@@ -11,6 +11,7 @@ pub struct AnthropicProvider {
     client: Client,
     api_key: String,
     model: String,
+    base_url: String,
 }
 
 #[derive(Serialize)]
@@ -38,7 +39,7 @@ struct ContentBlock {
 }
 
 impl AnthropicProvider {
-    pub fn new(api_key: &str, model: &str) -> Result<Self> {
+    pub fn new(api_key: &str, model: &str, base_url: Option<&str>) -> Result<Self> {
         if api_key.is_empty() {
             anyhow::bail!(
                 "Anthropic API key is required. Set ANTHROPIC_API_KEY environment variable."
@@ -49,6 +50,10 @@ impl AnthropicProvider {
             client: Client::new(),
             api_key: api_key.to_string(),
             model: model.to_string(),
+            base_url: base_url
+                .unwrap_or("https://api.anthropic.com")
+                .trim_end_matches('/')
+                .to_string(),
         })
     }
 
@@ -65,7 +70,7 @@ impl AnthropicProvider {
 
         let response = self
             .client
-            .post("https://api.anthropic.com/v1/messages")
+            .post(format!("{}/v1/messages", self.base_url))
             .header("x-api-key", &self.api_key)
             .header("anthropic-version", "2023-06-01")
             .header("content-type", "application/json")

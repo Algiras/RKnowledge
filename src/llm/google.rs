@@ -11,6 +11,7 @@ pub struct GoogleProvider {
     client: Client,
     api_key: String,
     model: String,
+    base_url: String,
 }
 
 #[derive(Serialize)]
@@ -71,7 +72,7 @@ struct GoogleError {
 }
 
 impl GoogleProvider {
-    pub fn new(api_key: &str, model: &str) -> Result<Self> {
+    pub fn new(api_key: &str, model: &str, base_url: Option<&str>) -> Result<Self> {
         if api_key.is_empty() {
             anyhow::bail!("Google API key is required. Set GOOGLE_API_KEY environment variable.");
         }
@@ -80,6 +81,10 @@ impl GoogleProvider {
             client: Client::new(),
             api_key: api_key.to_string(),
             model: model.to_string(),
+            base_url: base_url
+                .unwrap_or("https://generativelanguage.googleapis.com")
+                .trim_end_matches('/')
+                .to_string(),
         })
     }
 
@@ -102,8 +107,8 @@ impl GoogleProvider {
         };
 
         let url = format!(
-            "https://generativelanguage.googleapis.com/v1beta/models/{}:generateContent?key={}",
-            self.model, self.api_key
+            "{}/v1beta/models/{}:generateContent?key={}",
+            self.base_url, self.model, self.api_key
         );
 
         let response = self
@@ -130,12 +135,17 @@ impl GoogleProvider {
             anyhow::bail!("Google API error: {}", error.message);
         }
 
-        response
+        let text = response
             .candidates
             .and_then(|c| c.into_iter().next())
             .and_then(|c| c.content.parts.into_iter().next())
             .and_then(|p| p.text)
-            .context("No content in Google response")
+            .context("No content in Google response")?;
+
+        tracing::debug!(response_len = text.len(), "Google API response received");
+        tracing::trace!(response = %text, "Google API raw response");
+
+        Ok(text)
     }
 }
 
@@ -146,6 +156,8 @@ impl LlmProviderTrait for GoogleProvider {
         let response = self
             .complete(GRAPH_EXTRACTION_SYSTEM_PROMPT, &user_prompt)
             .await?;
+
+        tracing::debug!(raw_len = response.len(), "Parsing Google response");
 
         // Parse JSON response
         parse_relations_json(&response)

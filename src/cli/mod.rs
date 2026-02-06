@@ -25,6 +25,16 @@ pub enum Commands {
     },
 
     /// Configure API keys for LLM providers
+    #[command(long_about = "Configure API keys for LLM providers.\n\n\
+        Supported providers: anthropic, openai, google, ollama.\n\
+        All four providers support a custom base_url in the config file,\n\
+        so you can point any provider at a proxy, gateway, or compatible service.\n\n\
+        The OpenAI provider works with any OpenAI-compatible API (Groq, DeepSeek,\n\
+        Mistral, Together AI, OpenRouter, Azure, LM Studio, vLLM, etc.).\n\n\
+        The Anthropic provider works with any Anthropic Messages API-compatible\n\
+        service (proxies, AWS Bedrock gateways, etc.).\n\n\
+        Google accepts both GOOGLE_API_KEY and GEMINI_API_KEY environment variables.\n\n\
+        Set base_url in ~/.config/rknowledge/config.toml for each provider.")]
     Auth {
         /// Provider to configure (anthropic, openai, google, ollama)
         #[arg(short, long)]
@@ -45,11 +55,11 @@ pub enum Commands {
         #[arg(required = true)]
         path: PathBuf,
 
-        /// LLM provider to use
+        /// LLM provider (anthropic, openai, google, ollama). OpenAI-compatible APIs (Groq, DeepSeek, etc.) use 'openai' with a custom base_url in config
         #[arg(short, long, env = "RKNOWLEDGE_PROVIDER")]
         provider: Option<LlmProvider>,
 
-        /// Model to use (provider-specific)
+        /// Model name (provider-specific, e.g. claude-sonnet-4-20250514, gpt-4o, gemini-2.0-flash, mistral)
         #[arg(short, long, env = "RKNOWLEDGE_MODEL")]
         model: Option<String>,
 
@@ -116,6 +126,9 @@ pub enum Commands {
         #[arg(short, long, default_value = "8080")]
         port: u16,
     },
+
+    /// Check system health and diagnose common problems
+    Doctor,
 }
 
 #[derive(Debug, Clone, Copy, ValueEnum, Default)]

@@ -1,6 +1,6 @@
 [package]
 name = "rknowledge"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2024"
 description = "High-performance knowledge graph extraction CLI using LLMs"
 license = "MIT"

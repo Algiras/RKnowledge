@@ -23,7 +23,7 @@ Production-grade knowledge graph extraction CLI. Extract concepts and relationsh
 | Dimension | [Original](https://github.com/rahulnyk/knowledge_graph) (Python) | RKnowledge (Rust) |
 |---|---|---|
 | **Interface** | Jupyter notebook | Full CLI, 10 subcommands |
-| **LLM Providers** | Ollama only | Anthropic, OpenAI, Google, Ollama |
+| **LLM Providers** | Ollama only | Anthropic, OpenAI, Google, Ollama + any OpenAI-compatible API |
 | **Concurrency** | Sequential | Parallel LLM calls (`-j` flag) |
 | **Storage** | In-memory DataFrames | Neo4j graph DB (persistent) |
 | **Incremental** | Rebuild from scratch | `--append` merges into existing graph |
@@ -152,10 +152,12 @@ chunk_overlap = 150
 
 [providers.anthropic]
 api_key = "${ANTHROPIC_API_KEY}"
+# base_url = "https://api.anthropic.com"  # Change for Anthropic-compatible proxies
 model = "claude-sonnet-4-20250514"
 
 [providers.openai]
 api_key = "${OPENAI_API_KEY}"
+# base_url = "https://api.openai.com/v1"  # Change for Groq, DeepSeek, etc.
 model = "gpt-4o"
 
 [providers.ollama]
@@ -163,8 +165,8 @@ base_url = "http://localhost:11434"
 model = "mistral"
 
 [providers.google]
-api_key = "${GOOGLE_API_KEY}"
-model = "gemini-pro"
+api_key = "${GOOGLE_API_KEY}"  # Also accepts GEMINI_API_KEY
+model = "gemini-2.0-flash"
 
 [neo4j]
 uri = "bolt://localhost:7687"
@@ -177,10 +179,44 @@ database = "neo4j"
 
 | Provider | Setup | Best For |
 |----------|-------|----------|
-| **Ollama** | `ollama run mistral` | Free, local, private data |
+| **Ollama** | `ollama pull mistral` | Free, local, private data |
 | **Anthropic** | `export ANTHROPIC_API_KEY=...` | Highest quality extraction |
 | **OpenAI** | `export OPENAI_API_KEY=...` | Good balance of quality/speed |
-| **Google** | `export GOOGLE_API_KEY=...` | Gemini models |
+| **Google** | `export GOOGLE_API_KEY=...` or `GEMINI_API_KEY` | Gemini models |
+| **Groq** | Set `base_url` in config (see below) | Ultra-fast inference |
+| **DeepSeek** | Set `base_url` in config (see below) | Cost-effective |
+| **Mistral** | Set `base_url` in config (see below) | European, multilingual |
+| **+ any OpenAI-compatible** | Set `base_url` in config | Together, OpenRouter, Fireworks, LM Studio, vLLM, ... |
+
+> **All four providers support `base_url`** in the config, so you can point any provider at a proxy, gateway, or compatible service.
+
+### OpenAI-Compatible APIs
+
+The `openai` provider works with **any service that implements the OpenAI chat completions API**. Change `base_url` in your config:
+
+```toml
+# Example: Using Groq
+[providers.openai]
+api_key = "${GROQ_API_KEY}"
+base_url = "https://api.groq.com/openai/v1"
+model = "llama-3.3-70b-versatile"
+```
+
+```bash
+export GROQ_API_KEY=your-key
+rknowledge build ./docs --provider openai
+```
+
+| Service | `base_url` |
+|---------|-----------|
+| Groq | `https://api.groq.com/openai/v1` |
+| DeepSeek | `https://api.deepseek.com/v1` |
+| Mistral | `https://api.mistral.ai/v1` |
+| Together AI | `https://api.together.xyz/v1` |
+| OpenRouter | `https://openrouter.ai/api/v1` |
+| Fireworks | `https://api.fireworks.ai/inference/v1` |
+| LM Studio | `http://localhost:1234/v1` |
+| vLLM | `http://localhost:8000/v1` |
 
 ## Architecture
 

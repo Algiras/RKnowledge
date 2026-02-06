@@ -65,11 +65,12 @@ async fn list_providers() -> Result<()> {
     };
 
     // Check each provider
+    let ollama_status = check_ollama_status(&config).await;
     let providers = [
         ("Anthropic", check_provider_status(&config, "anthropic")),
         ("OpenAI", check_provider_status(&config, "openai")),
         ("Google", check_provider_status(&config, "google")),
-        ("Ollama", check_ollama_status(&config)),
+        ("Ollama", ollama_status),
     ];
 
     for (name, (configured, detail)) in providers {
@@ -96,25 +97,48 @@ async fn list_providers() -> Result<()> {
     println!("Or set environment variables:");
     println!("  {} export ANTHROPIC_API_KEY=your-key", style("$").dim());
     println!("  {} export OPENAI_API_KEY=your-key", style("$").dim());
-    println!("  {} export GOOGLE_API_KEY=your-key", style("$").dim());
+    println!(
+        "  {} export GOOGLE_API_KEY=your-key  {}",
+        style("$").dim(),
+        style("(or GEMINI_API_KEY)").dim()
+    );
+    println!();
+    println!(
+        "{}",
+        style("Tip: The OpenAI provider works with any OpenAI-compatible API.").dim()
+    );
+    println!(
+        "{}",
+        style("  Set base_url in config to use Groq, DeepSeek, Mistral, Together, etc.").dim()
+    );
+    println!(
+        "{}",
+        style("  See: rknowledge help or ~/.config/rknowledge/config.toml").dim()
+    );
 
     Ok(())
 }
 
 fn check_provider_status(config: &Config, provider: &str) -> (bool, String) {
-    let env_var = match provider {
-        "anthropic" => "ANTHROPIC_API_KEY",
-        "openai" => "OPENAI_API_KEY",
-        "google" => "GOOGLE_API_KEY",
-        _ => "",
+    let env_vars: &[&str] = match provider {
+        "anthropic" => &["ANTHROPIC_API_KEY"],
+        "openai" => &["OPENAI_API_KEY"],
+        "google" => &["GOOGLE_API_KEY", "GEMINI_API_KEY"],
+        _ => &[],
     };
 
-    // Check environment variable first
-    if !env_var.is_empty()
-        && let Ok(val) = std::env::var(env_var)
-        && !val.is_empty()
-    {
-        return (true, format!("(from {})", env_var));
+    let model = config
+        .get_provider(provider)
+        .and_then(|p| p.model.as_deref())
+        .unwrap_or("default");
+
+    // Check environment variables first
+    for env_var in env_vars {
+        if let Ok(val) = std::env::var(env_var)
+            && !val.is_empty()
+        {
+            return (true, format!("(from {}, model: {})", env_var, model));
+        }
     }
 
     // Check config file
@@ -122,32 +146,36 @@ fn check_provider_status(config: &Config, provider: &str) -> (bool, String) {
         && !provider_config.api_key.is_empty()
         && !provider_config.api_key.starts_with("${")
     {
-        return (true, "(from config)".to_string());
+        return (true, format!("(from config, model: {})", model));
     }
 
-    (false, String::new())
+    (false, format!("(model: {})", model))
 }
 
-fn check_ollama_status(config: &Config) -> (bool, String) {
+async fn check_ollama_status(config: &Config) -> (bool, String) {
     if let Some(provider_config) = config.get_provider("ollama") {
         let base_url = provider_config
             .base_url
             .as_deref()
             .unwrap_or("http://localhost:11434");
+        let model = provider_config.model.as_deref().unwrap_or("mistral");
 
-        // Try to check if Ollama is running (synchronous check)
-        let client = reqwest::blocking::Client::builder()
+        // Async check if Ollama is running
+        let client = reqwest::Client::builder()
             .timeout(std::time::Duration::from_secs(2))
             .build();
 
         if let Ok(client) = client
-            && let Ok(resp) = client.get(format!("{}/api/tags", base_url)).send()
+            && let Ok(resp) = client.get(format!("{}/api/tags", base_url)).send().await
             && resp.status().is_success()
         {
-            return (true, format!("(running at {})", base_url));
+            return (true, format!("(running at {}, model: {})", base_url, model));
         }
 
-        return (false, format!("(not running at {})", base_url));
+        return (
+            false,
+            format!("(not running at {}, model: {})", base_url, model),
+        );
     }
 
     (false, String::new())

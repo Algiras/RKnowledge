@@ -102,6 +102,13 @@ impl Config {
         }
         if let Some(ref mut provider) = self.providers.google {
             provider.api_key = expand_env_var(&provider.api_key);
+            // Fallback: if GOOGLE_API_KEY is empty, try GEMINI_API_KEY
+            if provider.api_key.is_empty()
+                && let Ok(gemini_key) = std::env::var("GEMINI_API_KEY")
+                && !gemini_key.is_empty()
+            {
+                provider.api_key = gemini_key;
+            }
         }
         self.neo4j.password = expand_env_var(&self.neo4j.password);
     }

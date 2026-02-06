@@ -155,7 +155,13 @@ pub async fn run(
                 let client = Arc::clone(client_ref);
                 async move {
                     pb_ref.set_message(format!("chunk {}/{}", i + 1, pb_ref.length().unwrap_or(0)));
-                    let relations = client.extract_relations(&text).await.unwrap_or_default();
+                    let relations = match client.extract_relations(&text).await {
+                        Ok(r) => r,
+                        Err(e) => {
+                            tracing::warn!("LLM extraction failed for chunk {}: {:#}", i + 1, e);
+                            Vec::new()
+                        }
+                    };
                     pb_ref.inc(1);
                     (chunk_id, relations)
                 }

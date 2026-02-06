@@ -73,7 +73,7 @@ pub async fn run(force: bool) -> Result<()> {
             google: Some(ProviderConfig {
                 api_key: "${GOOGLE_API_KEY}".to_string(),
                 base_url: None,
-                model: Some("gemini-pro".to_string()),
+                model: Some("gemini-2.0-flash".to_string()),
             }),
         },
         neo4j: Neo4jConfig {

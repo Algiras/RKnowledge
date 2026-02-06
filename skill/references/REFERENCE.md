@@ -20,11 +20,12 @@ chunk_overlap = 150
 # Provider configurations
 [providers.anthropic]
 api_key = "${ANTHROPIC_API_KEY}"
+# base_url = "https://api.anthropic.com"  # Change for Anthropic-compatible APIs
 model = "claude-sonnet-4-20250514"
 
 [providers.openai]
 api_key = "${OPENAI_API_KEY}"
-base_url = "https://api.openai.com/v1"  # Optional, for custom endpoints
+# base_url = "https://api.openai.com/v1"  # Change for OpenAI-compatible APIs
 model = "gpt-4o"
 
 [providers.ollama]
@@ -32,8 +33,9 @@ base_url = "http://localhost:11434"
 model = "mistral"
 
 [providers.google]
-api_key = "${GOOGLE_API_KEY}"
-model = "gemini-pro"
+api_key = "${GOOGLE_API_KEY}"  # Also accepts GEMINI_API_KEY
+# base_url = "https://generativelanguage.googleapis.com"  # Change for Google-compatible APIs
+model = "gemini-2.0-flash"
 
 # Neo4j configuration
 [neo4j]
@@ -50,10 +52,73 @@ API keys can be set via environment variables:
 | Variable | Description |
 |----------|-------------|
 | `ANTHROPIC_API_KEY` | Anthropic API key |
-| `OPENAI_API_KEY` | OpenAI API key |
+| `OPENAI_API_KEY` | OpenAI API key (also used for OpenAI-compatible services) |
 | `GOOGLE_API_KEY` | Google AI API key |
+| `GEMINI_API_KEY` | Alternative to `GOOGLE_API_KEY` (either works) |
 | `RKNOWLEDGE_PROVIDER` | Default provider override |
 | `RKNOWLEDGE_MODEL` | Default model override |
+
+### Using OpenAI-Compatible APIs
+
+The OpenAI provider works with **any service that implements the OpenAI chat completions API**. Change `base_url` in `[providers.openai]` to point to the service:
+
+| Service | `base_url` | Example Model |
+|---------|-----------|---------------|
+| **OpenAI** | `https://api.openai.com/v1` (default) | `gpt-4o`, `gpt-4o-mini` |
+| **Groq** | `https://api.groq.com/openai/v1` | `llama-3.3-70b-versatile` |
+| **DeepSeek** | `https://api.deepseek.com/v1` | `deepseek-chat` |
+| **Mistral** | `https://api.mistral.ai/v1` | `mistral-large-latest` |
+| **Together AI** | `https://api.together.xyz/v1` | `meta-llama/Llama-3-70b-chat-hf` |
+| **OpenRouter** | `https://openrouter.ai/api/v1` | `anthropic/claude-sonnet-4-20250514` |
+| **Fireworks** | `https://api.fireworks.ai/inference/v1` | `accounts/fireworks/models/llama-v3p1-70b-instruct` |
+| **Azure OpenAI** | `https://<resource>.openai.azure.com/openai/deployments/<dep>/v1` | Your deployment name |
+| **LM Studio** | `http://localhost:1234/v1` | Local model |
+| **vLLM** | `http://localhost:8000/v1` | Local model |
+
+Example config for Groq:
+```toml
+[providers.openai]
+api_key = "${GROQ_API_KEY}"
+base_url = "https://api.groq.com/openai/v1"
+model = "llama-3.3-70b-versatile"
+```
+
+Then run:
+```bash
+export GROQ_API_KEY=your-key
+rknowledge build ./docs --provider openai
+```
+
+### Using Anthropic-Compatible APIs
+
+The Anthropic provider also supports a custom `base_url` for services that implement the Anthropic Messages API:
+
+| Service | `base_url` |
+|---------|-----------|
+| **Anthropic** | `https://api.anthropic.com` (default) |
+| **AWS Bedrock** (via gateway) | Your Bedrock gateway URL |
+| **Anthropic proxy** | Your proxy URL |
+
+Example config:
+```toml
+[providers.anthropic]
+api_key = "${ANTHROPIC_API_KEY}"
+base_url = "https://your-proxy.example.com"
+model = "claude-sonnet-4-20250514"
+```
+
+### Using Google-Compatible APIs
+
+The Google provider supports a custom `base_url` for the Gemini API:
+
+```toml
+[providers.google]
+api_key = "${GOOGLE_API_KEY}"
+base_url = "https://generativelanguage.googleapis.com"  # default
+model = "gemini-2.0-flash"
+```
+
+> **Tip**: All four providers (Anthropic, OpenAI, Google, Ollama) support `base_url` in the config, making it easy to point any provider at a proxy, gateway, or compatible service.
 
 ## Graph Schema
 

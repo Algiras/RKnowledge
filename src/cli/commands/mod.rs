@@ -1,6 +1,7 @@
 pub mod auth;
 pub mod build;
 pub mod communities;
+pub mod doctor;
 pub mod export;
 pub mod init;
 pub mod path;

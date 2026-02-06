@@ -73,6 +73,9 @@ async fn main() -> Result<()> {
         Commands::Viz { port } => {
             cli::commands::viz::run(port).await?;
         }
+        Commands::Doctor => {
+            cli::commands::doctor::run().await?;
+        }
     }
 
     Ok(())

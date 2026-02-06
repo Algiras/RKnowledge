@@ -59,6 +59,7 @@ impl LlmClient {
                 Box::new(anthropic::AnthropicProvider::new(
                     &provider_config.api_key,
                     &model,
+                    provider_config.base_url.as_deref(),
                 )?)
             }
             LlmProvider::OpenAI => {
@@ -96,10 +97,11 @@ impl LlmClient {
                 let model = model_override
                     .map(String::from)
                     .or_else(|| provider_config.model.clone())
-                    .unwrap_or_else(|| "gemini-pro".to_string());
+                    .unwrap_or_else(|| "gemini-2.0-flash".to_string());
                 Box::new(google::GoogleProvider::new(
                     &provider_config.api_key,
                     &model,
+                    provider_config.base_url.as_deref(),
                 )?)
             }
         };

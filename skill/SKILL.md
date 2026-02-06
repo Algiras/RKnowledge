@@ -4,7 +4,7 @@ description: Build knowledge graphs from documents using LLMs. Extract concepts 
 license: MIT
 metadata:
   author: rknowledge
-  version: "0.1.0"
+  version: "0.2.0"
 compatibility: Requires Docker for Neo4j backend. Supports Anthropic, OpenAI, Google, and Ollama (local) LLM providers.
 ---
 
@@ -56,6 +56,8 @@ Alternatively, use environment variables:
 export ANTHROPIC_API_KEY=your-key-here
 # or
 export OPENAI_API_KEY=your-key-here
+# or
+export GOOGLE_API_KEY=your-key-here   # also accepts GEMINI_API_KEY
 # or use Ollama for local models (no API key needed)
 ```
 
@@ -113,8 +115,12 @@ rknowledge viz
 | `rknowledge auth` | Configure API keys for LLM providers |
 | `rknowledge build <path>` | Process documents and build graph |
 | `rknowledge query <query>` | Search or query the graph |
+| `rknowledge path <from> <to>` | Find shortest path between concepts |
+| `rknowledge stats` | Show graph statistics and analytics |
+| `rknowledge communities` | List detected communities and members |
 | `rknowledge export` | Export graph to various formats |
-| `rknowledge viz` | Open visualization in browser |
+| `rknowledge viz` | Open interactive visualization in browser |
+| `rknowledge doctor` | Check system health and diagnose problems |
 
 ## Build Options
 
@@ -125,6 +131,8 @@ rknowledge viz
 | `--output` | Output destination (neo4j, json, csv) | neo4j |
 | `--chunk-size` | Text chunk size in characters | 1500 |
 | `--chunk-overlap` | Overlap between chunks | 150 |
+| `--concurrency, -j` | Number of concurrent LLM requests | 4 |
+| `--append` | Append to existing graph (incremental) | false |
 
 ## Supported File Types
 
@@ -138,26 +146,76 @@ rknowledge viz
 ### Anthropic (Recommended)
 ```bash
 export ANTHROPIC_API_KEY=your-key
-rknowledge build ./docs --provider anthropic
+rknowledge build ./docs --provider anthropic --model claude-sonnet-4-20250514
 ```
 
 ### OpenAI
 ```bash
 export OPENAI_API_KEY=your-key
-rknowledge build ./docs --provider openai
+rknowledge build ./docs --provider openai --model gpt-4o
 ```
 
 ### Google (Gemini)
 ```bash
-export GOOGLE_API_KEY=your-key
-rknowledge build ./docs --provider google
+# Accepts either GOOGLE_API_KEY or GEMINI_API_KEY
+export GEMINI_API_KEY=your-key
+rknowledge build ./docs --provider google --model gemini-2.0-flash
 ```
 
-### Ollama (Local)
+### Ollama (Local - Free)
 ```bash
-# Start Ollama first
-ollama run mistral
+# Start Ollama and pull a model first
+ollama pull mistral
 rknowledge build ./docs --provider ollama --model mistral
+```
+
+### OpenAI-Compatible APIs (Groq, DeepSeek, Mistral, Together, etc.)
+
+The OpenAI provider works with **any OpenAI-compatible API**. Set `base_url` in your config file to point to the service:
+
+```toml
+# ~/.config/rknowledge/config.toml
+
+# Groq (fast inference)
+[providers.openai]
+api_key = "${GROQ_API_KEY}"
+base_url = "https://api.groq.com/openai/v1"
+model = "llama-3.3-70b-versatile"
+
+# DeepSeek
+[providers.openai]
+api_key = "${DEEPSEEK_API_KEY}"
+base_url = "https://api.deepseek.com/v1"
+model = "deepseek-chat"
+
+# Mistral
+[providers.openai]
+api_key = "${MISTRAL_API_KEY}"
+base_url = "https://api.mistral.ai/v1"
+model = "mistral-large-latest"
+
+# Together AI
+[providers.openai]
+api_key = "${TOGETHER_API_KEY}"
+base_url = "https://api.together.xyz/v1"
+model = "meta-llama/Llama-3-70b-chat-hf"
+
+# OpenRouter (access many models through one API)
+[providers.openai]
+api_key = "${OPENROUTER_API_KEY}"
+base_url = "https://openrouter.ai/api/v1"
+model = "anthropic/claude-sonnet-4-20250514"
+
+# LM Studio or vLLM (local)
+[providers.openai]
+api_key = "not-needed"
+base_url = "http://localhost:1234/v1"
+model = "local-model"
+```
+
+Then build with:
+```bash
+rknowledge build ./docs --provider openai
 ```
 
 ## Example Workflows
@@ -203,6 +261,13 @@ After running `rknowledge init`, Neo4j is available at:
 - **Credentials**: neo4j / rknowledge
 
 ## Troubleshooting
+
+Run the built-in diagnostics first:
+```bash
+rknowledge doctor
+```
+
+This checks config, Docker, Neo4j connectivity, LLM providers, and graph status.
 
 ### Neo4j Connection Failed
 ```bash
