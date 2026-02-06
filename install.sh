@@ -241,13 +241,12 @@ main() {
     local checksum_url="https://github.com/${REPO}/releases/download/${VERSION}/checksums.sha256"
 
     # Download to temp directory
-    local tmp_dir
-    tmp_dir=$(mktemp -d)
-    trap 'rm -rf "$tmp_dir"' EXIT
+    TMP_DIR=$(mktemp -d)
+    trap 'rm -rf "$TMP_DIR"' EXIT
 
     printf "\n"
     info "Downloading ${CYAN}${archive_name}${RESET}..."
-    if ! download "$download_url" "${tmp_dir}/${archive_name}"; then
+    if ! download "$download_url" "${TMP_DIR}/${archive_name}"; then
         printf "\n"
         error "Download failed for ${CYAN}${archive_name}${RESET}"
         error ""
@@ -268,11 +267,11 @@ main() {
     fi
 
     # Try checksum verification
-    if download "$checksum_url" "${tmp_dir}/checksums.sha256" 2>/dev/null; then
+    if download "$checksum_url" "${TMP_DIR}/checksums.sha256" 2>/dev/null; then
         local expected_checksum
-        expected_checksum=$(grep "${archive_name}" "${tmp_dir}/checksums.sha256" | cut -d' ' -f1 || true)
+        expected_checksum=$(grep "${archive_name}" "${TMP_DIR}/checksums.sha256" | cut -d' ' -f1 || true)
         if [ -n "$expected_checksum" ]; then
-            verify_checksum "${tmp_dir}/${archive_name}" "$expected_checksum"
+            verify_checksum "${TMP_DIR}/${archive_name}" "$expected_checksum"
             info "Checksum verified"
         else
             warn "No checksum entry found for ${archive_name}, skipping verification"
@@ -285,13 +284,13 @@ main() {
     info "Extracting..."
     case "$PLATFORM_ARCHIVE" in
         tar.gz)
-            tar -xzf "${tmp_dir}/${archive_name}" -C "${tmp_dir}"
+            tar -xzf "${TMP_DIR}/${archive_name}" -C "${TMP_DIR}"
             ;;
         zip)
             if command -v unzip >/dev/null 2>&1; then
-                unzip -q "${tmp_dir}/${archive_name}" -d "${tmp_dir}"
+                unzip -q "${TMP_DIR}/${archive_name}" -d "${TMP_DIR}"
             elif command -v 7z >/dev/null 2>&1; then
-                7z x -o"${tmp_dir}" "${tmp_dir}/${archive_name}" >/dev/null
+                7z x -o"${TMP_DIR}" "${TMP_DIR}/${archive_name}" >/dev/null
             else
                 fatal "Neither unzip nor 7z found. Install one and retry."
             fi
@@ -299,14 +298,14 @@ main() {
     esac
 
     # Find the binary in extracted files
-    local binary_path="${tmp_dir}/${BINARY}${PLATFORM_EXT}"
+    local binary_path="${TMP_DIR}/${BINARY}${PLATFORM_EXT}"
     if [ ! -f "$binary_path" ]; then
         # Some archives nest in a directory
         local found
-        found=$(find "$tmp_dir" -name "${BINARY}${PLATFORM_EXT}" -type f 2>/dev/null | head -1)
+        found=$(find "$TMP_DIR" -name "${BINARY}${PLATFORM_EXT}" -type f 2>/dev/null | head -1)
         if [ -z "$found" ]; then
             fatal "Binary '${BINARY}${PLATFORM_EXT}' not found in archive. Contents:"
-            ls -la "$tmp_dir" >&2
+            ls -la "$TMP_DIR" >&2
             exit 1
         fi
         binary_path="$found"
