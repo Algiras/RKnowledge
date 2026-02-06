@@ -8,6 +8,10 @@
   <img src="assets/viz_screenshot.png" alt="RKnowledge Graph Visualization" width="700">
 </p>
 
+<p align="center">
+  <img src="assets/demo.gif" alt="RKnowledge CLI Demo" width="700">
+</p>
+
 Production-grade knowledge graph extraction CLI. Extract concepts and relationships from any document using LLMs, store in Neo4j, analyze with graph algorithms, and explore with interactive visualization.
 
 **[Documentation](https://algiras.github.io/RKnowledge/)** · **[Architecture](ARCHITECTURE.md)** · **[Contributing](CONTRIBUTING.md)**
