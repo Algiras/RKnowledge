@@ -68,6 +68,8 @@ cp target/release/rknowledge ~/.local/bin/
 npx skills add Algiras/RKnowledge
 ```
 
+> Install the [skills CLI](https://skills.sh/docs/cli) first if you haven't already.
+
 ## Quick Start
 
 ```bash
