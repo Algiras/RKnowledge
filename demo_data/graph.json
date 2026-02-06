@@ -1,0 +1,2628 @@
+{
+  "nodes": [
+    {
+      "id": "api design",
+      "label": "api design",
+      "community": null,
+      "degree": 11
+    },
+    {
+      "id": "odb",
+      "label": "odb",
+      "community": null,
+      "degree": 17
+    },
+    {
+      "id": "rest apis",
+      "label": "rest apis",
+      "community": null,
+      "degree": 17
+    },
+    {
+      "id": "independent deployment",
+      "label": "independent deployment",
+      "community": null,
+      "degree": 11
+    },
+    {
+      "id": "convolutional neural networks",
+      "label": "convolutional neural networks",
+      "community": null,
+      "degree": 7
+    },
+    {
+      "id": "system observability",
+      "label": "system observability",
+      "community": null,
+      "degree": 17
+    },
+    {
+      "id": "education",
+      "label": "education",
+      "community": null,
+      "degree": 16
+    },
+    {
+      "id": "neural networks",
+      "label": "neural networks",
+      "community": null,
+      "degree": 7
+    },
+    {
+      "id": "ci/cd pipelines",
+      "label": "ci/cd pipelines",
+      "community": null,
+      "degree": 17
+    },
+    {
+      "id": "healthcare",
+      "label": "healthcare",
+      "community": null,
+      "degree": 16
+    },
+    {
+      "id": "finance",
+      "label": "finance",
+      "community": null,
+      "degree": 16
+    },
+    {
+      "id": "job displacement",
+      "label": "job displacement",
+      "community": null,
+      "degree": 16
+    },
+    {
+      "id": "ai decisions",
+      "label": "ai decisions",
+      "community": null,
+      "degree": 16
+    },
+    {
+      "id": "large language models",
+      "label": "large language models",
+      "community": null,
+      "degree": 7
+    },
+    {
+      "id": "image recognition",
+      "label": "image recognition",
+      "community": null,
+      "degree": 16
+    },
+    {
+      "id": "transportation",
+      "label": "transportation",
+      "community": null,
+      "degree": 16
+    },
+    {
+      "id": "database design",
+      "label": "database design",
+      "community": null,
+      "degree": 11
+    },
+    {
+      "id": "misuse",
+      "label": "misuse",
+      "community": null,
+      "degree": 16
+    },
+    {
+      "id": "ai",
+      "label": "ai",
+      "community": null,
+      "degree": 16
+    },
+    {
+      "id": "accountability",
+      "label": "accountability",
+      "community": null,
+      "degree": 16
+    },
+    {
+      "id": "microservices architecture",
+      "label": "microservices architecture",
+      "community": null,
+      "degree": 11
+    },
+    {
+      "id": "polyglot persistence",
+      "label": "polyglot persistence",
+      "community": null,
+      "degree": 28
+    },
+    {
+      "id": "deep learning",
+      "label": "deep learning",
+      "community": null,
+      "degree": 7
+    },
+    {
+      "id": "monitoring tools",
+      "label": "monitoring tools",
+      "community": null,
+      "degree": 17
+    },
+    {
+      "id": "computer vision",
+      "label": "computer vision",
+      "community": null,
+      "degree": 7
+    },
+    {
+      "id": "message queues",
+      "label": "message queues",
+      "community": null,
+      "degree": 11
+    },
+    {
+      "id": "machine learning",
+      "label": "machine learning",
+      "community": null,
+      "degree": 7
+    },
+    {
+      "id": "service-to-service communication",
+      "label": "service-to-service communication",
+      "community": null,
+      "degree": 17
+    },
+    {
+      "id": "kubernetes",
+      "label": "kubernetes",
+      "community": null,
+      "degree": 17
+    },
+    {
+      "id": "artificial intelligence",
+      "label": "artificial intelligence",
+      "community": null,
+      "degree": 7
+    },
+    {
+      "id": "cnns",
+      "label": "cnns",
+      "community": null,
+      "degree": 16
+    },
+    {
+      "id": "xai",
+      "label": "xai",
+      "community": null,
+      "degree": 16
+    },
+    {
+      "id": "graphql",
+      "label": "graphql",
+      "community": null,
+      "degree": 17
+    },
+    {
+      "id": "container orchestration",
+      "label": "container orchestration",
+      "community": null,
+      "degree": 17
+    },
+    {
+      "id": "protocol buffers",
+      "label": "protocol buffers",
+      "community": null,
+      "degree": 17
+    },
+    {
+      "id": "docker",
+      "label": "docker",
+      "community": null,
+      "degree": 17
+    },
+    {
+      "id": "terraform",
+      "label": "terraform",
+      "community": null,
+      "degree": 17
+    },
+    {
+      "id": "infrastructure as code",
+      "label": "infrastructure as code",
+      "community": null,
+      "degree": 17
+    },
+    {
+      "id": "grpc",
+      "label": "grpc",
+      "community": null,
+      "degree": 17
+    },
+    {
+      "id": "responsible ai",
+      "label": "responsible ai",
+      "community": null,
+      "degree": 16
+    },
+    {
+      "id": "relational databases",
+      "label": "relational databases",
+      "community": null,
+      "degree": 11
+    },
+    {
+      "id": "http methods",
+      "label": "http methods",
+      "community": null,
+      "degree": 17
+    },
+    {
+      "id": "natural language processing",
+      "label": "natural language processing",
+      "community": null,
+      "degree": 7
+    },
+    {
+      "id": "object detection",
+      "label": "object detection",
+      "community": null,
+      "degree": 16
+    },
+    {
+      "id": "bias",
+      "label": "bias",
+      "community": null,
+      "degree": 16
+    },
+    {
+      "id": "privacy",
+      "label": "privacy",
+      "community": null,
+      "degree": 16
+    },
+    {
+      "id": "trust",
+      "label": "trust",
+      "community": null,
+      "degree": 16
+    },
+    {
+      "id": "reactive systems",
+      "label": "reactive systems",
+      "community": null,
+      "degree": 11
+    },
+    {
+      "id": "event-driven architecture",
+      "label": "event-driven architecture",
+      "community": null,
+      "degree": 11
+    },
+    {
+      "id": "nosql databases",
+      "label": "nosql databases",
+      "community": null,
+      "degree": 11
+    },
+    {
+      "id": "containerized applications",
+      "label": "containerized applications",
+      "community": null,
+      "degree": 17
+    },
+    {
+      "id": "monolithic architecture",
+      "label": "monolithic architecture",
+      "community": null,
+      "degree": 11
+    },
+    {
+      "id": "software delivery",
+      "label": "software delivery",
+      "community": null,
+      "degree": 17
+    },
+    {
+      "id": "software architecture",
+      "label": "software architecture",
+      "community": null,
+      "degree": 11
+    }
+  ],
+  "edges": [
+    {
+      "source": "graphql",
+      "target": "odb",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "docker",
+      "target": "odb",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "container orchestration",
+      "target": "odb",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "grpc",
+      "target": "odb",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ci/cd pipelines",
+      "target": "odb",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "http methods",
+      "target": "odb",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "infrastructure as code",
+      "target": "odb",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "kubernetes",
+      "target": "odb",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "monitoring tools",
+      "target": "odb",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "containerized applications",
+      "target": "odb",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "protocol buffers",
+      "target": "rest apis",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "odb",
+      "target": "rest apis",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "infrastructure as code",
+      "target": "rest apis",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "container orchestration",
+      "target": "rest apis",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ci/cd pipelines",
+      "target": "rest apis",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "monitoring tools",
+      "target": "rest apis",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "http methods",
+      "target": "rest apis",
+      "relation": "rest apis use http methods to interact with resources",
+      "weight": 5.0
+    },
+    {
+      "source": "docker",
+      "target": "rest apis",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "graphql",
+      "target": "rest apis",
+      "relation": "graphql offers a flexible alternative to rest apis for data retrieval",
+      "weight": 5.0
+    },
+    {
+      "source": "grpc",
+      "target": "rest apis",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "containerized applications",
+      "target": "rest apis",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "kubernetes",
+      "target": "rest apis",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "polyglot persistence",
+      "target": "rest apis",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "event-driven architecture",
+      "target": "independent deployment",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "database design",
+      "target": "independent deployment",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "api design",
+      "target": "independent deployment",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "computer vision",
+      "target": "convolutional neural networks",
+      "relation": "uses CNNs for effective image recognition and object detection",
+      "weight": 5.0
+    },
+    {
+      "source": "artificial intelligence",
+      "target": "convolutional neural networks",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "kubernetes",
+      "target": "system observability",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "http methods",
+      "target": "system observability",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "docker",
+      "target": "system observability",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "graphql",
+      "target": "system observability",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "rest apis",
+      "target": "system observability",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "software delivery",
+      "target": "system observability",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "polyglot persistence",
+      "target": "system observability",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "odb",
+      "target": "system observability",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "container orchestration",
+      "target": "system observability",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "service-to-service communication",
+      "target": "system observability",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "infrastructure as code",
+      "target": "system observability",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "grpc",
+      "target": "system observability",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ci/cd pipelines",
+      "target": "system observability",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "protocol buffers",
+      "target": "system observability",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "containerized applications",
+      "target": "system observability",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "monitoring tools",
+      "target": "system observability",
+      "relation": "monitoring tools enhance system observability and issue detection",
+      "weight": 5.0
+    },
+    {
+      "source": "ai",
+      "target": "education",
+      "relation": "ai supports personalized learning and automated grading in education",
+      "weight": 5.0
+    },
+    {
+      "source": "ai decisions",
+      "target": "education",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "bias",
+      "target": "education",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "cnns",
+      "target": "education",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "accountability",
+      "target": "education",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "deep learning",
+      "target": "neural networks",
+      "relation": "employs neural networks with multiple layers to learn complex patterns",
+      "weight": 5.0
+    },
+    {
+      "source": "computer vision",
+      "target": "neural networks",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "convolutional neural networks",
+      "target": "neural networks",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "large language models",
+      "target": "neural networks",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "machine learning",
+      "target": "neural networks",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "artificial intelligence",
+      "target": "neural networks",
+      "relation": "uses computing systems inspired by biological neural networks to perform intelligent tasks",
+      "weight": 5.0
+    },
+    {
+      "source": "natural language processing",
+      "target": "neural networks",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "education",
+      "target": "healthcare",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ai decisions",
+      "target": "healthcare",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "accountability",
+      "target": "healthcare",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "bias",
+      "target": "healthcare",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "finance",
+      "target": "healthcare",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ai",
+      "target": "healthcare",
+      "relation": "ai applications include disease diagnosis, drug discovery, and personalized treatment in healthcare",
+      "weight": 5.0
+    },
+    {
+      "source": "cnns",
+      "target": "healthcare",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ai",
+      "target": "finance",
+      "relation": "ai is used for fraud detection, algorithmic trading, and risk assessment in finance",
+      "weight": 5.0
+    },
+    {
+      "source": "bias",
+      "target": "finance",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "education",
+      "target": "finance",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "cnns",
+      "target": "finance",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "accountability",
+      "target": "finance",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ai decisions",
+      "target": "finance",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "education",
+      "target": "job displacement",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "bias",
+      "target": "job displacement",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "accountability",
+      "target": "job displacement",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "healthcare",
+      "target": "job displacement",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "image recognition",
+      "target": "job displacement",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ai",
+      "target": "job displacement",
+      "relation": "ai raises ethical questions about job displacement",
+      "weight": 5.0
+    },
+    {
+      "source": "finance",
+      "target": "job displacement",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "cnns",
+      "target": "job displacement",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ai decisions",
+      "target": "job displacement",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "accountability",
+      "target": "ai decisions",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ai",
+      "target": "ai decisions",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "deep learning",
+      "target": "large language models",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "artificial intelligence",
+      "target": "large language models",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "computer vision",
+      "target": "large language models",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "convolutional neural networks",
+      "target": "large language models",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "healthcare",
+      "target": "image recognition",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "accountability",
+      "target": "image recognition",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "finance",
+      "target": "image recognition",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ai decisions",
+      "target": "image recognition",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "bias",
+      "target": "image recognition",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ai",
+      "target": "image recognition",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "education",
+      "target": "image recognition",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "cnns",
+      "target": "image recognition",
+      "relation": "cnns are particularly effective for image recognition tasks",
+      "weight": 5.0
+    },
+    {
+      "source": "privacy",
+      "target": "transportation",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "education",
+      "target": "transportation",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "image recognition",
+      "target": "transportation",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "responsible ai",
+      "target": "transportation",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "cnns",
+      "target": "transportation",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "finance",
+      "target": "transportation",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "bias",
+      "target": "transportation",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ai",
+      "target": "transportation",
+      "relation": "ai enables autonomous vehicles and traffic optimization in transportation",
+      "weight": 5.0
+    },
+    {
+      "source": "accountability",
+      "target": "transportation",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ai decisions",
+      "target": "transportation",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "object detection",
+      "target": "transportation",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "job displacement",
+      "target": "transportation",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "misuse",
+      "target": "transportation",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "healthcare",
+      "target": "transportation",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "api design",
+      "target": "database design",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ai decisions",
+      "target": "misuse",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "image recognition",
+      "target": "misuse",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "finance",
+      "target": "misuse",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "job displacement",
+      "target": "misuse",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "bias",
+      "target": "misuse",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ai",
+      "target": "misuse",
+      "relation": "ai development includes risks of potential misuse",
+      "weight": 5.0
+    },
+    {
+      "source": "accountability",
+      "target": "misuse",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "cnns",
+      "target": "misuse",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "education",
+      "target": "misuse",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "healthcare",
+      "target": "misuse",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "accountability",
+      "target": "ai",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "independent deployment",
+      "target": "microservices architecture",
+      "relation": "enables services to be updated or scaled without affecting others",
+      "weight": 5.0
+    },
+    {
+      "source": "message queues",
+      "target": "microservices architecture",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "event-driven architecture",
+      "target": "microservices architecture",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "database design",
+      "target": "microservices architecture",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "api design",
+      "target": "microservices architecture",
+      "relation": "relies on APIs for inter-service communication and integration",
+      "weight": 5.0
+    },
+    {
+      "source": "database design",
+      "target": "polyglot persistence",
+      "relation": "combines multiple database types (e.g., SQL/NoSQL) for optimal system performance",
+      "weight": 5.0
+    },
+    {
+      "source": "infrastructure as code",
+      "target": "polyglot persistence",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "graphql",
+      "target": "polyglot persistence",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "nosql databases",
+      "target": "polyglot persistence",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "event-driven architecture",
+      "target": "polyglot persistence",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "docker",
+      "target": "polyglot persistence",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "monitoring tools",
+      "target": "polyglot persistence",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "monolithic architecture",
+      "target": "polyglot persistence",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "containerized applications",
+      "target": "polyglot persistence",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "http methods",
+      "target": "polyglot persistence",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "container orchestration",
+      "target": "polyglot persistence",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "microservices architecture",
+      "target": "polyglot persistence",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "api design",
+      "target": "polyglot persistence",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ci/cd pipelines",
+      "target": "polyglot persistence",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "message queues",
+      "target": "polyglot persistence",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "odb",
+      "target": "polyglot persistence",
+      "relation": "odb supports polyglot persistence for flexible data management",
+      "weight": 5.0
+    },
+    {
+      "source": "independent deployment",
+      "target": "polyglot persistence",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "grpc",
+      "target": "polyglot persistence",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "kubernetes",
+      "target": "polyglot persistence",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "computer vision",
+      "target": "deep learning",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "artificial intelligence",
+      "target": "deep learning",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "convolutional neural networks",
+      "target": "deep learning",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ci/cd pipelines",
+      "target": "monitoring tools",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "containerized applications",
+      "target": "monitoring tools",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "http methods",
+      "target": "monitoring tools",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "grpc",
+      "target": "monitoring tools",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "docker",
+      "target": "monitoring tools",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "container orchestration",
+      "target": "monitoring tools",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "graphql",
+      "target": "monitoring tools",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "infrastructure as code",
+      "target": "monitoring tools",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "kubernetes",
+      "target": "monitoring tools",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "artificial intelligence",
+      "target": "computer vision",
+      "relation": "enables machines to interpret and understand visual information",
+      "weight": 5.0
+    },
+    {
+      "source": "database design",
+      "target": "message queues",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "api design",
+      "target": "message queues",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "event-driven architecture",
+      "target": "message queues",
+      "relation": "relies on systems like Apache Kafka/RabbitMQ for asynchronous service communication",
+      "weight": 5.0
+    },
+    {
+      "source": "independent deployment",
+      "target": "message queues",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "large language models",
+      "target": "machine learning",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "computer vision",
+      "target": "machine learning",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "convolutional neural networks",
+      "target": "machine learning",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "deep learning",
+      "target": "machine learning",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "artificial intelligence",
+      "target": "machine learning",
+      "relation": "a subset of AI that enables systems to learn from experience without explicit programming",
+      "weight": 5.0
+    },
+    {
+      "source": "grpc",
+      "target": "service-to-service communication",
+      "relation": "grpc is commonly used for service-to-service communication",
+      "weight": 5.0
+    },
+    {
+      "source": "graphql",
+      "target": "service-to-service communication",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "container orchestration",
+      "target": "service-to-service communication",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "docker",
+      "target": "service-to-service communication",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "kubernetes",
+      "target": "service-to-service communication",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "odb",
+      "target": "service-to-service communication",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "protocol buffers",
+      "target": "service-to-service communication",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "containerized applications",
+      "target": "service-to-service communication",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "polyglot persistence",
+      "target": "service-to-service communication",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "infrastructure as code",
+      "target": "service-to-service communication",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ci/cd pipelines",
+      "target": "service-to-service communication",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "http methods",
+      "target": "service-to-service communication",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "rest apis",
+      "target": "service-to-service communication",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "monitoring tools",
+      "target": "service-to-service communication",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "http methods",
+      "target": "kubernetes",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "container orchestration",
+      "target": "kubernetes",
+      "relation": "kubernetes automates container orchestration for deployment and scaling",
+      "weight": 5.0
+    },
+    {
+      "source": "ci/cd pipelines",
+      "target": "kubernetes",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "grpc",
+      "target": "kubernetes",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "graphql",
+      "target": "kubernetes",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "containerized applications",
+      "target": "kubernetes",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "infrastructure as code",
+      "target": "kubernetes",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "docker",
+      "target": "kubernetes",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "bias",
+      "target": "cnns",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ai",
+      "target": "cnns",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ai decisions",
+      "target": "cnns",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "accountability",
+      "target": "cnns",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "responsible ai",
+      "target": "xai",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "finance",
+      "target": "xai",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "trust",
+      "target": "xai",
+      "relation": "xai aims to build trust in ai systems",
+      "weight": 5.0
+    },
+    {
+      "source": "misuse",
+      "target": "xai",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ai decisions",
+      "target": "xai",
+      "relation": "xai focuses on making ai decisions more transparent",
+      "weight": 5.0
+    },
+    {
+      "source": "bias",
+      "target": "xai",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ai",
+      "target": "xai",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "transportation",
+      "target": "xai",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "healthcare",
+      "target": "xai",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "image recognition",
+      "target": "xai",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "cnns",
+      "target": "xai",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "accountability",
+      "target": "xai",
+      "relation": "xai ensures accountability in ai systems",
+      "weight": 5.0
+    },
+    {
+      "source": "education",
+      "target": "xai",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "object detection",
+      "target": "xai",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "privacy",
+      "target": "xai",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "job displacement",
+      "target": "xai",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ci/cd pipelines",
+      "target": "graphql",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "containerized applications",
+      "target": "graphql",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "docker",
+      "target": "graphql",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "container orchestration",
+      "target": "graphql",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ci/cd pipelines",
+      "target": "container orchestration",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "infrastructure as code",
+      "target": "protocol buffers",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "containerized applications",
+      "target": "protocol buffers",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "polyglot persistence",
+      "target": "protocol buffers",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ci/cd pipelines",
+      "target": "protocol buffers",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "grpc",
+      "target": "protocol buffers",
+      "relation": "grpc uses protocol buffers for efficient binary serialization",
+      "weight": 5.0
+    },
+    {
+      "source": "docker",
+      "target": "protocol buffers",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "monitoring tools",
+      "target": "protocol buffers",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "container orchestration",
+      "target": "protocol buffers",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "kubernetes",
+      "target": "protocol buffers",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "http methods",
+      "target": "protocol buffers",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "graphql",
+      "target": "protocol buffers",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "odb",
+      "target": "protocol buffers",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "container orchestration",
+      "target": "docker",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "containerized applications",
+      "target": "docker",
+      "relation": "docker packages applications into containers for consistent execution",
+      "weight": 5.0
+    },
+    {
+      "source": "ci/cd pipelines",
+      "target": "docker",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "container orchestration",
+      "target": "terraform",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "system observability",
+      "target": "terraform",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "graphql",
+      "target": "terraform",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "kubernetes",
+      "target": "terraform",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "rest apis",
+      "target": "terraform",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "service-to-service communication",
+      "target": "terraform",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "containerized applications",
+      "target": "terraform",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "http methods",
+      "target": "terraform",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "docker",
+      "target": "terraform",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "odb",
+      "target": "terraform",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "protocol buffers",
+      "target": "terraform",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "infrastructure as code",
+      "target": "terraform",
+      "relation": "terraform enables version-controlled infrastructure management",
+      "weight": 5.0
+    },
+    {
+      "source": "grpc",
+      "target": "terraform",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "software delivery",
+      "target": "terraform",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "monitoring tools",
+      "target": "terraform",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ci/cd pipelines",
+      "target": "terraform",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "polyglot persistence",
+      "target": "terraform",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "container orchestration",
+      "target": "infrastructure as code",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ci/cd pipelines",
+      "target": "infrastructure as code",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "graphql",
+      "target": "infrastructure as code",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "grpc",
+      "target": "infrastructure as code",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "docker",
+      "target": "infrastructure as code",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "containerized applications",
+      "target": "infrastructure as code",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "http methods",
+      "target": "infrastructure as code",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "containerized applications",
+      "target": "grpc",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "graphql",
+      "target": "grpc",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "container orchestration",
+      "target": "grpc",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ci/cd pipelines",
+      "target": "grpc",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "docker",
+      "target": "grpc",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "bias",
+      "target": "responsible ai",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "cnns",
+      "target": "responsible ai",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "job displacement",
+      "target": "responsible ai",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ai decisions",
+      "target": "responsible ai",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "misuse",
+      "target": "responsible ai",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "object detection",
+      "target": "responsible ai",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "education",
+      "target": "responsible ai",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "accountability",
+      "target": "responsible ai",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "image recognition",
+      "target": "responsible ai",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "finance",
+      "target": "responsible ai",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "privacy",
+      "target": "responsible ai",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "healthcare",
+      "target": "responsible ai",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ai",
+      "target": "responsible ai",
+      "relation": "responsible ai development requires addressing ethical concerns",
+      "weight": 5.0
+    },
+    {
+      "source": "independent deployment",
+      "target": "relational databases",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "nosql databases",
+      "target": "relational databases",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "microservices architecture",
+      "target": "relational databases",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "monolithic architecture",
+      "target": "relational databases",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "event-driven architecture",
+      "target": "relational databases",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "message queues",
+      "target": "relational databases",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "api design",
+      "target": "relational databases",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "reactive systems",
+      "target": "relational databases",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "polyglot persistence",
+      "target": "relational databases",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "database design",
+      "target": "relational databases",
+      "relation": "uses SQL and enforces ACID properties for structured data integrity",
+      "weight": 5.0
+    },
+    {
+      "source": "ci/cd pipelines",
+      "target": "http methods",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "grpc",
+      "target": "http methods",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "containerized applications",
+      "target": "http methods",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "container orchestration",
+      "target": "http methods",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "graphql",
+      "target": "http methods",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "docker",
+      "target": "http methods",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "convolutional neural networks",
+      "target": "natural language processing",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "machine learning",
+      "target": "natural language processing",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "large language models",
+      "target": "natural language processing",
+      "relation": "uses models like GPT and Claude trained on vast text data for NLP tasks",
+      "weight": 5.0
+    },
+    {
+      "source": "artificial intelligence",
+      "target": "natural language processing",
+      "relation": "combines linguistics and AI to enable computers to understand and generate human language",
+      "weight": 5.0
+    },
+    {
+      "source": "deep learning",
+      "target": "natural language processing",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "computer vision",
+      "target": "natural language processing",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ai decisions",
+      "target": "object detection",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "healthcare",
+      "target": "object detection",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ai",
+      "target": "object detection",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "misuse",
+      "target": "object detection",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "finance",
+      "target": "object detection",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "bias",
+      "target": "object detection",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "job displacement",
+      "target": "object detection",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "cnns",
+      "target": "object detection",
+      "relation": "cnns excel in object detection tasks",
+      "weight": 5.0
+    },
+    {
+      "source": "accountability",
+      "target": "object detection",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "education",
+      "target": "object detection",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "image recognition",
+      "target": "object detection",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ai",
+      "target": "bias",
+      "relation": "ai development involves ethical considerations regarding bias",
+      "weight": 5.0
+    },
+    {
+      "source": "ai decisions",
+      "target": "bias",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "accountability",
+      "target": "bias",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "healthcare",
+      "target": "privacy",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "education",
+      "target": "privacy",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ai",
+      "target": "privacy",
+      "relation": "ai development raises ethical concerns about privacy",
+      "weight": 5.0
+    },
+    {
+      "source": "accountability",
+      "target": "privacy",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "image recognition",
+      "target": "privacy",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "finance",
+      "target": "privacy",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "misuse",
+      "target": "privacy",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "cnns",
+      "target": "privacy",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ai decisions",
+      "target": "privacy",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "bias",
+      "target": "privacy",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "job displacement",
+      "target": "privacy",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "object detection",
+      "target": "privacy",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ai",
+      "target": "trust",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "responsible ai",
+      "target": "trust",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "accountability",
+      "target": "trust",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "education",
+      "target": "trust",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "transportation",
+      "target": "trust",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "misuse",
+      "target": "trust",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "bias",
+      "target": "trust",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "job displacement",
+      "target": "trust",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "object detection",
+      "target": "trust",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "finance",
+      "target": "trust",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ai decisions",
+      "target": "trust",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "privacy",
+      "target": "trust",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "cnns",
+      "target": "trust",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "image recognition",
+      "target": "trust",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "healthcare",
+      "target": "trust",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "message queues",
+      "target": "reactive systems",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "nosql databases",
+      "target": "reactive systems",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "polyglot persistence",
+      "target": "reactive systems",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "api design",
+      "target": "reactive systems",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "monolithic architecture",
+      "target": "reactive systems",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "event-driven architecture",
+      "target": "reactive systems",
+      "relation": "optimized for handling high-volume data streams via event-based workflows",
+      "weight": 5.0
+    },
+    {
+      "source": "microservices architecture",
+      "target": "reactive systems",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "independent deployment",
+      "target": "reactive systems",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "database design",
+      "target": "reactive systems",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "database design",
+      "target": "event-driven architecture",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "api design",
+      "target": "event-driven architecture",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "microservices architecture",
+      "target": "nosql databases",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "message queues",
+      "target": "nosql databases",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "independent deployment",
+      "target": "nosql databases",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "database design",
+      "target": "nosql databases",
+      "relation": "offers flexibility and horizontal scaling for unstructured or large-scale data",
+      "weight": 5.0
+    },
+    {
+      "source": "event-driven architecture",
+      "target": "nosql databases",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "monolithic architecture",
+      "target": "nosql databases",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "api design",
+      "target": "nosql databases",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "container orchestration",
+      "target": "containerized applications",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ci/cd pipelines",
+      "target": "containerized applications",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "message queues",
+      "target": "monolithic architecture",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "api design",
+      "target": "monolithic architecture",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "database design",
+      "target": "monolithic architecture",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "independent deployment",
+      "target": "monolithic architecture",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "microservices architecture",
+      "target": "monolithic architecture",
+      "relation": "contrasts with centralized, single-codebase systems by breaking functionality into independent services",
+      "weight": 5.0
+    },
+    {
+      "source": "event-driven architecture",
+      "target": "monolithic architecture",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "infrastructure as code",
+      "target": "software delivery",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "kubernetes",
+      "target": "software delivery",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "protocol buffers",
+      "target": "software delivery",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "polyglot persistence",
+      "target": "software delivery",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "monitoring tools",
+      "target": "software delivery",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "grpc",
+      "target": "software delivery",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "service-to-service communication",
+      "target": "software delivery",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "graphql",
+      "target": "software delivery",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "odb",
+      "target": "software delivery",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "rest apis",
+      "target": "software delivery",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "docker",
+      "target": "software delivery",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "containerized applications",
+      "target": "software delivery",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "ci/cd pipelines",
+      "target": "software delivery",
+      "relation": "ci/cd pipelines automate faster and more reliable software delivery",
+      "weight": 5.0
+    },
+    {
+      "source": "http methods",
+      "target": "software delivery",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "container orchestration",
+      "target": "software delivery",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "nosql databases",
+      "target": "software architecture",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "message queues",
+      "target": "software architecture",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "monolithic architecture",
+      "target": "software architecture",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "polyglot persistence",
+      "target": "software architecture",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "reactive systems",
+      "target": "software architecture",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "relational databases",
+      "target": "software architecture",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "independent deployment",
+      "target": "software architecture",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "api design",
+      "target": "software architecture",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "database design",
+      "target": "software architecture",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    },
+    {
+      "source": "microservices architecture",
+      "target": "software architecture",
+      "relation": "defines how components are organized as small, independent services in a distributed system",
+      "weight": 5.0
+    },
+    {
+      "source": "event-driven architecture",
+      "target": "software architecture",
+      "relation": "contextual proximity",
+      "weight": 1.0
+    }
+  ]
+}

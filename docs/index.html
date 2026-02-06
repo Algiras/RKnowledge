@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RKnowledge - Knowledge Graph Extraction CLI</title>
+    <meta name="description" content="High-performance knowledge graph extraction from documents using LLMs. Written in Rust.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+    <style>
+        :root {
+            --bg: #0f0f23;
+            --bg-card: #1a1a2e;
+            --bg-code: #16213e;
+            --accent: #e94560;
+            --accent2: #0f3460;
+            --text: #e0e0e0;
+            --text-dim: #8888aa;
+            --green: #4ade80;
+            --cyan: #22d3ee;
+            --yellow: #fbbf24;
+            --purple: #a78bfa;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        /* ── Hero ────────────────────────────── */
+        .hero {
+            text-align: center;
+            padding: 80px 20px 60px;
+            background: linear-gradient(135deg, var(--bg) 0%, var(--bg-card) 50%, var(--bg) 100%);
+            border-bottom: 1px solid var(--accent2);
+        }
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            margin-bottom: 16px;
+        }
+        .hero h1 span { color: var(--accent); }
+        .hero .tagline {
+            font-size: 1.25rem;
+            color: var(--text-dim);
+            max-width: 600px;
+            margin: 0 auto 32px;
+        }
+        .hero .badges { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 32px; }
+        .hero .badges img { height: 20px; }
+
+        /* ── Install box ─────────────────────── */
+        .install-box {
+            background: var(--bg-code);
+            border: 1px solid var(--accent2);
+            border-radius: 12px;
+            padding: 20px 32px;
+            max-width: 680px;
+            margin: 0 auto;
+            text-align: left;
+            position: relative;
+        }
+        .install-box .label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-dim);
+            margin-bottom: 8px;
+        }
+        .install-box code {
+            font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+            font-size: 0.95rem;
+            color: var(--cyan);
+            word-break: break-all;
+        }
+        .install-box .copy-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: var(--accent2);
+            border: none;
+            color: var(--text);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .install-box .copy-btn:hover { background: var(--accent); }
+
+        /* ── Container ───────────────────────── */
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            padding: 60px 0;
+            border-bottom: 1px solid #1e1e3a;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 32px;
+            text-align: center;
+        }
+        h2 span { color: var(--accent); }
+
+        /* ── Feature grid ────────────────────── */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+        }
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid #2a2a4a;
+            border-radius: 12px;
+            padding: 28px;
+            transition: border-color 0.2s;
+        }
+        .feature-card:hover { border-color: var(--accent); }
+        .feature-card .icon { font-size: 2rem; margin-bottom: 12px; }
+        .feature-card h3 { font-size: 1.1rem; margin-bottom: 8px; }
+        .feature-card p { color: var(--text-dim); font-size: 0.95rem; }
+
+        /* ── Code blocks ─────────────────────── */
+        .code-block {
+            background: var(--bg-code);
+            border: 1px solid var(--accent2);
+            border-radius: 8px;
+            padding: 20px 24px;
+            margin: 16px 0;
+            overflow-x: auto;
+        }
+        .code-block code {
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.8;
+        }
+        .code-block .comment { color: var(--text-dim); }
+        .code-block .cmd { color: var(--green); }
+        .code-block .flag { color: var(--yellow); }
+        .code-block .str { color: var(--cyan); }
+        .code-block .prompt { color: var(--text-dim); user-select: none; }
+
+        /* ── Quickstart steps ────────────────── */
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .step {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+        }
+        .step-num {
+            flex-shrink: 0;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+        .step-content h3 { margin-bottom: 4px; }
+        .step-content p { color: var(--text-dim); font-size: 0.9rem; }
+
+        /* ── Architecture ────────────────────── */
+        .arch-diagram {
+            background: var(--bg-code);
+            border: 1px solid var(--accent2);
+            border-radius: 12px;
+            padding: 32px;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            overflow-x: auto;
+            text-align: center;
+            color: var(--cyan);
+        }
+
+        /* ── Commands table ──────────────────── */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+        th, td {
+            text-align: left;
+            padding: 14px 18px;
+            border-bottom: 1px solid #2a2a4a;
+        }
+        th {
+            color: var(--text-dim);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        td code {
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            color: var(--green);
+            font-size: 0.9rem;
+        }
+        tr:hover { background: rgba(233, 69, 96, 0.05); }
+
+        /* ── Providers ───────────────────────── */
+        .providers {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+        }
+        .provider {
+            background: var(--bg-card);
+            border: 1px solid #2a2a4a;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+        }
+        .provider .icon { font-size: 2rem; margin-bottom: 8px; }
+        .provider h4 { margin-bottom: 4px; }
+        .provider p { font-size: 0.85rem; color: var(--text-dim); }
+        .provider .tag {
+            display: inline-block;
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 99px;
+            margin-top: 8px;
+        }
+        .tag-free { background: rgba(74, 222, 128, 0.15); color: var(--green); }
+        .tag-api { background: rgba(251, 191, 36, 0.15); color: var(--yellow); }
+
+        /* ── Footer ──────────────────────────── */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+        footer a { color: var(--accent); text-decoration: none; }
+        footer a:hover { text-decoration: underline; }
+
+        @media (max-width: 640px) {
+            .hero h1 { font-size: 2.5rem; }
+            .features { grid-template-columns: 1fr; }
+            .providers { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ── Hero ────────────────────────────────────────────────────── -->
+<header class="hero">
+    <h1>🧠 <span>R</span>Knowledge</h1>
+    <p class="tagline">
+        High-performance knowledge graph extraction from documents using LLMs.
+        Written in Rust for maximum speed.
+    </p>
+
+    <div class="badges">
+        <img src="https://img.shields.io/github/v/release/algimantask/rknowledge?style=flat-square&color=e94560" alt="Release">
+        <img src="https://img.shields.io/github/license/algimantask/rknowledge?style=flat-square" alt="License">
+        <img src="https://img.shields.io/badge/language-Rust-orange?style=flat-square" alt="Language">
+        <img src="https://img.shields.io/github/actions/workflow/status/algimantask/rknowledge/ci.yml?style=flat-square&label=CI" alt="CI">
+    </div>
+
+    <div class="install-box">
+        <div class="label">Install with one command</div>
+        <code>curl -fsSL https://raw.githubusercontent.com/algimantask/rknowledge/main/install.sh | bash</code>
+        <button class="copy-btn" onclick="navigator.clipboard.writeText('curl -fsSL https://raw.githubusercontent.com/algimantask/rknowledge/main/install.sh | bash')">Copy</button>
+    </div>
+</header>
+
+<!-- ── Features ────────────────────────────────────────────────── -->
+<section>
+    <div class="container">
+        <h2>Why <span>RKnowledge</span>?</h2>
+        <div class="features">
+            <div class="feature-card">
+                <div class="icon">⚡</div>
+                <h3>Blazing Fast</h3>
+                <p>Written in Rust with optimized release builds. Single binary, zero runtime dependencies.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🔌</div>
+                <h3>Multi-Provider LLM</h3>
+                <p>Supports Anthropic, OpenAI, Google Gemini, and Ollama for local inference. Swap with a flag.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">📄</div>
+                <h3>Multi-Format Input</h3>
+                <p>Parse PDF, Markdown, HTML, and plain text. Process entire directories recursively.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🔗</div>
+                <h3>Neo4j Backend</h3>
+                <p>Full graph database with Cypher queries. Auto-managed Docker setup with health checks.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">📊</div>
+                <h3>Rich Exports</h3>
+                <p>Export to JSON, CSV, GraphML, or Cypher statements. Compatible with any graph tool.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon">🌐</div>
+                <h3>Browser Visualization</h3>
+                <p>Interactive force-directed graph visualization powered by vis-network. One command to explore.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── Quick Start ─────────────────────────────────────────────── -->
+<section>
+    <div class="container">
+        <h2>Quick <span>Start</span></h2>
+        <div class="steps">
+            <div class="step">
+                <div class="step-num">1</div>
+                <div class="step-content">
+                    <h3>Install</h3>
+                    <div class="code-block">
+                        <code><span class="prompt">$ </span><span class="cmd">curl</span> <span class="flag">-fsSL</span> https://raw.githubusercontent.com/algimantask/rknowledge/main/install.sh | <span class="cmd">bash</span></code>
+                    </div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">2</div>
+                <div class="step-content">
+                    <h3>Initialize & configure</h3>
+                    <div class="code-block">
+                        <code><span class="prompt">$ </span><span class="cmd">rknowledge</span> init     <span class="comment"># Start Neo4j + create config</span><br>
+<span class="prompt">$ </span><span class="cmd">rknowledge</span> auth     <span class="comment"># Configure LLM provider</span></code>
+                    </div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">3</div>
+                <div class="step-content">
+                    <h3>Build your knowledge graph</h3>
+                    <div class="code-block">
+                        <code><span class="prompt">$ </span><span class="cmd">rknowledge</span> build ./documents/ <span class="flag">--provider</span> <span class="str">ollama</span><br>
+<span class="comment"># ✅ Extracted 40 relations from 4 chunks</span><br>
+<span class="comment"># ✨ Graph: 54 nodes, 383 edges</span></code>
+                    </div>
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-num">4</div>
+                <div class="step-content">
+                    <h3>Query & visualize</h3>
+                    <div class="code-block">
+                        <code><span class="prompt">$ </span><span class="cmd">rknowledge</span> query <span class="str">"machine learning"</span><br>
+<span class="prompt">$ </span><span class="cmd">rknowledge</span> viz       <span class="comment"># Opens browser visualization</span></code>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── Commands ─────────────────────────────────────────────────── -->
+<section>
+    <div class="container">
+        <h2><span>Commands</span></h2>
+        <table>
+            <thead>
+                <tr><th>Command</th><th>Description</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><code>rknowledge init</code></td><td>Initialize config and start Neo4j via Docker</td></tr>
+                <tr><td><code>rknowledge auth</code></td><td>Configure LLM provider API keys (interactive)</td></tr>
+                <tr><td><code>rknowledge build &lt;path&gt;</code></td><td>Process documents and build knowledge graph</td></tr>
+                <tr><td><code>rknowledge query &lt;q&gt;</code></td><td>Search the graph (natural language or <code>cypher:</code> prefix)</td></tr>
+                <tr><td><code>rknowledge export</code></td><td>Export to JSON, CSV, GraphML, or Cypher</td></tr>
+                <tr><td><code>rknowledge viz</code></td><td>Open interactive graph visualization in browser</td></tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- ── LLM Providers ───────────────────────────────────────────── -->
+<section>
+    <div class="container">
+        <h2>LLM <span>Providers</span></h2>
+        <div class="providers">
+            <div class="provider">
+                <div class="icon">🟣</div>
+                <h4>Anthropic</h4>
+                <p>Claude Sonnet/Opus</p>
+                <span class="tag tag-api">API Key</span>
+            </div>
+            <div class="provider">
+                <div class="icon">🟢</div>
+                <h4>OpenAI</h4>
+                <p>GPT-4o / GPT-4</p>
+                <span class="tag tag-api">API Key</span>
+            </div>
+            <div class="provider">
+                <div class="icon">🔵</div>
+                <h4>Google</h4>
+                <p>Gemini Pro</p>
+                <span class="tag tag-api">API Key</span>
+            </div>
+            <div class="provider">
+                <div class="icon">🦙</div>
+                <h4>Ollama</h4>
+                <p>Mistral, Llama, etc.</p>
+                <span class="tag tag-free">Free / Local</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── Architecture ────────────────────────────────────────────── -->
+<section>
+    <div class="container">
+        <h2><span>Architecture</span></h2>
+        <div class="arch-diagram">
+<pre>
+┌──────────────────────────────────────────────────────────────┐
+│                      CLI (clap)                              │
+├──────────┬───────────┬────────────┬────────────┬─────────────┤
+│  init    │  auth     │  build     │  query     │  viz/export │
+├──────────┴───────────┴────────────┴────────────┴─────────────┤
+│                                                              │
+│  ┌────────────┐  ┌────────────┐  ┌─────────────────────┐    │
+│  │   Parser   │  │ LLM Client │  │   Graph Builder     │    │
+│  │ PDF/MD/HTML│→ │ Multi-prov │→ │ petgraph + proximity│    │
+│  │ + Chunker  │  │ async HTTP │  │                     │    │
+│  └────────────┘  └────────────┘  └─────────────────────┘    │
+│                                           │                  │
+│  ┌────────────────────────────────────────┴──────────────┐   │
+│  │                  Storage Layer                        │   │
+│  │  ┌──────────┐  ┌──────────────┐  ┌────────────────┐  │   │
+│  │  │  Neo4j   │  │ Export       │  │ Visualization  │  │   │
+│  │  │ (Docker) │  │ JSON/CSV/GML │  │ (vis-network)  │  │   │
+│  │  └──────────┘  └──────────────┘  └────────────────┘  │   │
+│  └───────────────────────────────────────────────────────┘   │
+└──────────────────────────────────────────────────────────────┘
+</pre>
+        </div>
+    </div>
+</section>
+
+<!-- ── Footer ──────────────────────────────────────────────────── -->
+<footer>
+    <p>
+        Built with ❤️ in Rust &nbsp;·&nbsp;
+        <a href="https://github.com/algimantask/rknowledge">GitHub</a> &nbsp;·&nbsp;
+        <a href="https://github.com/algimantask/rknowledge/blob/main/LICENSE">MIT License</a> &nbsp;·&nbsp;
+        Inspired by <a href="https://github.com/rahulnyk/knowledge_graph">rahulnyk/knowledge_graph</a>
+    </p>
+</footer>
+
+</body>
+</html>

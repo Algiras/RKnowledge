@@ -1,0 +1,67 @@
+# RKnowledge - AI Agent Context
+
+## Project Identity
+- **Name**: RKnowledge
+- **Language**: Rust (edition 2024)
+- **Type**: CLI application (single binary)
+- **Purpose**: Extract knowledge graphs from documents using LLMs, store in Neo4j
+
+## Architecture (read ARCHITECTURE.md for full details)
+
+### Pipeline
+```
+Documents → Parser → Chunker → LLM Client → Graph Builder → Neo4j / Export / Viz
+```
+
+### Key Modules
+- `src/main.rs` — entry point, CLI dispatch
+- `src/cli/` — clap CLI definition + command implementations
+- `src/parser/` — document parsing (PDF, MD, HTML, TXT) + text chunking
+- `src/llm/` — LLM provider abstraction (Anthropic, OpenAI, Ollama, Google)
+- `src/graph/` — graph building (petgraph) + Neo4j storage
+- `src/export.rs` — JSON, CSV, GraphML, Cypher export
+- `src/config.rs` — TOML config with env var expansion
+
+### Important Patterns
+- **Error handling**: `anyhow::Result` everywhere
+- **TUI output**: Use `console::style()` and `indicatif` — NOT `println!` with `colored`
+- **Logging**: `tracing` crate — default level is `warn`, use `RUST_LOG=info` for more
+- **Async**: `tokio` runtime, `reqwest` for HTTP, `neo4rs` for Neo4j
+- **LLM abstraction**: `LlmProviderTrait` trait with `extract_relations()` method
+
+### Neo4j Schema
+```cypher
+(:Concept {id, label, degree}) -[:RELATES_TO {relation, weight}]-> (:Concept)
+```
+
+## Conventions
+- Run `cargo fmt` and `cargo clippy -- -D warnings` before suggesting changes
+- Use `console::style()` for CLI output, not `colored::Colorize`
+- Use emoji constants (`static EMOJI: Emoji = Emoji("🔗 ", "")`) for TUI
+- Public functions need doc comments
+- Tests go in `#[cfg(test)]` blocks at the bottom of each file
+
+## Known Issues to Fix
+1. Sequential LLM calls — should use `futures::stream::buffered()` for parallelism
+2. Neo4j inserts one-by-one — should batch with `UNWIND`
+3. `store_graph` deletes all data first — should support incremental MERGE
+4. `row_to_json` hardcodes column names — should use actual row columns
+5. Community detection is stubbed (always None)
+6. No shell completions
+7. Minimal test coverage
+
+## File Naming
+- Commands: `src/cli/commands/<command_name>.rs`
+- LLM providers: `src/llm/<provider_name>.rs`
+- Parsers: `src/parser/<format_name>.rs`
+
+## Dependencies (do not add unnecessary ones)
+Key crates: clap, tokio, reqwest, serde, neo4rs, petgraph, indicatif, console, anyhow, tracing
+
+## Build & Test
+```bash
+cargo build --release    # optimized binary (LTO enabled)
+cargo test               # unit tests
+cargo clippy             # lint
+RUST_LOG=debug cargo run -- build ./demo_data --provider ollama  # debug run
+```

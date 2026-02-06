@@ -1,0 +1,1757 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+  <key id="label" for="node" attr.name="label" attr.type="string"/>
+  <key id="degree" for="node" attr.name="degree" attr.type="int"/>
+  <key id="relation" for="edge" attr.name="relation" attr.type="string"/>
+  <key id="weight" for="edge" attr.name="weight" attr.type="double"/>
+  <graph id="G" edgedefault="directed">
+    <node id="api design">
+      <data key="label">api design</data>
+      <data key="degree">11</data>
+    </node>
+    <node id="odb">
+      <data key="label">odb</data>
+      <data key="degree">17</data>
+    </node>
+    <node id="rest apis">
+      <data key="label">rest apis</data>
+      <data key="degree">17</data>
+    </node>
+    <node id="independent deployment">
+      <data key="label">independent deployment</data>
+      <data key="degree">11</data>
+    </node>
+    <node id="convolutional neural networks">
+      <data key="label">convolutional neural networks</data>
+      <data key="degree">7</data>
+    </node>
+    <node id="system observability">
+      <data key="label">system observability</data>
+      <data key="degree">17</data>
+    </node>
+    <node id="education">
+      <data key="label">education</data>
+      <data key="degree">16</data>
+    </node>
+    <node id="neural networks">
+      <data key="label">neural networks</data>
+      <data key="degree">7</data>
+    </node>
+    <node id="ci/cd pipelines">
+      <data key="label">ci/cd pipelines</data>
+      <data key="degree">17</data>
+    </node>
+    <node id="healthcare">
+      <data key="label">healthcare</data>
+      <data key="degree">16</data>
+    </node>
+    <node id="finance">
+      <data key="label">finance</data>
+      <data key="degree">16</data>
+    </node>
+    <node id="job displacement">
+      <data key="label">job displacement</data>
+      <data key="degree">16</data>
+    </node>
+    <node id="ai decisions">
+      <data key="label">ai decisions</data>
+      <data key="degree">16</data>
+    </node>
+    <node id="large language models">
+      <data key="label">large language models</data>
+      <data key="degree">7</data>
+    </node>
+    <node id="image recognition">
+      <data key="label">image recognition</data>
+      <data key="degree">16</data>
+    </node>
+    <node id="transportation">
+      <data key="label">transportation</data>
+      <data key="degree">16</data>
+    </node>
+    <node id="database design">
+      <data key="label">database design</data>
+      <data key="degree">11</data>
+    </node>
+    <node id="misuse">
+      <data key="label">misuse</data>
+      <data key="degree">16</data>
+    </node>
+    <node id="ai">
+      <data key="label">ai</data>
+      <data key="degree">16</data>
+    </node>
+    <node id="accountability">
+      <data key="label">accountability</data>
+      <data key="degree">16</data>
+    </node>
+    <node id="microservices architecture">
+      <data key="label">microservices architecture</data>
+      <data key="degree">11</data>
+    </node>
+    <node id="polyglot persistence">
+      <data key="label">polyglot persistence</data>
+      <data key="degree">28</data>
+    </node>
+    <node id="deep learning">
+      <data key="label">deep learning</data>
+      <data key="degree">7</data>
+    </node>
+    <node id="monitoring tools">
+      <data key="label">monitoring tools</data>
+      <data key="degree">17</data>
+    </node>
+    <node id="computer vision">
+      <data key="label">computer vision</data>
+      <data key="degree">7</data>
+    </node>
+    <node id="message queues">
+      <data key="label">message queues</data>
+      <data key="degree">11</data>
+    </node>
+    <node id="machine learning">
+      <data key="label">machine learning</data>
+      <data key="degree">7</data>
+    </node>
+    <node id="service-to-service communication">
+      <data key="label">service-to-service communication</data>
+      <data key="degree">17</data>
+    </node>
+    <node id="kubernetes">
+      <data key="label">kubernetes</data>
+      <data key="degree">17</data>
+    </node>
+    <node id="artificial intelligence">
+      <data key="label">artificial intelligence</data>
+      <data key="degree">7</data>
+    </node>
+    <node id="cnns">
+      <data key="label">cnns</data>
+      <data key="degree">16</data>
+    </node>
+    <node id="xai">
+      <data key="label">xai</data>
+      <data key="degree">16</data>
+    </node>
+    <node id="graphql">
+      <data key="label">graphql</data>
+      <data key="degree">17</data>
+    </node>
+    <node id="container orchestration">
+      <data key="label">container orchestration</data>
+      <data key="degree">17</data>
+    </node>
+    <node id="protocol buffers">
+      <data key="label">protocol buffers</data>
+      <data key="degree">17</data>
+    </node>
+    <node id="docker">
+      <data key="label">docker</data>
+      <data key="degree">17</data>
+    </node>
+    <node id="terraform">
+      <data key="label">terraform</data>
+      <data key="degree">17</data>
+    </node>
+    <node id="infrastructure as code">
+      <data key="label">infrastructure as code</data>
+      <data key="degree">17</data>
+    </node>
+    <node id="grpc">
+      <data key="label">grpc</data>
+      <data key="degree">17</data>
+    </node>
+    <node id="responsible ai">
+      <data key="label">responsible ai</data>
+      <data key="degree">16</data>
+    </node>
+    <node id="relational databases">
+      <data key="label">relational databases</data>
+      <data key="degree">11</data>
+    </node>
+    <node id="http methods">
+      <data key="label">http methods</data>
+      <data key="degree">17</data>
+    </node>
+    <node id="natural language processing">
+      <data key="label">natural language processing</data>
+      <data key="degree">7</data>
+    </node>
+    <node id="object detection">
+      <data key="label">object detection</data>
+      <data key="degree">16</data>
+    </node>
+    <node id="bias">
+      <data key="label">bias</data>
+      <data key="degree">16</data>
+    </node>
+    <node id="privacy">
+      <data key="label">privacy</data>
+      <data key="degree">16</data>
+    </node>
+    <node id="trust">
+      <data key="label">trust</data>
+      <data key="degree">16</data>
+    </node>
+    <node id="reactive systems">
+      <data key="label">reactive systems</data>
+      <data key="degree">11</data>
+    </node>
+    <node id="event-driven architecture">
+      <data key="label">event-driven architecture</data>
+      <data key="degree">11</data>
+    </node>
+    <node id="nosql databases">
+      <data key="label">nosql databases</data>
+      <data key="degree">11</data>
+    </node>
+    <node id="containerized applications">
+      <data key="label">containerized applications</data>
+      <data key="degree">17</data>
+    </node>
+    <node id="monolithic architecture">
+      <data key="label">monolithic architecture</data>
+      <data key="degree">11</data>
+    </node>
+    <node id="software delivery">
+      <data key="label">software delivery</data>
+      <data key="degree">17</data>
+    </node>
+    <node id="software architecture">
+      <data key="label">software architecture</data>
+      <data key="degree">11</data>
+    </node>
+    <edge id="e0" source="graphql" target="odb">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e1" source="docker" target="odb">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e2" source="container orchestration" target="odb">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e3" source="grpc" target="odb">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e4" source="ci/cd pipelines" target="odb">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e5" source="http methods" target="odb">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e6" source="infrastructure as code" target="odb">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e7" source="kubernetes" target="odb">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e8" source="monitoring tools" target="odb">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e9" source="containerized applications" target="odb">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e10" source="protocol buffers" target="rest apis">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e11" source="odb" target="rest apis">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e12" source="infrastructure as code" target="rest apis">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e13" source="container orchestration" target="rest apis">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e14" source="ci/cd pipelines" target="rest apis">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e15" source="monitoring tools" target="rest apis">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e16" source="http methods" target="rest apis">
+      <data key="relation">rest apis use http methods to interact with resources</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e17" source="docker" target="rest apis">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e18" source="graphql" target="rest apis">
+      <data key="relation">graphql offers a flexible alternative to rest apis for data retrieval</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e19" source="grpc" target="rest apis">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e20" source="containerized applications" target="rest apis">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e21" source="kubernetes" target="rest apis">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e22" source="polyglot persistence" target="rest apis">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e23" source="event-driven architecture" target="independent deployment">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e24" source="database design" target="independent deployment">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e25" source="api design" target="independent deployment">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e26" source="computer vision" target="convolutional neural networks">
+      <data key="relation">uses CNNs for effective image recognition and object detection</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e27" source="artificial intelligence" target="convolutional neural networks">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e28" source="kubernetes" target="system observability">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e29" source="http methods" target="system observability">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e30" source="docker" target="system observability">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e31" source="graphql" target="system observability">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e32" source="rest apis" target="system observability">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e33" source="software delivery" target="system observability">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e34" source="polyglot persistence" target="system observability">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e35" source="odb" target="system observability">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e36" source="container orchestration" target="system observability">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e37" source="service-to-service communication" target="system observability">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e38" source="infrastructure as code" target="system observability">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e39" source="grpc" target="system observability">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e40" source="ci/cd pipelines" target="system observability">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e41" source="protocol buffers" target="system observability">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e42" source="containerized applications" target="system observability">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e43" source="monitoring tools" target="system observability">
+      <data key="relation">monitoring tools enhance system observability and issue detection</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e44" source="ai" target="education">
+      <data key="relation">ai supports personalized learning and automated grading in education</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e45" source="ai decisions" target="education">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e46" source="bias" target="education">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e47" source="cnns" target="education">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e48" source="accountability" target="education">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e49" source="deep learning" target="neural networks">
+      <data key="relation">employs neural networks with multiple layers to learn complex patterns</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e50" source="computer vision" target="neural networks">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e51" source="convolutional neural networks" target="neural networks">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e52" source="large language models" target="neural networks">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e53" source="machine learning" target="neural networks">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e54" source="artificial intelligence" target="neural networks">
+      <data key="relation">uses computing systems inspired by biological neural networks to perform intelligent tasks</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e55" source="natural language processing" target="neural networks">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e56" source="education" target="healthcare">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e57" source="ai decisions" target="healthcare">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e58" source="accountability" target="healthcare">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e59" source="bias" target="healthcare">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e60" source="finance" target="healthcare">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e61" source="ai" target="healthcare">
+      <data key="relation">ai applications include disease diagnosis, drug discovery, and personalized treatment in healthcare</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e62" source="cnns" target="healthcare">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e63" source="ai" target="finance">
+      <data key="relation">ai is used for fraud detection, algorithmic trading, and risk assessment in finance</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e64" source="bias" target="finance">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e65" source="education" target="finance">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e66" source="cnns" target="finance">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e67" source="accountability" target="finance">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e68" source="ai decisions" target="finance">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e69" source="education" target="job displacement">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e70" source="bias" target="job displacement">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e71" source="accountability" target="job displacement">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e72" source="healthcare" target="job displacement">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e73" source="image recognition" target="job displacement">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e74" source="ai" target="job displacement">
+      <data key="relation">ai raises ethical questions about job displacement</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e75" source="finance" target="job displacement">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e76" source="cnns" target="job displacement">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e77" source="ai decisions" target="job displacement">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e78" source="accountability" target="ai decisions">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e79" source="ai" target="ai decisions">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e80" source="deep learning" target="large language models">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e81" source="artificial intelligence" target="large language models">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e82" source="computer vision" target="large language models">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e83" source="convolutional neural networks" target="large language models">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e84" source="healthcare" target="image recognition">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e85" source="accountability" target="image recognition">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e86" source="finance" target="image recognition">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e87" source="ai decisions" target="image recognition">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e88" source="bias" target="image recognition">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e89" source="ai" target="image recognition">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e90" source="education" target="image recognition">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e91" source="cnns" target="image recognition">
+      <data key="relation">cnns are particularly effective for image recognition tasks</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e92" source="privacy" target="transportation">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e93" source="education" target="transportation">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e94" source="image recognition" target="transportation">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e95" source="responsible ai" target="transportation">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e96" source="cnns" target="transportation">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e97" source="finance" target="transportation">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e98" source="bias" target="transportation">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e99" source="ai" target="transportation">
+      <data key="relation">ai enables autonomous vehicles and traffic optimization in transportation</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e100" source="accountability" target="transportation">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e101" source="ai decisions" target="transportation">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e102" source="object detection" target="transportation">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e103" source="job displacement" target="transportation">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e104" source="misuse" target="transportation">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e105" source="healthcare" target="transportation">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e106" source="api design" target="database design">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e107" source="ai decisions" target="misuse">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e108" source="image recognition" target="misuse">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e109" source="finance" target="misuse">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e110" source="job displacement" target="misuse">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e111" source="bias" target="misuse">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e112" source="ai" target="misuse">
+      <data key="relation">ai development includes risks of potential misuse</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e113" source="accountability" target="misuse">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e114" source="cnns" target="misuse">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e115" source="education" target="misuse">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e116" source="healthcare" target="misuse">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e117" source="accountability" target="ai">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e118" source="independent deployment" target="microservices architecture">
+      <data key="relation">enables services to be updated or scaled without affecting others</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e119" source="message queues" target="microservices architecture">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e120" source="event-driven architecture" target="microservices architecture">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e121" source="database design" target="microservices architecture">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e122" source="api design" target="microservices architecture">
+      <data key="relation">relies on APIs for inter-service communication and integration</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e123" source="database design" target="polyglot persistence">
+      <data key="relation">combines multiple database types (e.g., SQL/NoSQL) for optimal system performance</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e124" source="infrastructure as code" target="polyglot persistence">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e125" source="graphql" target="polyglot persistence">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e126" source="nosql databases" target="polyglot persistence">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e127" source="event-driven architecture" target="polyglot persistence">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e128" source="docker" target="polyglot persistence">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e129" source="monitoring tools" target="polyglot persistence">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e130" source="monolithic architecture" target="polyglot persistence">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e131" source="containerized applications" target="polyglot persistence">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e132" source="http methods" target="polyglot persistence">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e133" source="container orchestration" target="polyglot persistence">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e134" source="microservices architecture" target="polyglot persistence">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e135" source="api design" target="polyglot persistence">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e136" source="ci/cd pipelines" target="polyglot persistence">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e137" source="message queues" target="polyglot persistence">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e138" source="odb" target="polyglot persistence">
+      <data key="relation">odb supports polyglot persistence for flexible data management</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e139" source="independent deployment" target="polyglot persistence">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e140" source="grpc" target="polyglot persistence">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e141" source="kubernetes" target="polyglot persistence">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e142" source="computer vision" target="deep learning">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e143" source="artificial intelligence" target="deep learning">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e144" source="convolutional neural networks" target="deep learning">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e145" source="ci/cd pipelines" target="monitoring tools">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e146" source="containerized applications" target="monitoring tools">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e147" source="http methods" target="monitoring tools">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e148" source="grpc" target="monitoring tools">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e149" source="docker" target="monitoring tools">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e150" source="container orchestration" target="monitoring tools">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e151" source="graphql" target="monitoring tools">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e152" source="infrastructure as code" target="monitoring tools">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e153" source="kubernetes" target="monitoring tools">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e154" source="artificial intelligence" target="computer vision">
+      <data key="relation">enables machines to interpret and understand visual information</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e155" source="database design" target="message queues">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e156" source="api design" target="message queues">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e157" source="event-driven architecture" target="message queues">
+      <data key="relation">relies on systems like Apache Kafka/RabbitMQ for asynchronous service communication</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e158" source="independent deployment" target="message queues">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e159" source="large language models" target="machine learning">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e160" source="computer vision" target="machine learning">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e161" source="convolutional neural networks" target="machine learning">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e162" source="deep learning" target="machine learning">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e163" source="artificial intelligence" target="machine learning">
+      <data key="relation">a subset of AI that enables systems to learn from experience without explicit programming</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e164" source="grpc" target="service-to-service communication">
+      <data key="relation">grpc is commonly used for service-to-service communication</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e165" source="graphql" target="service-to-service communication">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e166" source="container orchestration" target="service-to-service communication">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e167" source="docker" target="service-to-service communication">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e168" source="kubernetes" target="service-to-service communication">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e169" source="odb" target="service-to-service communication">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e170" source="protocol buffers" target="service-to-service communication">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e171" source="containerized applications" target="service-to-service communication">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e172" source="polyglot persistence" target="service-to-service communication">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e173" source="infrastructure as code" target="service-to-service communication">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e174" source="ci/cd pipelines" target="service-to-service communication">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e175" source="http methods" target="service-to-service communication">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e176" source="rest apis" target="service-to-service communication">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e177" source="monitoring tools" target="service-to-service communication">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e178" source="http methods" target="kubernetes">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e179" source="container orchestration" target="kubernetes">
+      <data key="relation">kubernetes automates container orchestration for deployment and scaling</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e180" source="ci/cd pipelines" target="kubernetes">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e181" source="grpc" target="kubernetes">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e182" source="graphql" target="kubernetes">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e183" source="containerized applications" target="kubernetes">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e184" source="infrastructure as code" target="kubernetes">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e185" source="docker" target="kubernetes">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e186" source="bias" target="cnns">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e187" source="ai" target="cnns">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e188" source="ai decisions" target="cnns">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e189" source="accountability" target="cnns">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e190" source="responsible ai" target="xai">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e191" source="finance" target="xai">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e192" source="trust" target="xai">
+      <data key="relation">xai aims to build trust in ai systems</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e193" source="misuse" target="xai">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e194" source="ai decisions" target="xai">
+      <data key="relation">xai focuses on making ai decisions more transparent</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e195" source="bias" target="xai">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e196" source="ai" target="xai">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e197" source="transportation" target="xai">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e198" source="healthcare" target="xai">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e199" source="image recognition" target="xai">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e200" source="cnns" target="xai">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e201" source="accountability" target="xai">
+      <data key="relation">xai ensures accountability in ai systems</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e202" source="education" target="xai">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e203" source="object detection" target="xai">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e204" source="privacy" target="xai">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e205" source="job displacement" target="xai">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e206" source="ci/cd pipelines" target="graphql">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e207" source="containerized applications" target="graphql">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e208" source="docker" target="graphql">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e209" source="container orchestration" target="graphql">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e210" source="ci/cd pipelines" target="container orchestration">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e211" source="infrastructure as code" target="protocol buffers">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e212" source="containerized applications" target="protocol buffers">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e213" source="polyglot persistence" target="protocol buffers">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e214" source="ci/cd pipelines" target="protocol buffers">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e215" source="grpc" target="protocol buffers">
+      <data key="relation">grpc uses protocol buffers for efficient binary serialization</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e216" source="docker" target="protocol buffers">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e217" source="monitoring tools" target="protocol buffers">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e218" source="container orchestration" target="protocol buffers">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e219" source="kubernetes" target="protocol buffers">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e220" source="http methods" target="protocol buffers">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e221" source="graphql" target="protocol buffers">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e222" source="odb" target="protocol buffers">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e223" source="container orchestration" target="docker">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e224" source="containerized applications" target="docker">
+      <data key="relation">docker packages applications into containers for consistent execution</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e225" source="ci/cd pipelines" target="docker">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e226" source="container orchestration" target="terraform">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e227" source="system observability" target="terraform">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e228" source="graphql" target="terraform">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e229" source="kubernetes" target="terraform">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e230" source="rest apis" target="terraform">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e231" source="service-to-service communication" target="terraform">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e232" source="containerized applications" target="terraform">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e233" source="http methods" target="terraform">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e234" source="docker" target="terraform">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e235" source="odb" target="terraform">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e236" source="protocol buffers" target="terraform">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e237" source="infrastructure as code" target="terraform">
+      <data key="relation">terraform enables version-controlled infrastructure management</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e238" source="grpc" target="terraform">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e239" source="software delivery" target="terraform">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e240" source="monitoring tools" target="terraform">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e241" source="ci/cd pipelines" target="terraform">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e242" source="polyglot persistence" target="terraform">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e243" source="container orchestration" target="infrastructure as code">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e244" source="ci/cd pipelines" target="infrastructure as code">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e245" source="graphql" target="infrastructure as code">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e246" source="grpc" target="infrastructure as code">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e247" source="docker" target="infrastructure as code">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e248" source="containerized applications" target="infrastructure as code">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e249" source="http methods" target="infrastructure as code">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e250" source="containerized applications" target="grpc">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e251" source="graphql" target="grpc">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e252" source="container orchestration" target="grpc">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e253" source="ci/cd pipelines" target="grpc">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e254" source="docker" target="grpc">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e255" source="bias" target="responsible ai">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e256" source="cnns" target="responsible ai">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e257" source="job displacement" target="responsible ai">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e258" source="ai decisions" target="responsible ai">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e259" source="misuse" target="responsible ai">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e260" source="object detection" target="responsible ai">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e261" source="education" target="responsible ai">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e262" source="accountability" target="responsible ai">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e263" source="image recognition" target="responsible ai">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e264" source="finance" target="responsible ai">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e265" source="privacy" target="responsible ai">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e266" source="healthcare" target="responsible ai">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e267" source="ai" target="responsible ai">
+      <data key="relation">responsible ai development requires addressing ethical concerns</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e268" source="independent deployment" target="relational databases">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e269" source="nosql databases" target="relational databases">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e270" source="microservices architecture" target="relational databases">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e271" source="monolithic architecture" target="relational databases">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e272" source="event-driven architecture" target="relational databases">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e273" source="message queues" target="relational databases">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e274" source="api design" target="relational databases">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e275" source="reactive systems" target="relational databases">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e276" source="polyglot persistence" target="relational databases">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e277" source="database design" target="relational databases">
+      <data key="relation">uses SQL and enforces ACID properties for structured data integrity</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e278" source="ci/cd pipelines" target="http methods">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e279" source="grpc" target="http methods">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e280" source="containerized applications" target="http methods">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e281" source="container orchestration" target="http methods">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e282" source="graphql" target="http methods">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e283" source="docker" target="http methods">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e284" source="convolutional neural networks" target="natural language processing">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e285" source="machine learning" target="natural language processing">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e286" source="large language models" target="natural language processing">
+      <data key="relation">uses models like GPT and Claude trained on vast text data for NLP tasks</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e287" source="artificial intelligence" target="natural language processing">
+      <data key="relation">combines linguistics and AI to enable computers to understand and generate human language</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e288" source="deep learning" target="natural language processing">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e289" source="computer vision" target="natural language processing">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e290" source="ai decisions" target="object detection">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e291" source="healthcare" target="object detection">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e292" source="ai" target="object detection">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e293" source="misuse" target="object detection">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e294" source="finance" target="object detection">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e295" source="bias" target="object detection">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e296" source="job displacement" target="object detection">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e297" source="cnns" target="object detection">
+      <data key="relation">cnns excel in object detection tasks</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e298" source="accountability" target="object detection">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e299" source="education" target="object detection">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e300" source="image recognition" target="object detection">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e301" source="ai" target="bias">
+      <data key="relation">ai development involves ethical considerations regarding bias</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e302" source="ai decisions" target="bias">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e303" source="accountability" target="bias">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e304" source="healthcare" target="privacy">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e305" source="education" target="privacy">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e306" source="ai" target="privacy">
+      <data key="relation">ai development raises ethical concerns about privacy</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e307" source="accountability" target="privacy">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e308" source="image recognition" target="privacy">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e309" source="finance" target="privacy">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e310" source="misuse" target="privacy">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e311" source="cnns" target="privacy">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e312" source="ai decisions" target="privacy">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e313" source="bias" target="privacy">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e314" source="job displacement" target="privacy">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e315" source="object detection" target="privacy">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e316" source="ai" target="trust">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e317" source="responsible ai" target="trust">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e318" source="accountability" target="trust">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e319" source="education" target="trust">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e320" source="transportation" target="trust">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e321" source="misuse" target="trust">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e322" source="bias" target="trust">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e323" source="job displacement" target="trust">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e324" source="object detection" target="trust">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e325" source="finance" target="trust">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e326" source="ai decisions" target="trust">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e327" source="privacy" target="trust">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e328" source="cnns" target="trust">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e329" source="image recognition" target="trust">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e330" source="healthcare" target="trust">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e331" source="message queues" target="reactive systems">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e332" source="nosql databases" target="reactive systems">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e333" source="polyglot persistence" target="reactive systems">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e334" source="api design" target="reactive systems">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e335" source="monolithic architecture" target="reactive systems">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e336" source="event-driven architecture" target="reactive systems">
+      <data key="relation">optimized for handling high-volume data streams via event-based workflows</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e337" source="microservices architecture" target="reactive systems">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e338" source="independent deployment" target="reactive systems">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e339" source="database design" target="reactive systems">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e340" source="database design" target="event-driven architecture">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e341" source="api design" target="event-driven architecture">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e342" source="microservices architecture" target="nosql databases">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e343" source="message queues" target="nosql databases">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e344" source="independent deployment" target="nosql databases">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e345" source="database design" target="nosql databases">
+      <data key="relation">offers flexibility and horizontal scaling for unstructured or large-scale data</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e346" source="event-driven architecture" target="nosql databases">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e347" source="monolithic architecture" target="nosql databases">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e348" source="api design" target="nosql databases">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e349" source="container orchestration" target="containerized applications">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e350" source="ci/cd pipelines" target="containerized applications">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e351" source="message queues" target="monolithic architecture">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e352" source="api design" target="monolithic architecture">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e353" source="database design" target="monolithic architecture">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e354" source="independent deployment" target="monolithic architecture">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e355" source="microservices architecture" target="monolithic architecture">
+      <data key="relation">contrasts with centralized, single-codebase systems by breaking functionality into independent services</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e356" source="event-driven architecture" target="monolithic architecture">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e357" source="infrastructure as code" target="software delivery">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e358" source="kubernetes" target="software delivery">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e359" source="protocol buffers" target="software delivery">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e360" source="polyglot persistence" target="software delivery">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e361" source="monitoring tools" target="software delivery">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e362" source="grpc" target="software delivery">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e363" source="service-to-service communication" target="software delivery">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e364" source="graphql" target="software delivery">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e365" source="odb" target="software delivery">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e366" source="rest apis" target="software delivery">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e367" source="docker" target="software delivery">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e368" source="containerized applications" target="software delivery">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e369" source="ci/cd pipelines" target="software delivery">
+      <data key="relation">ci/cd pipelines automate faster and more reliable software delivery</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e370" source="http methods" target="software delivery">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e371" source="container orchestration" target="software delivery">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e372" source="nosql databases" target="software architecture">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e373" source="message queues" target="software architecture">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e374" source="monolithic architecture" target="software architecture">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e375" source="polyglot persistence" target="software architecture">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e376" source="reactive systems" target="software architecture">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e377" source="relational databases" target="software architecture">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e378" source="independent deployment" target="software architecture">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e379" source="api design" target="software architecture">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e380" source="database design" target="software architecture">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+    <edge id="e381" source="microservices architecture" target="software architecture">
+      <data key="relation">defines how components are organized as small, independent services in a distributed system</data>
+      <data key="weight">5</data>
+    </edge>
+    <edge id="e382" source="event-driven architecture" target="software architecture">
+      <data key="relation">contextual proximity</data>
+      <data key="weight">1</data>
+    </edge>
+  </graph>
+</graphml>

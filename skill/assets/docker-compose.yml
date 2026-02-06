@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  neo4j:
+    image: neo4j:5-community
+    container_name: rknowledge-neo4j
+    ports:
+      - "7474:7474"  # HTTP (Neo4j Browser)
+      - "7687:7687"  # Bolt protocol
+    environment:
+      - NEO4J_AUTH=neo4j/rknowledge
+      - NEO4J_PLUGINS=["apoc"]
+      - NEO4J_apoc_export_file_enabled=true
+      - NEO4J_apoc_import_file_enabled=true
+      - NEO4J_apoc_import_file_use__neo4j__config=true
+      - NEO4J_dbms_security_procedures_unrestricted=apoc.*
+      - NEO4J_dbms_memory_heap_initial__size=512m
+      - NEO4J_dbms_memory_heap_max__size=1G
+      - NEO4J_dbms_memory_pagecache_size=512m
+    volumes:
+      - rknowledge-neo4j-data:/data
+      - rknowledge-neo4j-logs:/logs
+      - rknowledge-neo4j-import:/var/lib/neo4j/import
+      - rknowledge-neo4j-plugins:/plugins
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:7474 || exit 1"]
+      interval: 15s
+      timeout: 30s
+      retries: 10
+      start_period: 30s
+    restart: unless-stopped
+
+volumes:
+  rknowledge-neo4j-data:
+    name: rknowledge-neo4j-data
+  rknowledge-neo4j-logs:
+    name: rknowledge-neo4j-logs
+  rknowledge-neo4j-import:
+    name: rknowledge-neo4j-import
+  rknowledge-neo4j-plugins:
+    name: rknowledge-neo4j-plugins
+
+networks:
+  default:
+    name: rknowledge-network

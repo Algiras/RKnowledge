@@ -1,0 +1,70 @@
+[package]
+name = "rknowledge"
+version = "0.1.0"
+edition = "2024"
+description = "High-performance knowledge graph extraction CLI using LLMs"
+license = "MIT"
+repository = "https://github.com/algimantask/rknowledge"
+keywords = ["knowledge-graph", "llm", "neo4j", "rag"]
+categories = ["command-line-utilities", "text-processing"]
+
+[[bin]]
+name = "rknowledge"
+path = "src/main.rs"
+
+[dependencies]
+# CLI
+clap = { version = "4.5", features = ["derive", "env"] }
+
+# Async runtime
+tokio = { version = "1.44", features = ["full"] }
+
+# HTTP client for LLM APIs
+reqwest = { version = "0.12", features = ["json", "rustls-tls", "blocking"], default-features = false }
+
+# Serialization
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+toml = "0.8"
+
+# Neo4j driver
+neo4rs = "0.8"
+
+# Document parsing
+pdf-extract = "0.8"
+pulldown-cmark = "0.12"
+
+# Progress and output
+indicatif = { version = "0.17", features = ["rayon"] }
+console = "0.15"
+colored = "2.2"
+
+# Utilities
+uuid = { version = "1.16", features = ["v4"] }
+thiserror = "2.0"
+anyhow = "1.0"
+async-trait = "0.1"
+futures = "0.3"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+dirs = "6.0"
+walkdir = "2.5"
+regex = "1.11"
+
+# Graph operations
+petgraph = "0.8"
+
+# For HTML parsing
+scraper = "0.22"
+
+[dev-dependencies]
+tokio-test = "0.4"
+tempfile = "3.15"
+assert_cmd = "2.0"
+predicates = "3.1"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+strip = true
