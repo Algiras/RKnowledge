@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RKnowledge - Production-Grade Knowledge Graph CLI</title>
-    <meta name="description" content="Production-grade knowledge graph extraction CLI. Rust, multi-LLM, Neo4j, graph analytics, interactive visualization. Inspired by rahulnyk/knowledge_graph.">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
+    <meta name="description"
+        content="Production-grade knowledge graph extraction CLI. Rust, multi-LLM, Neo4j, graph analytics, interactive visualization. Inspired by rahulnyk/knowledge_graph.">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧠</text></svg>">
     <style>
         :root {
             --bg: #0a0a1a;
@@ -23,397 +26,806 @@
             --purple: #a78bfa;
             --red: #f87171;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
 
         /* Hero */
-        .hero { text-align: center; padding: 80px 20px 60px; background: linear-gradient(180deg, var(--bg) 0%, var(--bg-card) 50%, var(--bg) 100%); border-bottom: 1px solid var(--border); }
-        .hero h1 { font-size: 3.2rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 16px; }
-        .hero h1 span { color: var(--accent); }
-        .hero .tagline { font-size: 1.2rem; color: var(--text-dim); max-width: 640px; margin: 0 auto 12px; }
-        .hero .sub { font-size: 0.9rem; color: var(--text-dim); margin-bottom: 28px; }
-        .hero .sub a { color: var(--cyan); text-decoration: none; }
-        .hero .sub a:hover { text-decoration: underline; }
-        .badges { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 28px; }
-        .badges img { height: 20px; }
-        .install-box { background: var(--bg-code); border: 1px solid var(--border); border-radius: 10px; padding: 16px 28px; max-width: 640px; margin: 0 auto; text-align: left; position: relative; }
-        .install-box .label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-dim); margin-bottom: 6px; }
-        .install-box code { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.88rem; color: var(--cyan); word-break: break-all; }
-        .install-box .copy-btn { position: absolute; top: 10px; right: 10px; background: var(--accent2); border: 1px solid var(--border); color: var(--text-dim); padding: 4px 10px; border-radius: 5px; cursor: pointer; font-size: 0.75rem; transition: all 0.15s; }
-        .install-box .copy-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+        .hero {
+            text-align: center;
+            padding: 80px 20px 60px;
+            background: linear-gradient(180deg, var(--bg) 0%, var(--bg-card) 50%, var(--bg) 100%);
+            border-bottom: 1px solid var(--border);
+        }
 
-        .container { max-width: 960px; margin: 0 auto; padding: 0 20px; }
-        section { padding: 64px 0; border-bottom: 1px solid #1a1a30; }
-        h2 { font-size: 1.9rem; margin-bottom: 12px; text-align: center; font-weight: 700; }
-        h2 span { color: var(--accent); }
-        .section-sub { text-align: center; color: var(--text-dim); font-size: 0.95rem; margin-bottom: 36px; max-width: 600px; margin-left: auto; margin-right: auto; }
+        .hero h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 16px;
+        }
+
+        .hero h1 span {
+            color: var(--accent);
+        }
+
+        .hero .tagline {
+            font-size: 1.2rem;
+            color: var(--text-dim);
+            max-width: 640px;
+            margin: 0 auto 12px;
+        }
+
+        .hero .sub {
+            font-size: 0.9rem;
+            color: var(--text-dim);
+            margin-bottom: 28px;
+        }
+
+        .hero .sub a {
+            color: var(--cyan);
+            text-decoration: none;
+        }
+
+        .hero .sub a:hover {
+            text-decoration: underline;
+        }
+
+        .badges {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 28px;
+        }
+
+        .badges img {
+            height: 20px;
+        }
+
+        .install-box {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px 28px;
+            max-width: 640px;
+            margin: 0 auto;
+            text-align: left;
+            position: relative;
+        }
+
+        .install-box .label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-dim);
+            margin-bottom: 6px;
+        }
+
+        .install-box code {
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.88rem;
+            color: var(--cyan);
+            word-break: break-all;
+        }
+
+        .install-box .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--accent2);
+            border: 1px solid var(--border);
+            color: var(--text-dim);
+            padding: 4px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.15s;
+        }
+
+        .install-box .copy-btn:hover {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            padding: 64px 0;
+            border-bottom: 1px solid #1a1a30;
+        }
+
+        h2 {
+            font-size: 1.9rem;
+            margin-bottom: 12px;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        h2 span {
+            color: var(--accent);
+        }
+
+        .section-sub {
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 0.95rem;
+            margin-bottom: 36px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
 
         /* Comparison table */
-        .cmp-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
-        .cmp-table th { text-align: left; padding: 12px 16px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-dim); font-weight: 600; border-bottom: 2px solid var(--border); }
-        .cmp-table th:first-child { width: 28%; }
-        .cmp-table th.orig { color: var(--text-dim); }
-        .cmp-table th.ours { color: var(--accent); }
-        .cmp-table td { padding: 10px 16px; border-bottom: 1px solid #1a1a30; vertical-align: top; }
-        .cmp-table td:first-child { color: var(--text); font-weight: 500; }
-        .cmp-table td:nth-child(2) { color: var(--text-dim); }
-        .cmp-table td:nth-child(3) { color: var(--green); }
-        .cmp-table tr:hover { background: rgba(255,107,138,0.03); }
-        .cmp-table .tag { display: inline-block; font-size: 0.68rem; padding: 1px 6px; border-radius: 4px; font-weight: 600; }
-        .tag-new { background: rgba(74,222,128,0.15); color: var(--green); }
-        .tag-better { background: rgba(102,204,238,0.15); color: var(--cyan); }
+        .cmp-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+        }
+
+        .cmp-table th {
+            text-align: left;
+            padding: 12px 16px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-dim);
+            font-weight: 600;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .cmp-table th:first-child {
+            width: 28%;
+        }
+
+        .cmp-table th.orig {
+            color: var(--text-dim);
+        }
+
+        .cmp-table th.ours {
+            color: var(--accent);
+        }
+
+        .cmp-table td {
+            padding: 10px 16px;
+            border-bottom: 1px solid #1a1a30;
+            vertical-align: top;
+        }
+
+        .cmp-table td:first-child {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .cmp-table td:nth-child(2) {
+            color: var(--text-dim);
+        }
+
+        .cmp-table td:nth-child(3) {
+            color: var(--green);
+        }
+
+        .cmp-table tr:hover {
+            background: rgba(255, 107, 138, 0.03);
+        }
+
+        .cmp-table .tag {
+            display: inline-block;
+            font-size: 0.68rem;
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .tag-new {
+            background: rgba(74, 222, 128, 0.15);
+            color: var(--green);
+        }
+
+        .tag-better {
+            background: rgba(102, 204, 238, 0.15);
+            color: var(--cyan);
+        }
 
         /* Feature grid */
-        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
-        .feature-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 24px; transition: border-color 0.2s; }
-        .feature-card:hover { border-color: var(--accent); }
-        .feature-card .icon { font-size: 1.8rem; margin-bottom: 10px; }
-        .feature-card h3 { font-size: 1rem; margin-bottom: 6px; font-weight: 600; }
-        .feature-card p { color: var(--text-dim); font-size: 0.88rem; }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .feature-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 24px;
+            transition: border-color 0.2s;
+        }
+
+        .feature-card:hover {
+            border-color: var(--accent);
+        }
+
+        .feature-card .icon {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .feature-card h3 {
+            font-size: 1rem;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            color: var(--text-dim);
+            font-size: 0.88rem;
+        }
 
         /* Code blocks */
-        .code-block { background: var(--bg-code); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; margin: 12px 0; overflow-x: auto; }
-        .code-block code { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.85rem; line-height: 1.8; }
-        .comment { color: var(--text-dim); }
-        .cmd { color: var(--green); }
-        .flag { color: var(--yellow); }
-        .str { color: var(--cyan); }
-        .prompt { color: var(--text-dim); user-select: none; }
+        .code-block {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin: 12px 0;
+            overflow-x: auto;
+        }
+
+        .code-block code {
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.85rem;
+            line-height: 1.8;
+        }
+
+        .comment {
+            color: var(--text-dim);
+        }
+
+        .cmd {
+            color: var(--green);
+        }
+
+        .flag {
+            color: var(--yellow);
+        }
+
+        .str {
+            color: var(--cyan);
+        }
+
+        .prompt {
+            color: var(--text-dim);
+            user-select: none;
+        }
 
         /* Steps */
-        .steps { display: flex; flex-direction: column; gap: 20px; max-width: 700px; margin: 0 auto; }
-        .step { display: flex; gap: 16px; align-items: flex-start; }
-        .step-num { flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; }
-        .step-content h3 { margin-bottom: 4px; font-size: 1rem; }
-        .step-content p { color: var(--text-dim); font-size: 0.88rem; }
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .step {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .step-num {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .step-content h3 {
+            margin-bottom: 4px;
+            font-size: 1rem;
+        }
+
+        .step-content p {
+            color: var(--text-dim);
+            font-size: 0.88rem;
+        }
 
         /* Commands table */
-        .cmd-table { width: 100%; border-collapse: collapse; }
-        .cmd-table th, .cmd-table td { text-align: left; padding: 12px 16px; border-bottom: 1px solid #1a1a30; }
-        .cmd-table th { color: var(--text-dim); font-weight: 600; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.05em; }
-        .cmd-table td code { font-family: 'SF Mono', 'Fira Code', monospace; color: var(--green); font-size: 0.85rem; }
-        .cmd-table tr:hover { background: rgba(255,107,138,0.03); }
-        .cmd-table .new-badge { font-size: 0.65rem; background: rgba(74,222,128,0.15); color: var(--green); padding: 1px 5px; border-radius: 3px; margin-left: 6px; font-weight: 600; }
+        .cmd-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .cmd-table th,
+        .cmd-table td {
+            text-align: left;
+            padding: 12px 16px;
+            border-bottom: 1px solid #1a1a30;
+        }
+
+        .cmd-table th {
+            color: var(--text-dim);
+            font-weight: 600;
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .cmd-table td code {
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            color: var(--green);
+            font-size: 0.85rem;
+        }
+
+        .cmd-table tr:hover {
+            background: rgba(255, 107, 138, 0.03);
+        }
+
+        .cmd-table .new-badge {
+            font-size: 0.65rem;
+            background: rgba(74, 222, 128, 0.15);
+            color: var(--green);
+            padding: 1px 5px;
+            border-radius: 3px;
+            margin-left: 6px;
+            font-weight: 600;
+        }
 
         /* Providers */
-        .providers { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
-        .provider { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 18px; text-align: center; }
-        .provider .icon { font-size: 1.8rem; margin-bottom: 6px; }
-        .provider h4 { margin-bottom: 2px; font-size: 0.95rem; }
-        .provider p { font-size: 0.82rem; color: var(--text-dim); }
-        .provider .ptag { display: inline-block; font-size: 0.68rem; padding: 2px 8px; border-radius: 99px; margin-top: 6px; }
-        .ptag-free { background: rgba(74,222,128,0.15); color: var(--green); }
-        .ptag-api { background: rgba(251,191,36,0.15); color: var(--yellow); }
+        .providers {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 14px;
+        }
+
+        .provider {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 18px;
+            text-align: center;
+        }
+
+        .provider .icon {
+            font-size: 1.8rem;
+            margin-bottom: 6px;
+        }
+
+        .provider h4 {
+            margin-bottom: 2px;
+            font-size: 0.95rem;
+        }
+
+        .provider p {
+            font-size: 0.82rem;
+            color: var(--text-dim);
+        }
+
+        .provider .ptag {
+            display: inline-block;
+            font-size: 0.68rem;
+            padding: 2px 8px;
+            border-radius: 99px;
+            margin-top: 6px;
+        }
+
+        .ptag-free {
+            background: rgba(74, 222, 128, 0.15);
+            color: var(--green);
+        }
+
+        .ptag-api {
+            background: rgba(251, 191, 36, 0.15);
+            color: var(--yellow);
+        }
 
         /* Architecture */
-        .arch-diagram { background: var(--bg-code); border: 1px solid var(--border); border-radius: 10px; padding: 28px; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 0.8rem; line-height: 1.6; overflow-x: auto; text-align: center; color: var(--cyan); }
+        .arch-diagram {
+            background: var(--bg-code);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 28px;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.8rem;
+            line-height: 1.6;
+            overflow-x: auto;
+            text-align: center;
+            color: var(--cyan);
+        }
 
         /* Footer */
-        footer { text-align: center; padding: 40px 20px; color: var(--text-dim); font-size: 0.85rem; }
-        footer a { color: var(--accent); text-decoration: none; }
-        footer a:hover { text-decoration: underline; }
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-dim);
+            font-size: 0.85rem;
+        }
+
+        footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
 
         @media (max-width: 640px) {
-            .hero h1 { font-size: 2.2rem; }
-            .features { grid-template-columns: 1fr; }
-            .providers { grid-template-columns: repeat(2, 1fr); }
-            .cmp-table { font-size: 0.78rem; }
-            .cmp-table th, .cmp-table td { padding: 8px 10px; }
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            .providers {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .cmp-table {
+                font-size: 0.78rem;
+            }
+
+            .cmp-table th,
+            .cmp-table td {
+                padding: 8px 10px;
+            }
         }
     </style>
 </head>
+
 <body>
 
-<!-- Hero -->
-<header class="hero">
-    <h1>🧠 <span>R</span>Knowledge</h1>
-    <p class="tagline">Production-grade knowledge graph CLI. Extract concepts and relationships from any document using LLMs.</p>
-    <p class="sub">Inspired by <a href="https://github.com/rahulnyk/knowledge_graph">rahulnyk/knowledge_graph</a> &mdash; rewritten from scratch in Rust.</p>
+    <!-- Hero -->
+    <header class="hero">
+        <h1>🧠 <span>R</span>Knowledge</h1>
+        <p class="tagline">Production-grade knowledge graph CLI. Extract concepts and relationships from any document
+            using LLMs.</p>
+        <p class="sub">Inspired by <a href="https://github.com/rahulnyk/knowledge_graph">rahulnyk/knowledge_graph</a>
+            &mdash; rewritten from scratch in Rust.</p>
 
-    <div class="badges">
-        <img src="https://img.shields.io/github/v/release/Algiras/RKnowledge?style=flat-square&color=ff6b8a" alt="Release">
-        <img src="https://img.shields.io/badge/language-Rust-orange?style=flat-square" alt="Language">
-        <img src="https://img.shields.io/github/actions/workflow/status/Algiras/RKnowledge/ci.yml?style=flat-square&label=CI" alt="CI">
-        <img src="https://img.shields.io/github/license/Algiras/RKnowledge?style=flat-square" alt="License">
-    </div>
-
-    <div class="install-box">
-        <div class="label">Install with one command</div>
-        <code>curl -fsSL https://raw.githubusercontent.com/Algiras/RKnowledge/main/install.sh | bash</code>
-        <button class="copy-btn" onclick="navigator.clipboard.writeText('curl -fsSL https://raw.githubusercontent.com/Algiras/RKnowledge/main/install.sh | bash').then(()=>{this.textContent='Copied!';setTimeout(()=>this.textContent='Copy',1500)})">Copy</button>
-    </div>
-</header>
-
-<!-- Comparison -->
-<section>
-    <div class="container">
-        <h2>How We <span>Differ</span></h2>
-        <p class="section-sub"><a href="https://github.com/rahulnyk/knowledge_graph" style="color:var(--cyan)">rahulnyk/knowledge_graph</a> is a brilliant ~300-line Python notebook proof of concept. RKnowledge turns that idea into a 15,500-line production CLI.</p>
-
-        <table class="cmp-table">
-            <thead>
-                <tr>
-                    <th>Dimension</th>
-                    <th class="orig">Original (Python)</th>
-                    <th class="ours">RKnowledge (Rust)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Interface</td>
-                    <td>Jupyter notebook cells</td>
-                    <td>Full CLI with 10 subcommands <span class="tag tag-better">better</span></td>
-                </tr>
-                <tr>
-                    <td>Language</td>
-                    <td>Python</td>
-                    <td>Rust &mdash; compiled binary, ~15x faster parsing <span class="tag tag-better">better</span></td>
-                </tr>
-                <tr>
-                    <td>LLM Providers</td>
-                    <td>Ollama only (Mistral 7B)</td>
-                    <td>Anthropic, OpenAI, Google, Ollama <span class="tag tag-better">better</span></td>
-                </tr>
-                <tr>
-                    <td>Concurrency</td>
-                    <td>Sequential (1 chunk at a time)</td>
-                    <td>Parallel LLM calls with <code>-j</code> flag <span class="tag tag-new">new</span></td>
-                </tr>
-                <tr>
-                    <td>Storage</td>
-                    <td>In-memory Pandas DataFrames</td>
-                    <td>Neo4j graph DB (Docker), persistent <span class="tag tag-better">better</span></td>
-                </tr>
-                <tr>
-                    <td>Incremental Builds</td>
-                    <td>Always from scratch</td>
-                    <td><code>--append</code> merges into existing graph <span class="tag tag-new">new</span></td>
-                </tr>
-                <tr>
-                    <td>Input Formats</td>
-                    <td>PDF only</td>
-                    <td>PDF, Markdown, HTML, plain text <span class="tag tag-better">better</span></td>
-                </tr>
-                <tr>
-                    <td>Entity Typing</td>
-                    <td>8 fixed categories</td>
-                    <td>Free-form LLM classification <span class="tag tag-better">better</span></td>
-                </tr>
-                <tr>
-                    <td>Graph Algorithms</td>
-                    <td>Degree + Louvain</td>
-                    <td>PageRank, Label Propagation, Dijkstra shortest path, density <span class="tag tag-new">new</span></td>
-                </tr>
-                <tr>
-                    <td>Querying</td>
-                    <td>None</td>
-                    <td><code>query</code>, <code>path</code>, <code>stats</code>, <code>communities</code> commands <span class="tag tag-new">new</span></td>
-                </tr>
-                <tr>
-                    <td>Visualization</td>
-                    <td>Static Pyvis HTML</td>
-                    <td>Interactive: click cards, search, type legend, toggle edges <span class="tag tag-better">better</span></td>
-                </tr>
-                <tr>
-                    <td>Export</td>
-                    <td>None</td>
-                    <td>JSON, CSV, GraphML, Cypher dump <span class="tag tag-new">new</span></td>
-                </tr>
-                <tr>
-                    <td>CI/CD</td>
-                    <td>None</td>
-                    <td>GitHub Actions: lint, test, multi-platform build <span class="tag tag-new">new</span></td>
-                </tr>
-                <tr>
-                    <td>Distribution</td>
-                    <td><code>docker build</code> + Jupyter</td>
-                    <td>Single binary, curl install, skills.sh <span class="tag tag-better">better</span></td>
-                </tr>
-                <tr>
-                    <td>Tests</td>
-                    <td>None</td>
-                    <td>118 tests (107 unit + 11 integration) <span class="tag tag-new">new</span></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</section>
-
-<!-- Features -->
-<section>
-    <div class="container">
-        <h2>Why <span>RKnowledge</span>?</h2>
-        <p class="section-sub">Everything you need to extract, store, analyze, and explore knowledge graphs from any text.</p>
-        <div class="features">
-            <div class="feature-card">
-                <div class="icon">⚡</div>
-                <h3>Blazing Fast</h3>
-                <p>Compiled Rust binary. Parallel LLM extraction with <code>-j</code> concurrency. Zero runtime dependencies.</p>
-            </div>
-            <div class="feature-card">
-                <div class="icon">🔌</div>
-                <h3>Multi-Provider LLM</h3>
-                <p>Anthropic, OpenAI, Google Gemini, and Ollama for free local inference. Switch with one flag.</p>
-            </div>
-            <div class="feature-card">
-                <div class="icon">🏷️</div>
-                <h3>Smart Entity Typing</h3>
-                <p>LLM classifies each concept freely &mdash; "programming language", "database", "medical condition" &mdash; no fixed list.</p>
-            </div>
-            <div class="feature-card">
-                <div class="icon">📊</div>
-                <h3>Graph Analytics</h3>
-                <p>PageRank, community detection, shortest path, connected components, degree distribution. Built-in.</p>
-            </div>
-            <div class="feature-card">
-                <div class="icon">🔗</div>
-                <h3>Neo4j + Incremental</h3>
-                <p>Persistent Neo4j backend via Docker. <code>--append</code> merges new documents without rebuilding.</p>
-            </div>
-            <div class="feature-card">
-                <div class="icon">🌐</div>
-                <h3>Interactive Visualization</h3>
-                <p>Click-to-expand detail cards, entity type legend, search, toggle proximity edges, freeze physics.</p>
-            </div>
+        <div class="badges">
+            <img src="https://img.shields.io/github/v/release/Algiras/RKnowledge?style=flat-square&color=ff6b8a"
+                alt="Release">
+            <img src="https://img.shields.io/badge/language-Rust-orange?style=flat-square" alt="Language">
+            <img src="https://img.shields.io/github/actions/workflow/status/Algiras/RKnowledge/ci.yml?style=flat-square&label=CI"
+                alt="CI">
+            <img src="https://img.shields.io/github/license/Algiras/RKnowledge?style=flat-square" alt="License">
         </div>
-    </div>
-</section>
 
-<!-- Quick Start -->
-<section>
-    <div class="container">
-        <h2>Quick <span>Start</span></h2>
-        <div class="steps">
-            <div class="step">
-                <div class="step-num">1</div>
-                <div class="step-content">
-                    <h3>Install</h3>
-                    <div class="code-block"><code><span class="prompt">$ </span><span class="cmd">curl</span> <span class="flag">-fsSL</span> https://raw.githubusercontent.com/Algiras/RKnowledge/main/install.sh | <span class="cmd">bash</span></code></div>
+        <div class="install-box">
+            <div class="label">Install with one command</div>
+            <code>curl -fsSL https://raw.githubusercontent.com/Algiras/RKnowledge/main/install.sh | bash</code>
+            <button class="copy-btn"
+                onclick="navigator.clipboard.writeText('curl -fsSL https://raw.githubusercontent.com/Algiras/RKnowledge/main/install.sh | bash').then(()=>{this.textContent='Copied!';setTimeout(()=>this.textContent='Copy',1500)})">Copy</button>
+        </div>
+    </header>
+
+    <!-- Comparison -->
+    <section>
+        <div class="container">
+            <h2>How We <span>Differ</span></h2>
+            <p class="section-sub"><a href="https://github.com/rahulnyk/knowledge_graph"
+                    style="color:var(--cyan)">rahulnyk/knowledge_graph</a> is a brilliant ~300-line Python notebook
+                proof of concept. RKnowledge turns that idea into a 15,500-line production CLI.</p>
+
+            <table class="cmp-table">
+                <thead>
+                    <tr>
+                        <th>Dimension</th>
+                        <th class="orig">Original (Python)</th>
+                        <th class="ours">RKnowledge (Rust)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Interface</td>
+                        <td>Jupyter notebook cells</td>
+                        <td>Full CLI with 10 subcommands <span class="tag tag-better">better</span></td>
+                    </tr>
+                    <tr>
+                        <td>Language</td>
+                        <td>Python</td>
+                        <td>Rust &mdash; compiled binary, ~15x faster parsing <span class="tag tag-better">better</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>LLM Providers</td>
+                        <td>Ollama only (Mistral 7B)</td>
+                        <td>Anthropic, OpenAI, Google, Ollama <span class="tag tag-better">better</span></td>
+                    </tr>
+                    <tr>
+                        <td>Concurrency</td>
+                        <td>Sequential (1 chunk at a time)</td>
+                        <td>Parallel LLM calls with <code>-j</code> flag <span class="tag tag-new">new</span></td>
+                    </tr>
+                    <tr>
+                        <td>Storage</td>
+                        <td>In-memory Pandas DataFrames</td>
+                        <td>Neo4j graph DB (Docker), persistent <span class="tag tag-better">better</span></td>
+                    </tr>
+                    <tr>
+                        <td>Incremental Builds</td>
+                        <td>Always from scratch</td>
+                        <td><code>--append</code> merges into existing graph <span class="tag tag-new">new</span></td>
+                    </tr>
+                    <tr>
+                        <td>Input Formats</td>
+                        <td>PDF only</td>
+                        <td>PDF, Markdown, HTML, plain text <span class="tag tag-better">better</span></td>
+                    </tr>
+                    <tr>
+                        <td>Entity Typing</td>
+                        <td>8 fixed categories</td>
+                        <td>Free-form LLM classification <span class="tag tag-better">better</span></td>
+                    </tr>
+                    <tr>
+                        <td>Graph Algorithms</td>
+                        <td>Degree + Louvain</td>
+                        <td>PageRank, Label Propagation, Dijkstra shortest path, density <span
+                                class="tag tag-new">new</span></td>
+                    </tr>
+                    <tr>
+                        <td>Querying</td>
+                        <td>None</td>
+                        <td><code>query</code>, <code>path</code>, <code>stats</code>, <code>communities</code> commands
+                            <span class="tag tag-new">new</span></td>
+                    </tr>
+                    <tr>
+                        <td>Visualization</td>
+                        <td>Static Pyvis HTML</td>
+                        <td>Interactive: click cards, search, type legend, toggle edges <span
+                                class="tag tag-better">better</span></td>
+                    </tr>
+                    <tr>
+                        <td>Export</td>
+                        <td>None</td>
+                        <td>JSON, CSV, GraphML, Cypher dump <span class="tag tag-new">new</span></td>
+                    </tr>
+                    <tr>
+                        <td>CI/CD</td>
+                        <td>None</td>
+                        <td>GitHub Actions: lint, test, multi-platform build <span class="tag tag-new">new</span></td>
+                    </tr>
+                    <tr>
+                        <td>Distribution</td>
+                        <td><code>docker build</code> + Jupyter</td>
+                        <td>Single binary, curl install, skills.sh <span class="tag tag-better">better</span></td>
+                    </tr>
+                    <tr>
+                        <td>Tests</td>
+                        <td>None</td>
+                        <td>118 tests (107 unit + 11 integration) <span class="tag tag-new">new</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section>
+        <div class="container">
+            <h2>Why <span>RKnowledge</span>?</h2>
+            <p class="section-sub">Everything you need to extract, store, analyze, and explore knowledge graphs from any
+                text.</p>
+            <div class="features">
+                <div class="feature-card">
+                    <div class="icon">⚡</div>
+                    <h3>Blazing Fast</h3>
+                    <p>Compiled Rust binary. Parallel LLM extraction with <code>-j</code> concurrency. Zero runtime
+                        dependencies.</p>
                 </div>
-            </div>
-            <div class="step">
-                <div class="step-num">2</div>
-                <div class="step-content">
-                    <h3>Initialize &amp; configure</h3>
-                    <div class="code-block"><code><span class="prompt">$ </span><span class="cmd">rknowledge</span> init     <span class="comment"># Start Neo4j + create config</span><br><span class="prompt">$ </span><span class="cmd">rknowledge</span> auth     <span class="comment"># Configure LLM provider</span></code></div>
+                <div class="feature-card">
+                    <div class="icon">🔌</div>
+                    <h3>Multi-Provider LLM</h3>
+                    <p>Anthropic, OpenAI, Google Gemini, and Ollama for free local inference. Switch with one flag.</p>
                 </div>
-            </div>
-            <div class="step">
-                <div class="step-num">3</div>
-                <div class="step-content">
-                    <h3>Build your knowledge graph</h3>
-                    <div class="code-block"><code><span class="prompt">$ </span><span class="cmd">rknowledge</span> build ./docs/ <span class="flag">--provider</span> <span class="str">ollama</span> <span class="flag">-j</span> <span class="str">8</span><br><span class="comment"># Extracted 40 relations from 4 chunks (8 concurrent)</span><br><span class="comment"># Graph: 54 nodes, 383 edges</span></code></div>
+                <div class="feature-card">
+                    <div class="icon">🏷️</div>
+                    <h3>Smart Entity Typing</h3>
+                    <p>LLM classifies each concept freely &mdash; "programming language", "database", "medical
+                        condition" &mdash; no fixed list.</p>
                 </div>
-            </div>
-            <div class="step">
-                <div class="step-num">4</div>
-                <div class="step-content">
-                    <h3>Explore</h3>
-                    <div class="code-block"><code><span class="prompt">$ </span><span class="cmd">rknowledge</span> query <span class="str">"machine learning"</span> <span class="flag">--depth</span> <span class="str">2</span><br><span class="prompt">$ </span><span class="cmd">rknowledge</span> path <span class="str">"docker"</span> <span class="str">"kubernetes"</span><br><span class="prompt">$ </span><span class="cmd">rknowledge</span> stats<br><span class="prompt">$ </span><span class="cmd">rknowledge</span> viz</code></div>
+                <div class="feature-card">
+                    <div class="icon">📊</div>
+                    <h3>Graph Analytics</h3>
+                    <p>PageRank, community detection, shortest path, connected components, degree distribution.
+                        Built-in.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🔗</div>
+                    <h3>Neo4j + Incremental</h3>
+                    <p>Persistent Neo4j backend via Docker. <code>--append</code> merges new documents without
+                        rebuilding.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">🌐</div>
+                    <h3>Interactive Visualization</h3>
+                    <p>Click-to-expand detail cards, entity type legend, search, toggle proximity edges, freeze physics.
+                    </p>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- Commands -->
-<section>
-    <div class="container">
-        <h2><span>Commands</span></h2>
-        <table class="cmd-table">
-            <thead><tr><th>Command</th><th>Description</th></tr></thead>
-            <tbody>
-                <tr><td><code>init</code></td><td>Initialize config and start Neo4j via Docker</td></tr>
-                <tr><td><code>auth</code></td><td>Configure LLM provider API keys (interactive)</td></tr>
-                <tr><td><code>build &lt;path&gt;</code></td><td>Process documents and build knowledge graph. Flags: <code>-j</code>, <code>--append</code>, <code>--provider</code></td></tr>
-                <tr><td><code>query &lt;q&gt;</code></td><td>Search the graph with variable <code>--depth</code> or raw <code>cypher:</code> queries</td></tr>
-                <tr><td><code>path &lt;from&gt; &lt;to&gt;</code></td><td>Find shortest path between two concepts<span class="new-badge">new</span></td></tr>
-                <tr><td><code>stats</code></td><td>Graph analytics: PageRank, density, degree distribution, entity types<span class="new-badge">new</span></td></tr>
-                <tr><td><code>communities</code></td><td>List detected communities and their members<span class="new-badge">new</span></td></tr>
-                <tr><td><code>export</code></td><td>Export to JSON, CSV, GraphML, or Cypher</td></tr>
-                <tr><td><code>viz</code></td><td>Open interactive graph visualization in browser</td></tr>
-            </tbody>
-        </table>
-    </div>
-</section>
-
-<!-- LLM Providers -->
-<section>
-    <div class="container">
-        <h2>LLM <span>Providers</span></h2>
-        <div class="providers">
-            <div class="provider">
-                <div class="icon">🟣</div>
-                <h4>Anthropic</h4>
-                <p>Claude Sonnet / Opus</p>
-                <span class="ptag ptag-api">API Key</span>
-            </div>
-            <div class="provider">
-                <div class="icon">🟢</div>
-                <h4>OpenAI</h4>
-                <p>GPT-4o / GPT-4</p>
-                <span class="ptag ptag-api">API Key</span>
-            </div>
-            <div class="provider">
-                <div class="icon">🔵</div>
-                <h4>Google</h4>
-                <p>Gemini Pro</p>
-                <span class="ptag ptag-api">API Key</span>
-            </div>
-            <div class="provider">
-                <div class="icon">🦙</div>
-                <h4>Ollama</h4>
-                <p>Mistral, Llama, etc.</p>
-                <span class="ptag ptag-free">Free / Local</span>
+    <!-- Quick Start -->
+    <section>
+        <div class="container">
+            <h2>Quick <span>Start</span></h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <div class="step-content">
+                        <h3>Install</h3>
+                        <div class="code-block">
+                            <code><span class="prompt">$ </span><span class="cmd">curl</span> <span class="flag">-fsSL</span> https://raw.githubusercontent.com/Algiras/RKnowledge/main/install.sh | <span class="cmd">bash</span></code>
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <div class="step-content">
+                        <h3>Initialize &amp; configure</h3>
+                        <div class="code-block">
+                            <code><span class="prompt">$ </span><span class="cmd">rknowledge</span> init     <span class="comment"># Start Neo4j + create config</span><br><span class="prompt">$ </span><span class="cmd">rknowledge</span> auth     <span class="comment"># Configure LLM provider</span></code>
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <div class="step-content">
+                        <h3>Build your knowledge graph</h3>
+                        <div class="code-block">
+                            <code><span class="prompt">$ </span><span class="cmd">rknowledge</span> build ./docs/ <span class="flag">--provider</span> <span class="str">ollama</span> <span class="flag">-j</span> <span class="str">8</span><br><span class="comment"># Extracted 40 relations from 4 chunks (8 concurrent)</span><br><span class="comment"># Graph: 54 nodes, 383 edges</span></code>
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">4</div>
+                    <div class="step-content">
+                        <h3>Explore</h3>
+                        <div class="code-block">
+                            <code><span class="prompt">$ </span><span class="cmd">rknowledge</span> query <span class="str">"machine learning"</span> <span class="flag">--depth</span> <span class="str">2</span><br><span class="prompt">$ </span><span class="cmd">rknowledge</span> path <span class="str">"docker"</span> <span class="str">"kubernetes"</span><br><span class="prompt">$ </span><span class="cmd">rknowledge</span> stats<br><span class="prompt">$ </span><span class="cmd">rknowledge</span> viz</code>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- Architecture -->
-<section>
-    <div class="container">
-        <h2><span>Architecture</span></h2>
-        <div class="arch-diagram">
-<pre>
-┌──────────────────────────────────────────────────────────────────────┐
-│                         CLI (clap)                                    │
-├────────┬──────┬────────┬────────┬──────┬────────┬────────┬───────────┤
-│  init  │ auth │ build  │ query  │ path │ stats  │ comm.  │ viz/export│
-├────────┴──────┴────────┴────────┴──────┴────────┴────────┴───────────┤
-│                                                                       │
-│  ┌────────────┐  ┌────────────────┐  ┌──────────────────────────┐    │
-│  │   Parser   │  │   LLM Client   │  │     Graph Builder        │    │
-│  │ PDF/MD/HTML│→ │ 4 providers    │→ │ petgraph + community     │    │
-│  │ + Chunker  │  │ concurrent -j  │  │ + entity typing          │    │
-│  └────────────┘  └────────────────┘  └──────────────────────────┘    │
-│                                               │                       │
-│  ┌────────────┐  ┌────────────────┐  ┌───────┴──────────────────┐    │
-│  │ Analytics  │  │   Storage      │  │     Visualization        │    │
-│  │ PageRank   │  │   Neo4j        │  │   vis-network + cards    │    │
-│  │ Dijkstra   │  │   Docker       │  │   search + legend        │    │
-│  │ LPA comm.  │  │   MERGE/append │  │   type coloring          │    │
-│  └────────────┘  └────────────────┘  └──────────────────────────┘    │
-│                                                                       │
-│  ┌──────────────────────────────────────────────────────────────┐    │
-│  │                    Export Layer                               │    │
-│  │              JSON  ·  CSV  ·  GraphML  ·  Cypher             │    │
-│  └──────────────────────────────────────────────────────────────┘    │
-└──────────────────────────────────────────────────────────────────────┘
-</pre>
+    <!-- Commands -->
+    <section>
+        <div class="container">
+            <h2><span>Commands</span></h2>
+            <table class="cmd-table">
+                <thead>
+                    <tr>
+                        <th>Command</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>init</code></td>
+                        <td>Initialize config and start Neo4j via Docker</td>
+                    </tr>
+                    <tr>
+                        <td><code>auth</code></td>
+                        <td>Configure LLM provider API keys (interactive)</td>
+                    </tr>
+                    <tr>
+                        <td><code>build &lt;path&gt;</code></td>
+                        <td>Process documents and build knowledge graph. Flags: <code>-j</code>, <code>--append</code>,
+                            <code>--provider</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>query &lt;q&gt;</code></td>
+                        <td>Search the graph with variable <code>--depth</code> or raw <code>cypher:</code> queries</td>
+                    </tr>
+                    <tr>
+                        <td><code>path &lt;from&gt; &lt;to&gt;</code></td>
+                        <td>Find shortest path between two concepts<span class="new-badge">new</span></td>
+                    </tr>
+                    <tr>
+                        <td><code>stats</code></td>
+                        <td>Graph analytics: PageRank, density, degree distribution, entity types<span
+                                class="new-badge">new</span></td>
+                    </tr>
+                    <tr>
+                        <td><code>communities</code></td>
+                        <td>List detected communities and their members<span class="new-badge">new</span></td>
+                    </tr>
+                    <tr>
+                        <td><code>export</code></td>
+                        <td>Export to JSON, CSV, GraphML, or Cypher</td>
+                    </tr>
+                    <tr>
+                        <td><code>viz</code></td>
+                        <td>Open interactive graph visualization in browser</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-    </div>
-</section>
+    </section>
 
-<!-- Footer -->
-<footer>
-    <p>
-        Built with Rust &nbsp;&middot;&nbsp;
-        <a href="https://github.com/Algiras/RKnowledge">GitHub</a> &nbsp;&middot;&nbsp;
-        <a href="https://github.com/Algiras/RKnowledge/blob/main/LICENSE">MIT License</a> &nbsp;&middot;&nbsp;
-        Inspired by <a href="https://github.com/rahulnyk/knowledge_graph">rahulnyk/knowledge_graph</a>
-    </p>
-</footer>
+    <!-- LLM Providers -->
+    <section>
+        <div class="container">
+            <h2>LLM <span>Providers</span></h2>
+            <div class="providers">
+                <div class="provider">
+                    <div class="icon">🟣</div>
+                    <h4>Anthropic</h4>
+                    <p>Claude Sonnet / Opus</p>
+                    <span class="ptag ptag-api">API Key</span>
+                </div>
+                <div class="provider">
+                    <div class="icon">🟢</div>
+                    <h4>OpenAI</h4>
+                    <p>GPT-4o / GPT-4</p>
+                    <span class="ptag ptag-api">API Key</span>
+                </div>
+                <div class="provider">
+                    <div class="icon">🔵</div>
+                    <h4>Google</h4>
+                    <p>Gemini Pro</p>
+                    <span class="ptag ptag-api">API Key</span>
+                </div>
+                <div class="provider">
+                    <div class="icon">🦙</div>
+                    <h4>Ollama</h4>
+                    <p>Mistral, Llama, etc.</p>
+                    <span class="ptag ptag-free">Free / Local</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Architecture -->
+    <section>
+        <div class="container">
+            <h2><span>Architecture</span></h2>
+            <div style="text-align: center; padding: 20px 0;">
+                <img src="architecture_diagram.png" alt="RKnowledge Architecture"
+                    style="max-width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--border);">
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>
+            Built with Rust &nbsp;&middot;&nbsp;
+            <a href="https://github.com/Algiras/RKnowledge">GitHub</a> &nbsp;&middot;&nbsp;
+            <a href="https://github.com/Algiras/RKnowledge/blob/main/LICENSE">MIT License</a> &nbsp;&middot;&nbsp;
+            Inspired by <a href="https://github.com/rahulnyk/knowledge_graph">rahulnyk/knowledge_graph</a>
+        </p>
+    </footer>
 
 </body>
+
 </html>
