@@ -4,6 +4,10 @@
 [![Release](https://img.shields.io/github/v/release/Algiras/RKnowledge)](https://github.com/Algiras/RKnowledge/releases)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
+<p align="center">
+  <img src="assets/viz_screenshot.png" alt="RKnowledge Graph Visualization" width="700">
+</p>
+
 Production-grade knowledge graph extraction CLI. Extract concepts and relationships from any document using LLMs, store in Neo4j, analyze with graph algorithms, and explore with interactive visualization.
 
 **[Documentation](https://algiras.github.io/RKnowledge/)** · **[Architecture](ARCHITECTURE.md)** · **[Contributing](CONTRIBUTING.md)**
