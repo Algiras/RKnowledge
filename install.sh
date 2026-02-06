@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # RKnowledge Installer
-# Usage: curl -fsSL https://raw.githubusercontent.com/algimantask/rknowledge/main/install.sh | bash
-#   or:  curl -fsSL https://raw.githubusercontent.com/algimantask/rknowledge/main/install.sh | bash -s -- --version v0.1.0
-#   or:  curl -fsSL https://raw.githubusercontent.com/algimantask/rknowledge/main/install.sh | bash -s -- --install-dir /usr/local/bin
+# Usage: curl -fsSL https://raw.githubusercontent.com/Algiras/RKnowledge/main/install.sh | bash
+#   or:  curl -fsSL ... | bash -s -- --version v0.1.0
+#   or:  curl -fsSL ... | bash -s -- --install-dir /usr/local/bin
 set -euo pipefail
 
 # ── Configuration ─────────────────────────────────────────────────────
-REPO="algimantask/rknowledge"
+REPO="Algiras/RKnowledge"
 BINARY="rknowledge"
 INSTALL_DIR="${RKNOWLEDGE_INSTALL_DIR:-}"
 VERSION=""
@@ -32,21 +32,73 @@ error() { printf "%s\n" "${RED}✗${RESET} $*" >&2; }
 fatal() { error "$@"; exit 1; }
 
 # ── Platform detection ────────────────────────────────────────────────
-detect_os() {
-    case "$(uname -s)" in
-        Linux*)  echo "unknown-linux-gnu" ;;
-        Darwin*) echo "apple-darwin" ;;
-        MINGW*|MSYS*|CYGWIN*) echo "pc-windows-msvc" ;;
-        *) fatal "Unsupported OS: $(uname -s)" ;;
-    esac
-}
+detect_platform() {
+    local os arch target archive ext
 
-detect_arch() {
-    case "$(uname -m)" in
-        x86_64|amd64)  echo "x86_64" ;;
-        arm64|aarch64) echo "aarch64" ;;
-        *) fatal "Unsupported architecture: $(uname -m)" ;;
+    # Detect OS
+    case "$(uname -s)" in
+        Linux*)
+            os="unknown-linux-gnu"
+            # Detect musl (Alpine, Void, etc.)
+            if command -v ldd >/dev/null 2>&1; then
+                if ldd --version 2>&1 | grep -qi musl; then
+                    os="unknown-linux-musl"
+                fi
+            elif [ -f /etc/alpine-release ]; then
+                os="unknown-linux-musl"
+            fi
+            archive="tar.gz"
+            ext=""
+            ;;
+        Darwin*)
+            os="apple-darwin"
+            archive="tar.gz"
+            ext=""
+            ;;
+        MINGW*|MSYS*|CYGWIN*)
+            os="pc-windows-msvc"
+            archive="zip"
+            ext=".exe"
+            ;;
+        *)
+            fatal "Unsupported OS: $(uname -s)"
+            ;;
     esac
+
+    # Detect architecture
+    case "$(uname -m)" in
+        x86_64|amd64)   arch="x86_64" ;;
+        arm64|aarch64)   arch="aarch64" ;;
+        armv7l|armhf)    arch="armv7" ;;
+        *)               fatal "Unsupported architecture: $(uname -m)" ;;
+    esac
+
+    target="${arch}-${os}"
+
+    # Validate: we only publish specific targets
+    case "$target" in
+        x86_64-unknown-linux-gnu|aarch64-unknown-linux-gnu|\
+        x86_64-apple-darwin|aarch64-apple-darwin|\
+        x86_64-pc-windows-msvc)
+            ;;
+        x86_64-unknown-linux-musl)
+            # Fallback to glibc build for now
+            warn "musl detected; using glibc binary (may need glibc compat)"
+            target="x86_64-unknown-linux-gnu"
+            ;;
+        aarch64-unknown-linux-musl)
+            warn "musl detected; using glibc binary (may need glibc compat)"
+            target="aarch64-unknown-linux-gnu"
+            ;;
+        *)
+            fatal "No prebuilt binary for ${CYAN}${target}${RESET}. Build from source: cargo install --git https://github.com/${REPO}"
+            ;;
+    esac
+
+    # Export for use in main
+    PLATFORM_TARGET="$target"
+    PLATFORM_ARCHIVE="$archive"
+    PLATFORM_EXT="$ext"
 }
 
 detect_install_dir() {
@@ -55,7 +107,7 @@ detect_install_dir() {
         return
     fi
     # Prefer XDG, then ~/.local/bin, then /usr/local/bin
-    if [ -n "${XDG_BIN_HOME:-}" ]; then
+    if [ -n "${XDG_BIN_HOME:-}" ] && [ -d "${XDG_BIN_HOME}" ]; then
         echo "$XDG_BIN_HOME"
     elif [ -d "$HOME/.local/bin" ]; then
         echo "$HOME/.local/bin"
@@ -69,15 +121,17 @@ detect_install_dir() {
 # ── Version resolution ────────────────────────────────────────────────
 get_latest_version() {
     local url="https://api.github.com/repos/${REPO}/releases/latest"
-    local version
+    local response
 
     if command -v curl >/dev/null 2>&1; then
-        version=$(curl -fsSL "$url" 2>/dev/null | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+        response=$(curl -fsSL "$url" 2>/dev/null) || return 1
     elif command -v wget >/dev/null 2>&1; then
-        version=$(wget -qO- "$url" 2>/dev/null | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
+        response=$(wget -qO- "$url" 2>/dev/null) || return 1
+    else
+        return 1
     fi
 
-    echo "${version:-}"
+    echo "$response" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/'
 }
 
 # ── Download helpers ──────────────────────────────────────────────────
@@ -130,6 +184,13 @@ ${CYAN}Options:${RESET}
 
 ${CYAN}Environment:${RESET}
   RKNOWLEDGE_INSTALL_DIR  Override default install directory
+
+${CYAN}Supported platforms:${RESET}
+  x86_64-unknown-linux-gnu      Linux x86_64 (glibc)
+  aarch64-unknown-linux-gnu     Linux ARM64 (glibc)
+  x86_64-apple-darwin           macOS Intel
+  aarch64-apple-darwin          macOS Apple Silicon
+  x86_64-pc-windows-msvc        Windows x86_64
 EOF
             exit 0 ;;
         *) fatal "Unknown option: $1. Use --help for usage." ;;
@@ -144,30 +205,28 @@ main() {
     printf "\n"
 
     # Detect platform
-    local os arch target
-    os=$(detect_os)
-    arch=$(detect_arch)
-    target="${arch}-${os}"
+    detect_platform
 
-    info "Platform: ${CYAN}${target}${RESET}"
+    info "Platform: ${CYAN}${PLATFORM_TARGET}${RESET}"
+    info "Archive:  ${CYAN}${PLATFORM_ARCHIVE}${RESET}"
 
     # Resolve version
     if [ -z "$VERSION" ]; then
         printf "  ${DIM}Fetching latest release...${RESET}\r"
-        VERSION=$(get_latest_version)
+        VERSION=$(get_latest_version) || true
         if [ -z "$VERSION" ]; then
             fatal "Could not determine latest version. Use --version to specify."
         fi
     fi
-    info "Version: ${CYAN}${VERSION}${RESET}"
+    info "Version:  ${CYAN}${VERSION}${RESET}"
 
     # Determine install location
     local install_dir
     install_dir=$(detect_install_dir)
-    info "Install directory: ${CYAN}${install_dir}${RESET}"
+    info "Install:  ${CYAN}${install_dir}${RESET}"
 
     # Check existing installation
-    local dest="${install_dir}/${BINARY}"
+    local dest="${install_dir}/${BINARY}${PLATFORM_EXT}"
     if [ -f "$dest" ] && [ "$FORCE" = false ]; then
         local existing_version
         existing_version=$("$dest" --version 2>/dev/null | head -1 || echo "unknown")
@@ -177,12 +236,7 @@ main() {
     fi
 
     # Construct download URL
-    local ext=""
-    case "$os" in
-        *windows*) ext=".exe" ;;
-    esac
-
-    local archive_name="${BINARY}-${VERSION}-${target}.tar.gz"
+    local archive_name="${BINARY}-${VERSION}-${PLATFORM_TARGET}.${PLATFORM_ARCHIVE}"
     local download_url="https://github.com/${REPO}/releases/download/${VERSION}/${archive_name}"
     local checksum_url="https://github.com/${REPO}/releases/download/${VERSION}/checksums.sha256"
 
@@ -193,34 +247,73 @@ main() {
 
     printf "\n"
     info "Downloading ${CYAN}${archive_name}${RESET}..."
-    download "$download_url" "${tmp_dir}/${archive_name}"
+    if ! download "$download_url" "${tmp_dir}/${archive_name}"; then
+        printf "\n"
+        error "Download failed for ${CYAN}${archive_name}${RESET}"
+        error ""
+        error "This could mean:"
+        error "  1. Version ${CYAN}${VERSION}${RESET} does not exist"
+        error "  2. No prebuilt binary for ${CYAN}${PLATFORM_TARGET}${RESET}"
+        error ""
+        error "Available targets:"
+        error "  x86_64-unknown-linux-gnu    (Linux x86_64)"
+        error "  aarch64-unknown-linux-gnu   (Linux ARM64)"
+        error "  x86_64-apple-darwin         (macOS Intel)"
+        error "  aarch64-apple-darwin        (macOS Apple Silicon)"
+        error "  x86_64-pc-windows-msvc      (Windows x86_64)"
+        error ""
+        error "Build from source instead:"
+        error "  cargo install --git https://github.com/${REPO}"
+        exit 1
+    fi
 
     # Try checksum verification
     if download "$checksum_url" "${tmp_dir}/checksums.sha256" 2>/dev/null; then
         local expected_checksum
-        expected_checksum=$(grep "${archive_name}" "${tmp_dir}/checksums.sha256" | cut -d' ' -f1)
+        expected_checksum=$(grep "${archive_name}" "${tmp_dir}/checksums.sha256" | cut -d' ' -f1 || true)
         if [ -n "$expected_checksum" ]; then
             verify_checksum "${tmp_dir}/${archive_name}" "$expected_checksum"
             info "Checksum verified"
+        else
+            warn "No checksum entry found for ${archive_name}, skipping verification"
         fi
+    else
+        warn "Checksums not available, skipping verification"
     fi
 
     # Extract
     info "Extracting..."
-    tar -xzf "${tmp_dir}/${archive_name}" -C "${tmp_dir}"
+    case "$PLATFORM_ARCHIVE" in
+        tar.gz)
+            tar -xzf "${tmp_dir}/${archive_name}" -C "${tmp_dir}"
+            ;;
+        zip)
+            if command -v unzip >/dev/null 2>&1; then
+                unzip -q "${tmp_dir}/${archive_name}" -d "${tmp_dir}"
+            elif command -v 7z >/dev/null 2>&1; then
+                7z x -o"${tmp_dir}" "${tmp_dir}/${archive_name}" >/dev/null
+            else
+                fatal "Neither unzip nor 7z found. Install one and retry."
+            fi
+            ;;
+    esac
+
+    # Find the binary in extracted files
+    local binary_path="${tmp_dir}/${BINARY}${PLATFORM_EXT}"
+    if [ ! -f "$binary_path" ]; then
+        # Some archives nest in a directory
+        local found
+        found=$(find "$tmp_dir" -name "${BINARY}${PLATFORM_EXT}" -type f 2>/dev/null | head -1)
+        if [ -z "$found" ]; then
+            fatal "Binary '${BINARY}${PLATFORM_EXT}' not found in archive. Contents:"
+            ls -la "$tmp_dir" >&2
+            exit 1
+        fi
+        binary_path="$found"
+    fi
 
     # Install
     mkdir -p "$install_dir"
-    local binary_path="${tmp_dir}/${BINARY}${ext}"
-
-    # Handle case where binary is inside a directory in the archive
-    if [ ! -f "$binary_path" ]; then
-        binary_path=$(find "$tmp_dir" -name "${BINARY}${ext}" -type f | head -1)
-        if [ -z "$binary_path" ]; then
-            fatal "Binary not found in archive"
-        fi
-    fi
-
     chmod +x "$binary_path"
     mv "$binary_path" "$dest"
 
@@ -231,6 +324,8 @@ main() {
         local installed_version
         installed_version=$("$dest" --version 2>/dev/null | head -1)
         info "Verified: ${GREEN}${installed_version}${RESET}"
+    else
+        warn "Binary installed but could not verify (may need library dependencies)"
     fi
 
     # Check PATH
@@ -241,6 +336,7 @@ main() {
             warn "${install_dir} is not in your PATH"
             printf "\n"
             printf "  Add to your shell config:\n"
+            printf "\n"
             printf "  ${DIM}# bash${RESET}\n"
             printf "  echo 'export PATH=\"\$PATH:${install_dir}\"' >> ~/.bashrc\n"
             printf "\n"

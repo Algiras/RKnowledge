@@ -33,7 +33,11 @@ pub fn parse_relations_json(response: &str) -> Result<Vec<Relation>> {
             .filter(|r| !r.node_1.is_empty() && !r.node_2.is_empty() && r.node_1 != r.node_2)
             .collect()),
         Err(e) => {
-            tracing::warn!("Failed to parse relations JSON: {}. Response: {}", e, response);
+            tracing::warn!(
+                "Failed to parse relations JSON: {}. Response: {}",
+                e,
+                response
+            );
             Ok(vec![])
         }
     }
@@ -53,17 +57,17 @@ pub fn extract_json_array(response: &str) -> String {
     let stripped = strip_code_fences(response);
 
     // Strategy 1: starts with [
-    if stripped.starts_with('[') {
-        if let Some(end) = find_matching_bracket(&stripped) {
-            return stripped[..=end].to_string();
-        }
+    if stripped.starts_with('[')
+        && let Some(end) = find_matching_bracket(stripped)
+    {
+        return stripped[..=end].to_string();
     }
 
     // Strategy 2: find first [ anywhere
-    if let Some(start) = stripped.find('[') {
-        if let Some(end) = find_matching_bracket(&stripped[start..]) {
-            return stripped[start..=start + end].to_string();
-        }
+    if let Some(start) = stripped.find('[')
+        && let Some(end) = find_matching_bracket(&stripped[start..])
+    {
+        return stripped[start..=start + end].to_string();
     }
 
     // Fallback

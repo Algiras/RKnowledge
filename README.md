@@ -1,44 +1,59 @@
 # 🧠 RKnowledge
 
-[![CI](https://github.com/algimantask/rknowledge/actions/workflows/ci.yml/badge.svg)](https://github.com/algimantask/rknowledge/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/algimantask/rknowledge)](https://github.com/algimantask/rknowledge/releases)
+[![CI](https://github.com/Algiras/RKnowledge/actions/workflows/ci.yml/badge.svg)](https://github.com/Algiras/RKnowledge/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/Algiras/RKnowledge)](https://github.com/Algiras/RKnowledge/releases)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-High-performance knowledge graph extraction CLI using LLMs. Extract concepts and relationships from documents and store them in Neo4j.
+Production-grade knowledge graph extraction CLI. Extract concepts and relationships from any document using LLMs, store in Neo4j, analyze with graph algorithms, and explore with interactive visualization.
 
-**[Documentation](https://algimantask.github.io/rknowledge/)** · **[Architecture](ARCHITECTURE.md)** · **[Contributing](CONTRIBUTING.md)**
+**[Documentation](https://algiras.github.io/RKnowledge/)** · **[Architecture](ARCHITECTURE.md)** · **[Contributing](CONTRIBUTING.md)**
+
+> Inspired by [rahulnyk/knowledge_graph](https://github.com/rahulnyk/knowledge_graph) — rewritten from scratch in Rust.
+
+## How We Differ
+
+| Dimension | [Original](https://github.com/rahulnyk/knowledge_graph) (Python) | RKnowledge (Rust) |
+|---|---|---|
+| **Interface** | Jupyter notebook | Full CLI, 10 subcommands |
+| **LLM Providers** | Ollama only | Anthropic, OpenAI, Google, Ollama |
+| **Concurrency** | Sequential | Parallel LLM calls (`-j` flag) |
+| **Storage** | In-memory DataFrames | Neo4j graph DB (persistent) |
+| **Incremental** | Rebuild from scratch | `--append` merges into existing graph |
+| **Input Formats** | PDF only | PDF, Markdown, HTML, plain text |
+| **Entity Typing** | 8 fixed categories | Free-form LLM classification |
+| **Graph Analytics** | Degree + Louvain | PageRank, LPA communities, Dijkstra, density |
+| **Querying** | None | `query`, `path`, `stats`, `communities` |
+| **Visualization** | Static Pyvis | Interactive: click cards, search, toggles, legend |
+| **Export** | None | JSON, CSV, GraphML, Cypher |
+| **Tests** | None | 118 tests (107 unit + 11 integration) |
+| **CI/CD** | None | GitHub Actions: lint, test, multi-platform build |
+| **Distribution** | `docker build` + Jupyter | Single binary, curl install, skills.sh |
 
 ## Features
 
-- **Multi-format support**: PDF, Markdown, HTML, and plain text
-- **Multiple LLM providers**: Anthropic, OpenAI, Google, and Ollama (local)
-- **Neo4j backend**: Full graph database with Cypher queries
-- **Multiple export formats**: JSON, CSV, GraphML, Cypher
-- **Interactive visualization**: Browser-based graph visualization
-- **Fast**: Written in Rust for maximum performance, single binary
+- **Multi-format**: PDF, Markdown, HTML, and plain text
+- **Multi-provider LLM**: Anthropic, OpenAI, Google, Ollama (local/free)
+- **Concurrent extraction**: Parallel LLM calls with `-j` flag
+- **Smart entity typing**: LLM classifies freely ("programming language", "database", etc.)
+- **Neo4j backend**: Persistent graph DB with Cypher, incremental `--append`
+- **Graph analytics**: PageRank, community detection, shortest path, density
+- **Interactive visualization**: Click cards, search, entity legend, toggle proximity edges
+- **Multiple exports**: JSON, CSV, GraphML, Cypher
+- **Fast**: Compiled Rust, single binary, zero runtime deps
 
 ## Installation
 
-### One-liner (recommended)
+### One-liner
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/algimantask/rknowledge/main/install.sh | bash
-```
-
-Options:
-```bash
-# Specific version
-curl -fsSL ... | bash -s -- --version v0.1.0
-
-# Custom install directory
-curl -fsSL ... | bash -s -- --install-dir /usr/local/bin
+curl -fsSL https://raw.githubusercontent.com/Algiras/RKnowledge/main/install.sh | bash
 ```
 
 ### From Source
 
 ```bash
-git clone https://github.com/algimantask/rknowledge.git
-cd rknowledge
+git clone https://github.com/Algiras/RKnowledge.git
+cd RKnowledge
 cargo build --release
 cp target/release/rknowledge ~/.local/bin/
 ```
@@ -46,7 +61,7 @@ cp target/release/rknowledge ~/.local/bin/
 ### As a Skill
 
 ```bash
-npx skills add algimantask/rknowledge
+npx skills add Algiras/RKnowledge
 ```
 
 ## Quick Start
@@ -59,12 +74,13 @@ rknowledge init
 rknowledge auth
 
 # 3. Build a knowledge graph from documents
-rknowledge build ./docs/
+rknowledge build ./docs/ --provider ollama -j 8
 
-# 4. Query the graph
-rknowledge query "What are the main concepts?"
-
-# 5. Visualize
+# 4. Explore
+rknowledge query "machine learning" --depth 2
+rknowledge path "docker" "kubernetes"
+rknowledge stats
+rknowledge communities
 rknowledge viz
 ```
 
@@ -75,8 +91,11 @@ rknowledge viz
 | `init` | Initialize config and start Neo4j via Docker |
 | `auth` | Configure API keys for LLM providers (interactive) |
 | `build <path>` | Process documents and build knowledge graph |
-| `query <query>` | Search the graph (natural language or `cypher:` prefix) |
-| `export` | Export graph to JSON, CSV, GraphML, or Cypher |
+| `query <query>` | Search graph (natural language or `cypher:` prefix) with `--depth` |
+| `path <from> <to>` | Find shortest path between two concepts |
+| `stats` | Graph analytics: PageRank, density, degree distribution, entity types |
+| `communities` | List detected communities and their members |
+| `export` | Export to JSON, CSV, GraphML, or Cypher |
 | `viz` | Open interactive visualization in browser |
 
 ### Build Options
@@ -86,6 +105,8 @@ rknowledge build ./docs \
   --provider ollama \          # anthropic, openai, ollama, google
   --model mistral \            # provider-specific model name
   --output neo4j \             # neo4j, json, csv
+  -j 8 \                       # concurrent LLM requests
+  --append \                   # merge into existing graph
   --chunk-size 1500 \          # text chunk size (chars)
   --chunk-overlap 150          # overlap between chunks
 ```
@@ -93,14 +114,20 @@ rknowledge build ./docs \
 ### Query Examples
 
 ```bash
-# Natural language search
-rknowledge query "machine learning"
+# Natural language search with depth
+rknowledge query "machine learning" --depth 2
+
+# Shortest path between concepts
+rknowledge path "docker" "kubernetes"
+
+# Graph statistics and analytics
+rknowledge stats
+
+# Community detection
+rknowledge communities
 
 # Direct Cypher query
 rknowledge query "cypher: MATCH (n:Concept) RETURN n.label, n.degree ORDER BY n.degree DESC LIMIT 10"
-
-# Find all relationships for a concept
-rknowledge query "cypher: MATCH (n:Concept)-[r]->(m) WHERE n.label CONTAINS 'ai' RETURN n.label, r.relation, m.label"
 ```
 
 ## Configuration
@@ -148,47 +175,43 @@ database = "neo4j"
 ## Architecture
 
 ```
-┌──────────────────────────────────────────────────────────────┐
-│                      CLI (clap)                              │
-├──────────┬───────────┬────────────┬────────────┬─────────────┤
-│  init    │  auth     │  build     │  query     │  viz/export │
-├──────────┴───────────┴────────────┴────────────┴─────────────┤
-│                                                              │
-│  ┌────────────┐  ┌────────────┐  ┌─────────────────────┐    │
-│  │   Parser   │  │ LLM Client │  │   Graph Builder     │    │
-│  │ PDF/MD/HTML│→ │ Multi-prov │→ │ petgraph + proximity│    │
-│  │ + Chunker  │  │ async HTTP │  │                     │    │
-│  └────────────┘  └────────────┘  └─────────────────────┘    │
-│                                           │                  │
-│  ┌────────────────────────────────────────┴──────────────┐   │
-│  │                  Storage Layer                        │   │
-│  │  ┌──────────┐  ┌──────────────┐  ┌────────────────┐  │   │
-│  │  │  Neo4j   │  │ Export       │  │ Visualization  │  │   │
-│  │  │ (Docker) │  │ JSON/CSV/GML │  │ (vis-network)  │  │   │
-│  │  └──────────┘  └──────────────┘  └────────────────┘  │   │
-│  └───────────────────────────────────────────────────────┘   │
-└──────────────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────────┐
+│                         CLI (clap)                                    │
+├────────┬──────┬────────┬────────┬──────┬────────┬────────┬───────────┤
+│  init  │ auth │ build  │ query  │ path │ stats  │ comm.  │ viz/export│
+├────────┴──────┴────────┴────────┴──────┴────────┴────────┴───────────┤
+│                                                                       │
+│  ┌────────────┐  ┌────────────────┐  ┌──────────────────────────┐    │
+│  │   Parser   │  │   LLM Client   │  │     Graph Builder        │    │
+│  │ PDF/MD/HTML│→ │ 4 providers    │→ │ petgraph + community     │    │
+│  │ + Chunker  │  │ concurrent -j  │  │ + entity typing          │    │
+│  └────────────┘  └────────────────┘  └──────────────────────────┘    │
+│                                               │                       │
+│  ┌────────────┐  ┌────────────────┐  ┌───────┴──────────────────┐    │
+│  │ Analytics  │  │   Storage      │  │     Visualization        │    │
+│  │ PageRank   │  │   Neo4j        │  │   vis-network + cards    │    │
+│  │ Dijkstra   │  │   Docker       │  │   search + legend        │    │
+│  │ LPA comm.  │  │   MERGE/append │  │   type coloring          │    │
+│  └────────────┘  └────────────────┘  └──────────────────────────┘    │
+│                                                                       │
+│  ┌──────────────────────────────────────────────────────────────┐    │
+│  │                    Export Layer                               │    │
+│  │              JSON  ·  CSV  ·  GraphML  ·  Cypher             │    │
+│  └──────────────────────────────────────────────────────────────┘    │
+└──────────────────────────────────────────────────────────────────────┘
 ```
 
 See [ARCHITECTURE.md](ARCHITECTURE.md) for the full deep-dive.
 
 ## How It Works
 
-1. **Document Parsing**: Documents are loaded and converted to plain text
+1. **Document Parsing**: Documents are loaded and converted to plain text (PDF, MD, HTML, TXT)
 2. **Chunking**: Text is split into overlapping chunks (default 1500 chars)
-3. **LLM Extraction**: Each chunk is sent to the LLM to extract `(concept, concept, relationship)` triples
-4. **Graph Building**: Concepts become nodes, relationships become edges
+3. **LLM Extraction**: Chunks are sent concurrently to the LLM to extract `(concept, type, concept, type, relationship)` tuples
+4. **Graph Building**: Concepts become typed nodes, relationships become weighted edges
 5. **Contextual Proximity**: Concepts in the same chunk get additional weighted edges
-6. **Storage**: Graph is stored in Neo4j for querying and visualization
-
-## Export Formats
-
-```bash
-rknowledge export --format json --output graph.json
-rknowledge export --format csv --output graph          # → graph.nodes.csv, graph.edges.csv
-rknowledge export --format graphml --output graph.graphml
-rknowledge export --format cypher --output import.cypher
-```
+6. **Community Detection**: Label Propagation groups related concepts
+7. **Storage**: Graph is stored in Neo4j via `MERGE` for safe incremental updates
 
 ## Neo4j Access
 
@@ -200,8 +223,8 @@ After `rknowledge init`, Neo4j is available at:
 ## Development
 
 ```bash
-cargo test                  # Run tests
-cargo clippy                # Lint
+cargo test                  # Run tests (118 total)
+cargo clippy -- -D warnings # Lint (CI enforced)
 cargo fmt                   # Format
 RUST_LOG=debug cargo run -- build ./demo_data  # Debug logging
 ```

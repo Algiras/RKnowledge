@@ -1,8 +1,8 @@
-pub mod init;
 pub mod auth;
 pub mod build;
 pub mod communities;
 pub mod export;
+pub mod init;
 pub mod path;
 pub mod query;
 pub mod stats;

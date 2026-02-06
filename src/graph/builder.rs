@@ -65,7 +65,7 @@ impl GraphBuilder {
     /// Add a node to the graph if it doesn't exist
     fn ensure_node(&mut self, label: &str) -> NodeIndex {
         let label = label.to_lowercase().trim().to_string();
-        
+
         if let Some(&index) = self.node_indices.get(&label) {
             index
         } else {
@@ -106,11 +106,11 @@ impl GraphBuilder {
             // Track which chunks contain which nodes
             self.node_chunks
                 .entry(node_1.clone())
-                .or_insert_with(HashSet::new)
+                .or_default()
                 .insert(chunk_id.to_string());
             self.node_chunks
                 .entry(node_2.clone())
-                .or_insert_with(HashSet::new)
+                .or_default()
                 .insert(chunk_id.to_string());
 
             // Add or update edge
@@ -137,12 +137,12 @@ impl GraphBuilder {
     pub fn calculate_contextual_proximity(&mut self) {
         // Group nodes by chunk
         let mut chunk_nodes: HashMap<String, Vec<String>> = HashMap::new();
-        
+
         for (node, chunks) in &self.node_chunks {
             for chunk_id in chunks {
                 chunk_nodes
                     .entry(chunk_id.clone())
-                    .or_insert_with(Vec::new)
+                    .or_default()
                     .push(node.clone());
             }
         }
@@ -167,11 +167,16 @@ impl GraphBuilder {
                     });
 
                     // Only add contextual proximity if no explicit relation exists
-                    if edge_data.relations.is_empty() || 
-                       !edge_data.relations.iter().any(|r| r != "contextual proximity") {
-                        if !edge_data.relations.contains(&"contextual proximity".to_string()) {
-                            edge_data.relations.push("contextual proximity".to_string());
-                        }
+                    if (edge_data.relations.is_empty()
+                        || !edge_data
+                            .relations
+                            .iter()
+                            .any(|r| r != "contextual proximity"))
+                        && !edge_data
+                            .relations
+                            .contains(&"contextual proximity".to_string())
+                    {
+                        edge_data.relations.push("contextual proximity".to_string());
                     }
                     edge_data.weight += 1.0; // Weight for contextual proximity
                     edge_data.chunk_ids.insert(chunk_id.clone());
@@ -209,13 +214,15 @@ impl GraphBuilder {
         self.node_indices
             .iter()
             .map(|(label, &_node_idx)| {
-                let degree = self.edges
+                let degree = self
+                    .edges
                     .keys()
                     .filter(|(s, t)| s == label || t == label)
                     .count();
 
                 // Find the matching NodeIndex in the built graph
-                let community = graph.node_indices()
+                let community = graph
+                    .node_indices()
                     .find(|&ni| graph[ni] == *label)
                     .and_then(|ni| communities.get(&ni).copied());
 
@@ -237,10 +244,10 @@ impl GraphBuilder {
         self.edges
             .iter()
             .map(|((source, target), data)| {
-                let relation = data.relations
+                let relation = data
+                    .relations
                     .iter()
-                    .filter(|r| *r != "contextual proximity")
-                    .next()
+                    .find(|r| *r != "contextual proximity")
                     .cloned()
                     .unwrap_or_else(|| {
                         if data.relations.contains(&"contextual proximity".to_string()) {
@@ -298,7 +305,10 @@ mod tests {
     fn test_add_relations_basic() {
         let mut builder = GraphBuilder::new();
         builder.add_relations(
-            vec![rel("Alice", "Bob", "knows"), rel("Bob", "Charlie", "works with")],
+            vec![
+                rel("Alice", "Bob", "knows"),
+                rel("Bob", "Charlie", "works with"),
+            ],
             "c1",
         );
         assert_eq!(builder.node_count(), 3);
@@ -364,7 +374,10 @@ mod tests {
         let mut builder = GraphBuilder::new();
         // Three nodes in the same chunk but only 2 explicit edges
         builder.add_relations(
-            vec![rel("concept1", "concept2", "relates to"), rel("concept1", "concept3", "influences")],
+            vec![
+                rel("concept1", "concept2", "relates to"),
+                rel("concept1", "concept3", "influences"),
+            ],
             "chunk1",
         );
         assert_eq!(builder.edge_count(), 2);
@@ -402,7 +415,11 @@ mod tests {
     fn test_get_nodes_degree() {
         let mut builder = GraphBuilder::new();
         builder.add_relations(
-            vec![rel("hub", "spoke1", "r"), rel("hub", "spoke2", "r"), rel("hub", "spoke3", "r")],
+            vec![
+                rel("hub", "spoke1", "r"),
+                rel("hub", "spoke2", "r"),
+                rel("hub", "spoke3", "r"),
+            ],
             "c1",
         );
 
@@ -418,17 +435,17 @@ mod tests {
         builder.calculate_contextual_proximity();
 
         let edges = builder.get_edges();
-        let edge = edges.iter().find(|e| e.source == "a" || e.target == "a").unwrap();
+        let edge = edges
+            .iter()
+            .find(|e| e.source == "a" || e.target == "a")
+            .unwrap();
         assert_eq!(edge.relation, "explicit relation");
     }
 
     #[test]
     fn test_build_petgraph() {
         let mut builder = GraphBuilder::new();
-        builder.add_relations(
-            vec![rel("a", "b", "r1"), rel("b", "c", "r2")],
-            "c1",
-        );
+        builder.add_relations(vec![rel("a", "b", "r1"), rel("b", "c", "r2")], "c1");
 
         let graph = builder.build();
         assert_eq!(graph.node_count(), 3);

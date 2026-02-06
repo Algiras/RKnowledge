@@ -19,7 +19,7 @@ mod tests {
     fn test_extract_text() {
         let mut file = NamedTempFile::new().unwrap();
         writeln!(file, "Hello, World!").unwrap();
-        
+
         let text = extract_text(file.path()).unwrap();
         assert!(text.contains("Hello, World!"));
     }

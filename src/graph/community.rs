@@ -8,7 +8,10 @@ use std::collections::HashMap;
 /// among its neighbors. It converges when no node changes its label.
 ///
 /// Works on an undirected view of the directed graph and respects edge weights.
-pub fn label_propagation(graph: &DiGraph<String, f64>, max_iterations: usize) -> HashMap<NodeIndex, usize> {
+pub fn label_propagation(
+    graph: &DiGraph<String, f64>,
+    max_iterations: usize,
+) -> HashMap<NodeIndex, usize> {
     if graph.node_count() == 0 {
         return HashMap::new();
     }
@@ -170,8 +173,11 @@ mod tests {
         // All 3 nodes in a tight triangle should converge to same community
         let vals: Vec<usize> = communities.values().cloned().collect();
         assert_eq!(vals.len(), 3);
-        assert!(vals[0] == vals[1] && vals[1] == vals[2],
-            "triangle should be single community, got {:?}", vals);
+        assert!(
+            vals[0] == vals[1] && vals[1] == vals[2],
+            "triangle should be single community, got {:?}",
+            vals
+        );
     }
 
     #[test]
@@ -185,8 +191,10 @@ mod tests {
         g.add_edge(c, d, 4.0);
 
         let communities = label_propagation(&g, 20);
-        assert_ne!(communities[&a], communities[&c],
-            "disconnected components should have different communities");
+        assert_ne!(
+            communities[&a], communities[&c],
+            "disconnected components should have different communities"
+        );
         assert_eq!(communities[&a], communities[&b]);
         assert_eq!(communities[&c], communities[&d]);
     }

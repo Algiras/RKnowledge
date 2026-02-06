@@ -16,20 +16,28 @@ struct JsonExport {
 
 /// Export graph from builder to JSON file
 pub fn export_json(builder: &GraphBuilder, path: &Path) -> Result<()> {
-    let nodes: Vec<GraphNode> = builder.get_nodes().into_iter().map(|n| GraphNode {
-        id: n.id,
-        label: n.label,
-        community: n.community,
-        degree: Some(n.degree),
-        entity_type: n.entity_type,
-    }).collect();
-    
-    let edges: Vec<GraphEdge> = builder.get_edges().into_iter().map(|e| GraphEdge {
-        source: e.source,
-        target: e.target,
-        relation: e.relation,
-        weight: e.weight,
-    }).collect();
+    let nodes: Vec<GraphNode> = builder
+        .get_nodes()
+        .into_iter()
+        .map(|n| GraphNode {
+            id: n.id,
+            label: n.label,
+            community: n.community,
+            degree: Some(n.degree),
+            entity_type: n.entity_type,
+        })
+        .collect();
+
+    let edges: Vec<GraphEdge> = builder
+        .get_edges()
+        .into_iter()
+        .map(|e| GraphEdge {
+            source: e.source,
+            target: e.target,
+            relation: e.relation,
+            weight: e.weight,
+        })
+        .collect();
 
     export_json_from_data(&nodes, &edges, path)
 }
@@ -41,32 +49,39 @@ pub fn export_json_from_data(nodes: &[GraphNode], edges: &[GraphEdge], path: &Pa
         edges: edges.to_vec(),
     };
 
-    let file = File::create(path)
-        .with_context(|| format!("Failed to create file: {}", path.display()))?;
+    let file =
+        File::create(path).with_context(|| format!("Failed to create file: {}", path.display()))?;
     let writer = BufWriter::new(file);
 
-    serde_json::to_writer_pretty(writer, &export)
-        .context("Failed to write JSON")?;
+    serde_json::to_writer_pretty(writer, &export).context("Failed to write JSON")?;
 
     Ok(())
 }
 
 /// Export graph from builder to CSV files
 pub fn export_csv(builder: &GraphBuilder, nodes_path: &Path, edges_path: &Path) -> Result<()> {
-    let nodes: Vec<GraphNode> = builder.get_nodes().into_iter().map(|n| GraphNode {
-        id: n.id,
-        label: n.label,
-        community: n.community,
-        degree: Some(n.degree),
-        entity_type: n.entity_type,
-    }).collect();
-    
-    let edges: Vec<GraphEdge> = builder.get_edges().into_iter().map(|e| GraphEdge {
-        source: e.source,
-        target: e.target,
-        relation: e.relation,
-        weight: e.weight,
-    }).collect();
+    let nodes: Vec<GraphNode> = builder
+        .get_nodes()
+        .into_iter()
+        .map(|n| GraphNode {
+            id: n.id,
+            label: n.label,
+            community: n.community,
+            degree: Some(n.degree),
+            entity_type: n.entity_type,
+        })
+        .collect();
+
+    let edges: Vec<GraphEdge> = builder
+        .get_edges()
+        .into_iter()
+        .map(|e| GraphEdge {
+            source: e.source,
+            target: e.target,
+            relation: e.relation,
+            weight: e.weight,
+        })
+        .collect();
 
     export_csv_from_data(&nodes, &edges, nodes_path, edges_path)
 }
@@ -117,8 +132,8 @@ pub fn export_csv_from_data(
 
 /// Export to GraphML format
 pub fn export_graphml(nodes: &[GraphNode], edges: &[GraphEdge], path: &Path) -> Result<()> {
-    let file = File::create(path)
-        .with_context(|| format!("Failed to create file: {}", path.display()))?;
+    let file =
+        File::create(path).with_context(|| format!("Failed to create file: {}", path.display()))?;
     let mut writer = BufWriter::new(file);
 
     // Write GraphML header
@@ -129,10 +144,22 @@ pub fn export_graphml(nodes: &[GraphNode], edges: &[GraphEdge], path: &Path) -> 
     )?;
 
     // Define attribute keys
-    writeln!(writer, r#"  <key id="label" for="node" attr.name="label" attr.type="string"/>"#)?;
-    writeln!(writer, r#"  <key id="degree" for="node" attr.name="degree" attr.type="int"/>"#)?;
-    writeln!(writer, r#"  <key id="relation" for="edge" attr.name="relation" attr.type="string"/>"#)?;
-    writeln!(writer, r#"  <key id="weight" for="edge" attr.name="weight" attr.type="double"/>"#)?;
+    writeln!(
+        writer,
+        r#"  <key id="label" for="node" attr.name="label" attr.type="string"/>"#
+    )?;
+    writeln!(
+        writer,
+        r#"  <key id="degree" for="node" attr.name="degree" attr.type="int"/>"#
+    )?;
+    writeln!(
+        writer,
+        r#"  <key id="relation" for="edge" attr.name="relation" attr.type="string"/>"#
+    )?;
+    writeln!(
+        writer,
+        r#"  <key id="weight" for="edge" attr.name="weight" attr.type="double"/>"#
+    )?;
 
     // Start graph
     writeln!(writer, r#"  <graph id="G" edgedefault="directed">"#)?;
@@ -180,8 +207,8 @@ pub fn export_graphml(nodes: &[GraphNode], edges: &[GraphEdge], path: &Path) -> 
 
 /// Export to Cypher statements for Neo4j import
 pub fn export_cypher(nodes: &[GraphNode], edges: &[GraphEdge], path: &Path) -> Result<()> {
-    let file = File::create(path)
-        .with_context(|| format!("Failed to create file: {}", path.display()))?;
+    let file =
+        File::create(path).with_context(|| format!("Failed to create file: {}", path.display()))?;
     let mut writer = BufWriter::new(file);
 
     // Write header comment
@@ -257,8 +284,20 @@ mod tests {
 
     fn sample_nodes() -> Vec<GraphNode> {
         vec![
-            GraphNode { id: "rust".into(), label: "Rust".into(), community: None, degree: Some(3), entity_type: Some("technology".into()) },
-            GraphNode { id: "tokio".into(), label: "Tokio".into(), community: Some(1), degree: Some(1), entity_type: None },
+            GraphNode {
+                id: "rust".into(),
+                label: "Rust".into(),
+                community: None,
+                degree: Some(3),
+                entity_type: Some("technology".into()),
+            },
+            GraphNode {
+                id: "tokio".into(),
+                label: "Tokio".into(),
+                community: Some(1),
+                degree: Some(1),
+                entity_type: None,
+            },
         ]
     }
 

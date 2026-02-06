@@ -7,7 +7,7 @@ information for contributors — human and AI alike.
 
 ```bash
 # Clone
-git clone https://github.com/algimantask/rknowledge.git
+git clone https://github.com/Algiras/RKnowledge.git
 cd rknowledge
 
 # Build

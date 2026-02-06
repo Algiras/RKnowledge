@@ -1,5 +1,5 @@
 use anyhow::{Context, Result};
-use console::{style, Emoji};
+use console::{Emoji, style};
 use indicatif::{ProgressBar, ProgressStyle};
 use std::path::PathBuf;
 use std::time::Duration;
@@ -18,7 +18,8 @@ pub async fn run(format: ExportFormat, output: PathBuf) -> Result<()> {
     println!();
 
     // Load configuration
-    let config = Config::load().context("Failed to load configuration. Run 'rknowledge init' first.")?;
+    let config =
+        Config::load().context("Failed to load configuration. Run 'rknowledge init' first.")?;
 
     // Connect to Neo4j
     let spinner = ProgressBar::new_spinner();
@@ -56,7 +57,11 @@ pub async fn run(format: ExportFormat, output: PathBuf) -> Result<()> {
             crate::export::export_json_from_data(&nodes, &edges, &output)?;
             println!("{}", style("done").green());
             println!();
-            println!("  {} {}", style("→").dim(), style(output.display()).cyan().underlined());
+            println!(
+                "  {} {}",
+                style("→").dim(),
+                style(output.display()).cyan().underlined()
+            );
         }
         ExportFormat::Csv => {
             let nodes_path = output.with_extension("nodes.csv");
@@ -64,20 +69,36 @@ pub async fn run(format: ExportFormat, output: PathBuf) -> Result<()> {
             crate::export::export_csv_from_data(&nodes, &edges, &nodes_path, &edges_path)?;
             println!("{}", style("done").green());
             println!();
-            println!("  {} {}", style("→").dim(), style(nodes_path.display()).cyan().underlined());
-            println!("  {} {}", style("→").dim(), style(edges_path.display()).cyan().underlined());
+            println!(
+                "  {} {}",
+                style("→").dim(),
+                style(nodes_path.display()).cyan().underlined()
+            );
+            println!(
+                "  {} {}",
+                style("→").dim(),
+                style(edges_path.display()).cyan().underlined()
+            );
         }
         ExportFormat::Graphml => {
             crate::export::export_graphml(&nodes, &edges, &output)?;
             println!("{}", style("done").green());
             println!();
-            println!("  {} {}", style("→").dim(), style(output.display()).cyan().underlined());
+            println!(
+                "  {} {}",
+                style("→").dim(),
+                style(output.display()).cyan().underlined()
+            );
         }
         ExportFormat::Cypher => {
             crate::export::export_cypher(&nodes, &edges, &output)?;
             println!("{}", style("done").green());
             println!();
-            println!("  {} {}", style("→").dim(), style(output.display()).cyan().underlined());
+            println!(
+                "  {} {}",
+                style("→").dim(),
+                style(output.display()).cyan().underlined()
+            );
         }
     }
 

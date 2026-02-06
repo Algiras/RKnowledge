@@ -75,7 +75,7 @@ mod tests {
     fn test_markdown_to_text() {
         let md = "# Hello\n\nThis is a **test** with `code`.\n\n- Item 1\n- Item 2";
         let text = markdown_to_text(md);
-        
+
         assert!(text.contains("Hello"));
         assert!(text.contains("test"));
         assert!(text.contains("code"));
@@ -86,7 +86,7 @@ mod tests {
     fn test_code_block() {
         let md = "```rust\nfn main() {}\n```";
         let text = markdown_to_text(md);
-        
+
         assert!(text.contains("[code]"));
         assert!(text.contains("fn main()"));
     }

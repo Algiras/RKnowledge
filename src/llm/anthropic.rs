@@ -4,7 +4,7 @@ use reqwest::Client;
 use serde::{Deserialize, Serialize};
 
 use super::parsing::parse_relations_json;
-use super::prompts::{graph_extraction_user_prompt, GRAPH_EXTRACTION_SYSTEM_PROMPT};
+use super::prompts::{GRAPH_EXTRACTION_SYSTEM_PROMPT, graph_extraction_user_prompt};
 use super::{LlmProviderTrait, Relation};
 
 pub struct AnthropicProvider {
@@ -40,7 +40,9 @@ struct ContentBlock {
 impl AnthropicProvider {
     pub fn new(api_key: &str, model: &str) -> Result<Self> {
         if api_key.is_empty() {
-            anyhow::bail!("Anthropic API key is required. Set ANTHROPIC_API_KEY environment variable.");
+            anyhow::bail!(
+                "Anthropic API key is required. Set ANTHROPIC_API_KEY environment variable."
+            );
         }
 
         Ok(Self {
@@ -95,7 +97,9 @@ impl AnthropicProvider {
 impl LlmProviderTrait for AnthropicProvider {
     async fn extract_relations(&self, text: &str) -> Result<Vec<Relation>> {
         let user_prompt = graph_extraction_user_prompt(text);
-        let response = self.complete(GRAPH_EXTRACTION_SYSTEM_PROMPT, &user_prompt).await?;
+        let response = self
+            .complete(GRAPH_EXTRACTION_SYSTEM_PROMPT, &user_prompt)
+            .await?;
 
         // Parse JSON response
         parse_relations_json(&response)
@@ -105,7 +109,6 @@ impl LlmProviderTrait for AnthropicProvider {
         "anthropic"
     }
 }
-
 
 #[cfg(test)]
 mod tests {

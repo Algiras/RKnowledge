@@ -1,12 +1,12 @@
 use anyhow::{Context, Result};
-use console::{style, Emoji};
+use console::{Emoji, style};
 use indicatif::{ProgressBar, ProgressStyle};
 use std::time::Duration;
 
 use crate::config::Config;
-use crate::graph::neo4j::Neo4jClient;
-use crate::graph::builder::GraphBuilder;
 use crate::graph::analytics;
+use crate::graph::builder::GraphBuilder;
+use crate::graph::neo4j::Neo4jClient;
 
 static CHART: Emoji<'_, '_> = Emoji("📊 ", "");
 static TROPHY: Emoji<'_, '_> = Emoji("🏆 ", "");
@@ -15,10 +15,14 @@ static DATABASE: Emoji<'_, '_> = Emoji("💾 ", "");
 
 pub async fn run() -> Result<()> {
     println!();
-    println!("{}", style(" RKnowledge - Graph Statistics ").bold().reverse());
+    println!(
+        "{}",
+        style(" RKnowledge - Graph Statistics ").bold().reverse()
+    );
     println!();
 
-    let config = Config::load().context("Failed to load configuration. Run 'rknowledge init' first.")?;
+    let config =
+        Config::load().context("Failed to load configuration. Run 'rknowledge init' first.")?;
 
     let spinner = ProgressBar::new_spinner();
     spinner.set_style(
@@ -61,13 +65,41 @@ pub async fn run() -> Result<()> {
     // Print stats
     println!("{}Graph Overview", CHART);
     println!();
-    println!("  {} Nodes:                {}", style("•").cyan(), style(stats.node_count).green().bold());
-    println!("  {} Edges:                {}", style("•").cyan(), style(stats.edge_count).green().bold());
-    println!("  {} Connected components: {}", style("•").cyan(), style(stats.connected_components).green().bold());
-    println!("  {} Communities:          {}", style("•").cyan(), style(stats.community_count).green().bold());
-    println!("  {} Density:              {}", style("•").cyan(), style(format!("{:.4}", stats.density)).green());
-    println!("  {} Avg degree:           {}", style("•").cyan(), style(format!("{:.1}", stats.avg_degree)).green());
-    println!("  {} Max degree:           {}", style("•").cyan(), style(stats.max_degree).green().bold());
+    println!(
+        "  {} Nodes:                {}",
+        style("•").cyan(),
+        style(stats.node_count).green().bold()
+    );
+    println!(
+        "  {} Edges:                {}",
+        style("•").cyan(),
+        style(stats.edge_count).green().bold()
+    );
+    println!(
+        "  {} Connected components: {}",
+        style("•").cyan(),
+        style(stats.connected_components).green().bold()
+    );
+    println!(
+        "  {} Communities:          {}",
+        style("•").cyan(),
+        style(stats.community_count).green().bold()
+    );
+    println!(
+        "  {} Density:              {}",
+        style("•").cyan(),
+        style(format!("{:.4}", stats.density)).green()
+    );
+    println!(
+        "  {} Avg degree:           {}",
+        style("•").cyan(),
+        style(format!("{:.1}", stats.avg_degree)).green()
+    );
+    println!(
+        "  {} Max degree:           {}",
+        style("•").cyan(),
+        style(stats.max_degree).green().bold()
+    );
 
     if !stats.top_pagerank.is_empty() {
         println!();
@@ -76,9 +108,10 @@ pub async fn run() -> Result<()> {
         for (i, (label, score)) in stats.top_pagerank.iter().enumerate() {
             let bar_len = (score * 200.0).min(30.0) as usize;
             let bar = "█".repeat(bar_len);
-            println!("  {:>2}. {:<30} {} {:.4}", 
-                i + 1, 
-                style(label).cyan().bold(), 
+            println!(
+                "  {:>2}. {:<30} {} {:.4}",
+                i + 1,
+                style(label).cyan().bold(),
                 style(&bar).magenta(),
                 style(score).dim(),
             );
@@ -92,9 +125,10 @@ pub async fn run() -> Result<()> {
         for (i, (label, degree)) in stats.top_degree.iter().enumerate() {
             let bar_len = (*degree).min(30);
             let bar = "█".repeat(bar_len);
-            println!("  {:>2}. {:<30} {} ({})", 
-                i + 1, 
-                style(label).cyan().bold(), 
+            println!(
+                "  {:>2}. {:<30} {} ({})",
+                i + 1,
+                style(label).cyan().bold(),
                 style(&bar).blue(),
                 style(degree).dim(),
             );
@@ -102,7 +136,8 @@ pub async fn run() -> Result<()> {
     }
 
     // Entity type distribution
-    let mut type_counts: std::collections::HashMap<String, usize> = std::collections::HashMap::new();
+    let mut type_counts: std::collections::HashMap<String, usize> =
+        std::collections::HashMap::new();
     for node in &nodes {
         let t = node.entity_type.as_deref().unwrap_or("untyped");
         *type_counts.entry(t.to_string()).or_insert(0) += 1;
@@ -117,7 +152,8 @@ pub async fn run() -> Result<()> {
         for (t, count) in &type_vec {
             let bar_len = (*count).min(30);
             let bar = "█".repeat(bar_len);
-            println!("  {:<25} {} ({})", 
+            println!(
+                "  {:<25} {} ({})",
                 style(t).yellow(),
                 style(&bar).green(),
                 style(count).dim(),

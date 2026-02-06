@@ -22,21 +22,21 @@ fn html_to_text(html: &str) -> String {
     let mut found_main = false;
 
     for selector_str in main_selectors {
-        if let Ok(selector) = Selector::parse(selector_str) {
-            if let Some(element) = document.select(&selector).next() {
-                extract_element_text(&element, &mut text_parts);
-                found_main = true;
-                break;
-            }
+        if let Ok(selector) = Selector::parse(selector_str)
+            && let Some(element) = document.select(&selector).next()
+        {
+            extract_element_text(&element, &mut text_parts);
+            found_main = true;
+            break;
         }
     }
 
     if !found_main {
         // Fall back to extracting from root
-        if let Ok(selector) = Selector::parse("html") {
-            if let Some(element) = document.select(&selector).next() {
-                extract_element_text(&element, &mut text_parts);
-            }
+        if let Ok(selector) = Selector::parse("html")
+            && let Some(element) = document.select(&selector).next()
+        {
+            extract_element_text(&element, &mut text_parts);
         }
     }
 
@@ -84,10 +84,7 @@ fn clean_html_text(text: &str) -> String {
         .replace("&#39;", "'");
 
     // Normalize whitespace
-    let text: String = text
-        .split_whitespace()
-        .collect::<Vec<_>>()
-        .join(" ");
+    let text: String = text.split_whitespace().collect::<Vec<_>>().join(" ");
 
     // Restore paragraph breaks
     text.replace(" \n ", "\n\n")
@@ -113,7 +110,7 @@ mod tests {
                 </body>
             </html>
         "#;
-        
+
         let text = html_to_text(html);
         assert!(text.contains("Hello World"));
         assert!(text.contains("test paragraph"));

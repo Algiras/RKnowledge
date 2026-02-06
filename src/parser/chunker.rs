@@ -96,10 +96,7 @@ impl TextChunker {
         }
 
         // Filter out empty chunks and very small chunks
-        chunks
-            .into_iter()
-            .filter(|c| c.len() > 10)
-            .collect()
+        chunks.into_iter().filter(|c| c.len() > 10).collect()
     }
 
     fn split_by_chars(&self, text: &str) -> Vec<String> {
@@ -135,9 +132,10 @@ mod tests {
     #[test]
     fn test_basic_chunking() {
         let chunker = TextChunker::new(50, 10);
-        let text = "This is a test. Another sentence here. And one more sentence to make it longer.";
+        let text =
+            "This is a test. Another sentence here. And one more sentence to make it longer.";
         let chunks = chunker.split(text);
-        
+
         assert!(!chunks.is_empty());
         for chunk in &chunks {
             assert!(chunk.len() <= 70); // Allow flexibility due to overlap
@@ -222,7 +220,8 @@ mod tests {
     #[test]
     fn test_zero_overlap() {
         let chunker = TextChunker::new(50, 0);
-        let text = "First part of text. Second part of text. Third part of text. Fourth part ends here.";
+        let text =
+            "First part of text. Second part of text. Third part of text. Fourth part ends here.";
         let chunks = chunker.split(text);
         assert!(!chunks.is_empty());
     }

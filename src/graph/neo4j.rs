@@ -1,9 +1,9 @@
 use anyhow::{Context, Result};
-use neo4rs::{query, Graph, Row};
+use neo4rs::{Graph, Row, query};
 use serde::{Deserialize, Serialize};
 
-use crate::config::Neo4jConfig;
 use super::builder::GraphBuilder;
+use crate::config::Neo4jConfig;
 
 /// Node representation for Neo4j
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -50,7 +50,9 @@ impl Neo4jClient {
 
         // Create index on id for faster lookups
         self.graph
-            .run(query("CREATE INDEX concept_id IF NOT EXISTS FOR (n:Concept) ON (n.id)"))
+            .run(query(
+                "CREATE INDEX concept_id IF NOT EXISTS FOR (n:Concept) ON (n.id)",
+            ))
             .await
             .ok();
 
@@ -74,7 +76,7 @@ impl Neo4jClient {
         for edge in &edges {
             let q = query(
                 "MATCH (a:Concept {id: $source}), (b:Concept {id: $target}) \
-                 CREATE (a)-[r:RELATES_TO {relation: $relation, weight: $weight}]->(b)"
+                 CREATE (a)-[r:RELATES_TO {relation: $relation, weight: $weight}]->(b)",
             )
             .param("source", edge.source.clone())
             .param("target", edge.target.clone())
@@ -91,7 +93,9 @@ impl Neo4jClient {
     pub async fn merge_graph(&self, builder: &GraphBuilder) -> Result<()> {
         // Create index on id for faster lookups
         self.graph
-            .run(query("CREATE INDEX concept_id IF NOT EXISTS FOR (n:Concept) ON (n.id)"))
+            .run(query(
+                "CREATE INDEX concept_id IF NOT EXISTS FOR (n:Concept) ON (n.id)",
+            ))
             .await
             .ok();
 
@@ -119,7 +123,7 @@ impl Neo4jClient {
                 "MATCH (a:Concept {id: $source}), (b:Concept {id: $target}) \
                  MERGE (a)-[r:RELATES_TO {relation: $relation}]->(b) \
                  ON CREATE SET r.weight = $weight \
-                 ON MATCH SET r.weight = r.weight + $weight"
+                 ON MATCH SET r.weight = r.weight + $weight",
             )
             .param("source", edge.source.clone())
             .param("target", edge.target.clone())
@@ -151,17 +155,22 @@ impl Neo4jClient {
             nodes.push(GraphNode {
                 id,
                 label,
-                community: if community >= 0 { Some(community as usize) } else { None },
+                community: if community >= 0 {
+                    Some(community as usize)
+                } else {
+                    None
+                },
                 degree: Some(degree as usize),
                 entity_type,
             });
         }
 
         // Fetch edges
-        let mut result = self.graph
+        let mut result = self
+            .graph
             .execute(query(
                 "MATCH (a:Concept)-[r:RELATES_TO]->(b:Concept) \
-                 RETURN a.id AS source, b.id AS target, r.relation AS relation, r.weight AS weight"
+                 RETURN a.id AS source, b.id AS target, r.relation AS relation, r.weight AS weight",
             ))
             .await
             .context("Failed to fetch edges")?;
@@ -170,7 +179,9 @@ impl Neo4jClient {
         while let Ok(Some(row)) = result.next().await {
             let source: String = row.get("source").unwrap_or_default();
             let target: String = row.get("target").unwrap_or_default();
-            let relation: String = row.get("relation").unwrap_or_else(|_| "related".to_string());
+            let relation: String = row
+                .get("relation")
+                .unwrap_or_else(|_| "related".to_string());
             let weight: f64 = row.get("weight").unwrap_or(1.0);
 
             edges.push(GraphEdge {
@@ -186,7 +197,8 @@ impl Neo4jClient {
 
     /// Execute a raw Cypher query
     pub async fn execute_cypher(&self, cypher: &str) -> Result<Vec<serde_json::Value>> {
-        let mut result = self.graph
+        let mut result = self
+            .graph
             .execute(query(cypher))
             .await
             .context("Failed to execute Cypher query")?;
@@ -202,9 +214,12 @@ impl Neo4jClient {
     }
 
     /// Search for concepts by name or relation
-    pub async fn search_concepts(&self, search_term: &str) -> Result<Vec<(String, Vec<(String, String)>)>> {
+    pub async fn search_concepts(
+        &self,
+        search_term: &str,
+    ) -> Result<Vec<(String, Vec<(String, String)>)>> {
         let search_pattern = format!("(?i).*{}.*", regex::escape(search_term));
-        
+
         let mut result = self.graph
             .execute(query(
                 "MATCH (n:Concept)-[r:RELATES_TO]-(m:Concept) \
@@ -218,7 +233,7 @@ impl Neo4jClient {
         let mut results = Vec::new();
         while let Ok(Some(row)) = result.next().await {
             let concept: String = row.get("concept").unwrap_or_default();
-            
+
             // Parse relations from the collected list
             let relations_json: Vec<serde_json::Value> = row.get("relations").unwrap_or_default();
             let relations: Vec<(String, String)> = relations_json
@@ -239,9 +254,13 @@ impl Neo4jClient {
     }
 
     /// Search for concepts with variable depth traversal
-    pub async fn search_concepts_depth(&self, search_term: &str, depth: usize) -> Result<Vec<(String, Vec<(String, String)>)>> {
+    pub async fn search_concepts_depth(
+        &self,
+        search_term: &str,
+        depth: usize,
+    ) -> Result<Vec<(String, Vec<(String, String)>)>> {
         let search_pattern = format!("(?i).*{}.*", regex::escape(search_term));
-        let depth_val = depth.max(1).min(10) as i64; // Clamp to reasonable range
+        let depth_val = depth.clamp(1, 10) as i64; // Clamp to reasonable range
 
         let cypher = format!(
             "MATCH (n:Concept) WHERE n.label =~ $pattern \
@@ -254,7 +273,8 @@ impl Neo4jClient {
             depth_val
         );
 
-        let mut result = self.graph
+        let mut result = self
+            .graph
             .execute(query(&cypher).param("pattern", search_pattern))
             .await
             .context("Failed to search concepts with depth")?;
@@ -284,20 +304,24 @@ impl Neo4jClient {
     /// Get graph statistics
     #[allow(dead_code)]
     pub async fn get_stats(&self) -> Result<(usize, usize)> {
-        let mut result = self.graph
+        let mut result = self
+            .graph
             .execute(query("MATCH (n:Concept) RETURN count(n) AS node_count"))
             .await?;
-        
+
         let node_count: i64 = if let Ok(Some(row)) = result.next().await {
             row.get("node_count").unwrap_or(0)
         } else {
             0
         };
 
-        let mut result = self.graph
-            .execute(query("MATCH ()-[r:RELATES_TO]->() RETURN count(r) AS edge_count"))
+        let mut result = self
+            .graph
+            .execute(query(
+                "MATCH ()-[r:RELATES_TO]->() RETURN count(r) AS edge_count",
+            ))
             .await?;
-        
+
         let edge_count: i64 = if let Ok(Some(row)) = result.next().await {
             row.get("edge_count").unwrap_or(0)
         } else {
@@ -312,20 +336,23 @@ impl Neo4jClient {
 fn row_to_json(row: &Row) -> serde_json::Value {
     // Try to extract common column types
     let mut result = serde_json::Map::new();
-    
+
     // Try common column names
-    for col in ["n", "m", "r", "n.label", "n.id", "n.degree", "m.label", "m.id", "count", "label", "id", "degree", "source", "target", "relation"] {
+    for col in [
+        "n", "m", "r", "n.label", "n.id", "n.degree", "m.label", "m.id", "count", "label", "id",
+        "degree", "source", "target", "relation",
+    ] {
         if let Ok(val) = row.get::<String>(col) {
             result.insert(col.to_string(), serde_json::Value::String(val));
         } else if let Ok(val) = row.get::<i64>(col) {
             result.insert(col.to_string(), serde_json::Value::Number(val.into()));
-        } else if let Ok(val) = row.get::<f64>(col) {
-            if let Some(num) = serde_json::Number::from_f64(val) {
-                result.insert(col.to_string(), serde_json::Value::Number(num));
-            }
+        } else if let Ok(val) = row.get::<f64>(col)
+            && let Some(num) = serde_json::Number::from_f64(val)
+        {
+            result.insert(col.to_string(), serde_json::Value::Number(num));
         }
     }
-    
+
     if result.is_empty() {
         // Fallback to debug representation
         serde_json::json!({

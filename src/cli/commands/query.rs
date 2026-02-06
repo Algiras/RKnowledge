@@ -1,5 +1,5 @@
 use anyhow::{Context, Result};
-use console::{style, Emoji};
+use console::{Emoji, style};
 
 use crate::config::Config;
 use crate::graph::neo4j::Neo4jClient;
@@ -9,7 +9,8 @@ static GRAPH: Emoji<'_, '_> = Emoji("🔗 ", "");
 
 pub async fn run(query: String, depth: usize) -> Result<()> {
     // Load configuration
-    let config = Config::load().context("Failed to load configuration. Run 'rknowledge init' first.")?;
+    let config =
+        Config::load().context("Failed to load configuration. Run 'rknowledge init' first.")?;
 
     // Connect to Neo4j
     let neo4j_client = Neo4jClient::new(&config.neo4j).await?;
@@ -22,7 +23,11 @@ pub async fn run(query: String, depth: usize) -> Result<()> {
         let results = neo4j_client.execute_cypher(cypher).await?;
         print_results(&results);
     } else {
-        println!("{}Searching knowledge graph (depth: {})...", SEARCH, style(depth).cyan());
+        println!(
+            "{}Searching knowledge graph (depth: {})...",
+            SEARCH,
+            style(depth).cyan()
+        );
         println!("  Query: {}", style(&query).cyan());
 
         if depth > 1 {
@@ -73,11 +78,12 @@ fn print_results(results: &[serde_json::Value]) {
     println!();
     println!("Results ({} rows):", style(results.len()).green().bold());
     println!();
-    
+
     for (i, result) in results.iter().enumerate() {
         if let Some(obj) = result.as_object() {
             // Pretty print as table-like format
-            let parts: Vec<String> = obj.iter()
+            let parts: Vec<String> = obj
+                .iter()
                 .filter(|(k, _)| *k != "raw")
                 .map(|(k, v)| {
                     let val = match v {
@@ -88,14 +94,18 @@ fn print_results(results: &[serde_json::Value]) {
                     format!("{}: {}", style(k).dim(), style(val).cyan())
                 })
                 .collect();
-            
+
             if !parts.is_empty() {
                 println!("  {}. {}", i + 1, parts.join(" | "));
             } else if let Some(raw) = obj.get("raw") {
                 println!("  {}. {}", i + 1, style(raw.to_string()).dim());
             }
         } else {
-            println!("  {}. {}", i + 1, serde_json::to_string_pretty(result).unwrap_or_default());
+            println!(
+                "  {}. {}",
+                i + 1,
+                serde_json::to_string_pretty(result).unwrap_or_default()
+            );
         }
     }
 }

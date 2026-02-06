@@ -20,17 +20,19 @@ pub struct GraphStats {
 /// Compute PageRank scores for all nodes.
 ///
 /// Uses the power iteration method with a damping factor (typically 0.85).
-pub fn pagerank(graph: &DiGraph<String, f64>, damping: f64, iterations: usize) -> HashMap<NodeIndex, f64> {
+pub fn pagerank(
+    graph: &DiGraph<String, f64>,
+    damping: f64,
+    iterations: usize,
+) -> HashMap<NodeIndex, f64> {
     let n = graph.node_count();
     if n == 0 {
         return HashMap::new();
     }
 
     let n_f = n as f64;
-    let mut scores: HashMap<NodeIndex, f64> = graph
-        .node_indices()
-        .map(|ni| (ni, 1.0 / n_f))
-        .collect();
+    let mut scores: HashMap<NodeIndex, f64> =
+        graph.node_indices().map(|ni| (ni, 1.0 / n_f)).collect();
 
     for _ in 0..iterations {
         let mut new_scores: HashMap<NodeIndex, f64> = graph
@@ -65,8 +67,12 @@ pub fn node_degrees(graph: &DiGraph<String, f64>) -> HashMap<NodeIndex, usize> {
     graph
         .node_indices()
         .map(|ni| {
-            let in_deg = graph.edges_directed(ni, petgraph::Direction::Incoming).count();
-            let out_deg = graph.edges_directed(ni, petgraph::Direction::Outgoing).count();
+            let in_deg = graph
+                .edges_directed(ni, petgraph::Direction::Incoming)
+                .count();
+            let out_deg = graph
+                .edges_directed(ni, petgraph::Direction::Outgoing)
+                .count();
             (ni, in_deg + out_deg)
         })
         .collect()
@@ -84,7 +90,9 @@ pub fn shortest_path(
     let to_label_lower = to_label.to_lowercase();
 
     if from_label_lower == to_label_lower {
-        let idx = graph.node_indices().find(|&ni| graph[ni].to_lowercase() == from_label_lower)?;
+        let idx = graph
+            .node_indices()
+            .find(|&ni| graph[ni].to_lowercase() == from_label_lower)?;
         return Some((0.0, vec![graph[idx].clone()]));
     }
 
@@ -107,13 +115,19 @@ pub fn shortest_path(
         }
     }
 
-    let from_dir = graph.node_indices().find(|&ni| graph[ni].to_lowercase() == from_label_lower)?;
-    let to_dir = graph.node_indices().find(|&ni| graph[ni].to_lowercase() == to_label_lower)?;
+    let from_dir = graph
+        .node_indices()
+        .find(|&ni| graph[ni].to_lowercase() == from_label_lower)?;
+    let to_dir = graph
+        .node_indices()
+        .find(|&ni| graph[ni].to_lowercase() == to_label_lower)?;
     let from_idx = dir_to_undir[&from_dir];
     let to_idx = dir_to_undir[&to_dir];
 
     // Dijkstra with inverted weights (higher weight = stronger connection = shorter path)
-    let costs = dijkstra(&undirected, from_idx, Some(to_idx), |e| 1.0 / e.weight().max(0.001));
+    let costs = dijkstra(&undirected, from_idx, Some(to_idx), |e| {
+        1.0 / e.weight().max(0.001)
+    });
     let costs_std: HashMap<petgraph::graph::NodeIndex, f64> = costs.into_iter().collect();
 
     let cost = *costs_std.get(&to_idx)?;
@@ -156,10 +170,8 @@ fn reconstruct_path_undirected(
             if let Some(&neighbor_cost) = costs.get(&neighbor) {
                 let edge_cost = 1.0 / edge.weight().max(0.001);
                 let diff = (neighbor_cost + edge_cost - current_cost).abs();
-                if diff < 1e-6 {
-                    if best_prev.is_none() || neighbor_cost < best_prev.unwrap().1 {
-                        best_prev = Some((neighbor, neighbor_cost));
-                    }
+                if diff < 1e-6 && (best_prev.is_none() || neighbor_cost < best_prev.unwrap().1) {
+                    best_prev = Some((neighbor, neighbor_cost));
                 }
             }
         }
@@ -261,7 +273,11 @@ mod tests {
         let g = build_simple_graph();
         let pr = pagerank(&g, 0.85, 30);
         let total: f64 = pr.values().sum();
-        assert!((total - 1.0).abs() < 0.01, "PageRank should sum to ~1.0, got {}", total);
+        assert!(
+            (total - 1.0).abs() < 0.01,
+            "PageRank should sum to ~1.0, got {}",
+            total
+        );
     }
 
     #[test]
@@ -271,7 +287,10 @@ mod tests {
         // Node "c" receives links from both "a" and "b" but links to nobody
         let c_idx = g.node_indices().find(|&ni| g[ni] == "c").unwrap();
         let a_idx = g.node_indices().find(|&ni| g[ni] == "a").unwrap();
-        assert!(pr[&c_idx] > pr[&a_idx], "c should have higher PageRank than a");
+        assert!(
+            pr[&c_idx] > pr[&a_idx],
+            "c should have higher PageRank than a"
+        );
     }
 
     #[test]

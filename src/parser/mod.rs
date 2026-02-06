@@ -1,8 +1,8 @@
 mod chunker;
+mod html;
+mod markdown;
 mod pdf;
 mod text;
-mod markdown;
-mod html;
 
 use anyhow::Result;
 use serde::{Deserialize, Serialize};

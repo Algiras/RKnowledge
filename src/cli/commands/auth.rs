@@ -1,5 +1,5 @@
 use anyhow::{Context, Result};
-use console::{style, Emoji};
+use console::{Emoji, style};
 use std::fs;
 use std::io::{self, Write};
 
@@ -13,7 +13,10 @@ static ROBOT: Emoji<'_, '_> = Emoji("🤖 ", "");
 
 pub async fn run(provider: Option<LlmProvider>, key: Option<String>, list: bool) -> Result<()> {
     println!();
-    println!("{}", style(" RKnowledge - Authentication ").bold().reverse());
+    println!(
+        "{}",
+        style(" RKnowledge - Authentication ").bold().reverse()
+    );
     println!();
 
     // List configured providers
@@ -53,7 +56,10 @@ async fn list_providers() -> Result<()> {
     let config = match Config::load() {
         Ok(c) => c,
         Err(_) => {
-            println!("{}", style("No configuration found. Run 'rknowledge init' first.").yellow());
+            println!(
+                "{}",
+                style("No configuration found. Run 'rknowledge init' first.").yellow()
+            );
             return Ok(());
         }
     };
@@ -73,8 +79,14 @@ async fn list_providers() -> Result<()> {
         } else {
             style("Not configured").red()
         };
-        
-        println!("  {}{:<12} {} {}", status_icon, name, status_text, style(detail).dim());
+
+        println!(
+            "  {}{:<12} {} {}",
+            status_icon,
+            name,
+            status_text,
+            style(detail).dim()
+        );
     }
 
     println!();
@@ -98,21 +110,19 @@ fn check_provider_status(config: &Config, provider: &str) -> (bool, String) {
     };
 
     // Check environment variable first
-    if !env_var.is_empty() {
-        if let Ok(val) = std::env::var(env_var) {
-            if !val.is_empty() {
-                return (true, format!("(from {})", env_var));
-            }
-        }
+    if !env_var.is_empty()
+        && let Ok(val) = std::env::var(env_var)
+        && !val.is_empty()
+    {
+        return (true, format!("(from {})", env_var));
     }
 
     // Check config file
-    if let Some(provider_config) = config.get_provider(provider) {
-        if !provider_config.api_key.is_empty() 
-            && !provider_config.api_key.starts_with("${") 
-        {
-            return (true, "(from config)".to_string());
-        }
+    if let Some(provider_config) = config.get_provider(provider)
+        && !provider_config.api_key.is_empty()
+        && !provider_config.api_key.starts_with("${")
+    {
+        return (true, "(from config)".to_string());
     }
 
     (false, String::new())
@@ -124,20 +134,19 @@ fn check_ollama_status(config: &Config) -> (bool, String) {
             .base_url
             .as_deref()
             .unwrap_or("http://localhost:11434");
-        
+
         // Try to check if Ollama is running (synchronous check)
         let client = reqwest::blocking::Client::builder()
             .timeout(std::time::Duration::from_secs(2))
             .build();
-        
-        if let Ok(client) = client {
-            if let Ok(resp) = client.get(format!("{}/api/tags", base_url)).send() {
-                if resp.status().is_success() {
-                    return (true, format!("(running at {})", base_url));
-                }
-            }
+
+        if let Ok(client) = client
+            && let Ok(resp) = client.get(format!("{}/api/tags", base_url)).send()
+            && resp.status().is_success()
+        {
+            return (true, format!("(running at {})", base_url));
         }
-        
+
         return (false, format!("(not running at {})", base_url));
     }
 
@@ -165,7 +174,10 @@ fn select_provider() -> Result<LlmProvider> {
         "3" => Ok(LlmProvider::Google),
         "4" => Ok(LlmProvider::Ollama),
         _ => {
-            println!("  {}", style("Invalid choice, defaulting to Ollama").yellow());
+            println!(
+                "  {}",
+                style("Invalid choice, defaulting to Ollama").yellow()
+            );
             Ok(LlmProvider::Ollama)
         }
     }
@@ -179,7 +191,10 @@ fn prompt_api_key(provider: &LlmProvider) -> Result<String> {
         LlmProvider::Ollama => {
             println!();
             println!("  {} Ollama doesn't require an API key.", style("ℹ").blue());
-            println!("  Make sure Ollama is running: {} ollama serve", style("$").dim());
+            println!(
+                "  Make sure Ollama is running: {} ollama serve",
+                style("$").dim()
+            );
             return Ok(String::new());
         }
     };
@@ -199,12 +214,18 @@ fn prompt_api_key(provider: &LlmProvider) -> Result<String> {
     match provider {
         LlmProvider::Anthropic => {
             if !api_key.starts_with("sk-ant-") {
-                println!("  {}", style("Warning: Anthropic API keys typically start with 'sk-ant-'").yellow());
+                println!(
+                    "  {}",
+                    style("Warning: Anthropic API keys typically start with 'sk-ant-'").yellow()
+                );
             }
         }
         LlmProvider::OpenAI => {
             if !api_key.starts_with("sk-") {
-                println!("  {}", style("Warning: OpenAI API keys typically start with 'sk-'").yellow());
+                println!(
+                    "  {}",
+                    style("Warning: OpenAI API keys typically start with 'sk-'").yellow()
+                );
             }
         }
         _ => {}
@@ -215,13 +236,12 @@ fn prompt_api_key(provider: &LlmProvider) -> Result<String> {
 
 fn save_api_key(provider: LlmProvider, api_key: &str) -> Result<()> {
     let config_path = Config::config_path()?;
-    
+
     if !config_path.exists() {
         anyhow::bail!("Configuration not found. Run 'rknowledge init' first.");
     }
 
-    let content = fs::read_to_string(&config_path)
-        .context("Failed to read config file")?;
+    let content = fs::read_to_string(&config_path).context("Failed to read config file")?;
 
     let provider_section = match provider {
         LlmProvider::Anthropic => "[providers.anthropic]",
@@ -237,9 +257,9 @@ fn save_api_key(provider: LlmProvider, api_key: &str) -> Result<()> {
 
     for line in &mut lines {
         if line.starts_with('[') {
-            in_section = line.contains(&provider_section[1..provider_section.len()-1]);
+            in_section = line.contains(&provider_section[1..provider_section.len() - 1]);
         }
-        
+
         if in_section && line.trim().starts_with("api_key") {
             *line = format!("api_key = \"{}\"", api_key);
             key_updated = true;
@@ -251,7 +271,7 @@ fn save_api_key(provider: LlmProvider, api_key: &str) -> Result<()> {
         // Find the section and add the key
         let mut section_found = false;
         for (i, line) in lines.iter().enumerate() {
-            if line.contains(&provider_section[1..provider_section.len()-1]) {
+            if line.contains(&provider_section[1..provider_section.len() - 1]) {
                 section_found = true;
                 // Insert api_key after section header
                 lines.insert(i + 1, format!("api_key = \"{}\"", api_key));
@@ -268,8 +288,7 @@ fn save_api_key(provider: LlmProvider, api_key: &str) -> Result<()> {
     }
 
     let new_content = lines.join("\n");
-    fs::write(&config_path, new_content)
-        .context("Failed to write config file")?;
+    fs::write(&config_path, new_content).context("Failed to write config file")?;
 
     Ok(())
 }

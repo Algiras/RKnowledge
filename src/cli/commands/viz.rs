@@ -1,5 +1,5 @@
 use anyhow::{Context, Result};
-use console::{style, Emoji};
+use console::{Emoji, style};
 use indicatif::{ProgressBar, ProgressStyle};
 use std::io::Write;
 use std::time::Duration;
@@ -14,11 +14,15 @@ static SPARKLE: Emoji<'_, '_> = Emoji("✨ ", "");
 
 pub async fn run(_port: u16) -> Result<()> {
     println!();
-    println!("{}", style(" RKnowledge - Graph Visualization ").bold().reverse());
+    println!(
+        "{}",
+        style(" RKnowledge - Graph Visualization ").bold().reverse()
+    );
     println!();
 
     // Load configuration
-    let config = Config::load().context("Failed to load configuration. Run 'rknowledge init' first.")?;
+    let config =
+        Config::load().context("Failed to load configuration. Run 'rknowledge init' first.")?;
 
     // Connect to Neo4j and fetch data
     let spinner = ProgressBar::new_spinner();
@@ -47,7 +51,7 @@ pub async fn run(_port: u16) -> Result<()> {
     // Write to temp file and open in browser
     let temp_dir = std::env::temp_dir();
     let html_path = temp_dir.join("rknowledge_viz.html");
-    
+
     let mut file = std::fs::File::create(&html_path)?;
     file.write_all(html.as_bytes())?;
 
@@ -79,7 +83,11 @@ pub async fn run(_port: u16) -> Result<()> {
     println!();
     println!("{}Visualization opened in browser", BROWSER);
     println!();
-    println!("{}File: {}", SPARKLE, style(html_path.display()).cyan().underlined());
+    println!(
+        "{}File: {}",
+        SPARKLE,
+        style(html_path.display()).cyan().underlined()
+    );
 
     Ok(())
 }
@@ -125,7 +133,10 @@ fn generate_viz_html(
         })
         .collect();
 
-    let explicit_count = edges.iter().filter(|e| e.relation != "contextual proximity").count();
+    let explicit_count = edges
+        .iter()
+        .filter(|e| e.relation != "contextual proximity")
+        .count();
     let proximity_count = edges.len() - explicit_count;
 
     let html = format!(
@@ -136,31 +147,60 @@ fn generate_viz_html(
     <title>RKnowledge Graph</title>
     <style>
         * {{ margin: 0; padding: 0; box-sizing: border-box; }}
-        body {{ font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0a1a; color: #c8c8e0; }}
-        #header {{ padding: 10px 20px; background: linear-gradient(135deg, #12122a 0%, #1a1a3e 100%); border-bottom: 1px solid #2a2a5a; display: flex; align-items: center; gap: 16px; }}
+        body {{ font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0a0a1a; color: #c8c8e0; overflow: hidden; }}
+        #header {{ padding: 10px 20px; background: linear-gradient(135deg, #12122a 0%, #1a1a3e 100%); border-bottom: 1px solid #2a2a5a; display: flex; align-items: center; gap: 16px; z-index: 30; position: relative; }}
         #header h1 {{ font-size: 1.1em; font-weight: 600; color: #ff6b8a; white-space: nowrap; }}
         .toolbar {{ display: flex; gap: 8px; align-items: center; flex: 1; }}
         #search {{ background: #0e0e22; border: 1px solid #2a2a5a; border-radius: 6px; color: #c8c8e0; padding: 5px 10px; font-size: 0.8em; width: 180px; outline: none; transition: border-color 0.2s; }}
         #search:focus {{ border-color: #ff6b8a; }}
-        .btn {{ background: #1a1a3e; border: 1px solid #2a2a5a; border-radius: 6px; color: #8888aa; padding: 5px 10px; font-size: 0.75em; cursor: pointer; transition: all 0.2s; white-space: nowrap; }}
+        .btn {{ background: #1a1a3e; border: 1px solid #2a2a5a; border-radius: 6px; color: #8888aa; padding: 5px 10px; font-size: 0.75em; cursor: pointer; transition: all 0.2s; white-space: nowrap; user-select: none; }}
         .btn:hover {{ border-color: #ff6b8a; color: #ff6b8a; }}
         .btn.active {{ background: #2a1a3e; border-color: #ff6b8a; color: #ff6b8a; }}
         .stats {{ font-size: 0.75em; color: #555577; white-space: nowrap; margin-left: auto; }}
         #graph {{ width: 100%; height: calc(100vh - 42px); }}
+
+        /* Loading / Error */
         #loading {{ position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: #555577; }}
         #loading .spinner {{ width: 32px; height: 32px; border: 2px solid #1a1a3e; border-top-color: #ff6b8a; border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 12px; }}
         @keyframes spin {{ to {{ transform: rotate(360deg); }} }}
         #error {{ display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: #ff6b8a; max-width: 420px; font-size: 0.9em; }}
-        #tooltip {{ display: none; position: absolute; background: #14142e; border: 1px solid #2a2a5a; border-radius: 8px; padding: 12px 14px; font-size: 0.82em; max-width: 340px; box-shadow: 0 8px 32px rgba(0,0,0,0.6); pointer-events: none; z-index: 20; backdrop-filter: blur(8px); }}
-        #tooltip .tt-name {{ color: #ff6b8a; font-weight: 600; font-size: 1.05em; margin-bottom: 2px; }}
-        #tooltip .tt-type {{ font-size: 0.85em; color: #666688; margin-bottom: 8px; display: flex; align-items: center; gap: 5px; }}
-        #tooltip .tt-dot {{ width: 8px; height: 8px; border-radius: 50%; display: inline-block; }}
-        #tooltip .tt-rels {{ color: #888; line-height: 1.7; }}
-        #tooltip .tt-target {{ color: #66ccee; }}
-        #tooltip .tt-edge {{ color: #444466; font-size: 0.9em; }}
-        #legend {{ position: fixed; bottom: 12px; left: 12px; background: #12122aee; border: 1px solid #2a2a5a; border-radius: 10px; padding: 10px 14px; font-size: 0.75em; max-height: 260px; overflow-y: auto; z-index: 10; backdrop-filter: blur(8px); min-width: 150px; }}
+
+        /* Hover tooltip (compact preview) */
+        #tooltip {{ display: none; position: absolute; background: #14142eee; border: 1px solid #2a2a5a; border-radius: 8px; padding: 10px 12px; font-size: 0.8em; max-width: 260px; box-shadow: 0 8px 32px rgba(0,0,0,0.6); pointer-events: none; z-index: 20; backdrop-filter: blur(8px); }}
+        #tooltip .tt-type {{ font-size: 0.8em; color: #666688; margin-bottom: 3px; display: flex; align-items: center; gap: 5px; }}
+        #tooltip .tt-dot {{ width: 7px; height: 7px; border-radius: 50%; display: inline-block; }}
+        #tooltip .tt-name {{ color: #e0e0f0; font-weight: 600; font-size: 1em; }}
+        #tooltip .tt-hint {{ font-size: 0.75em; color: #444466; margin-top: 5px; }}
+
+        /* Detail card (click panel) */
+        #card {{ display: none; position: fixed; top: 42px; right: 0; width: 360px; height: calc(100vh - 42px); background: #0e0e22; border-left: 1px solid #2a2a5a; z-index: 15; flex-direction: column; overflow: hidden; }}
+        #card.open {{ display: flex; }}
+        #card-head {{ padding: 16px 18px 12px; border-bottom: 1px solid #1a1a3a; flex-shrink: 0; }}
+        #card-close {{ position: absolute; top: 12px; right: 14px; background: none; border: none; color: #555577; font-size: 1.3em; cursor: pointer; line-height: 1; padding: 4px; border-radius: 4px; }}
+        #card-close:hover {{ color: #ff6b8a; background: #1a1a3e; }}
+        #card-type {{ display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }}
+        #card-type .ct-dot {{ width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }}
+        #card-type .ct-label {{ font-size: 0.78em; color: #8888aa; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500; }}
+        #card-name {{ font-size: 1.15em; font-weight: 700; color: #f0f0ff; margin-bottom: 2px; }}
+        #card-meta {{ font-size: 0.78em; color: #555577; }}
+        #card-body {{ flex: 1; overflow-y: auto; padding: 0; }}
+        #card-body::-webkit-scrollbar {{ width: 4px; }}
+        #card-body::-webkit-scrollbar-thumb {{ background: #2a2a5a; border-radius: 4px; }}
+
+        /* Connection sections */
+        .card-section {{ padding: 12px 18px; border-bottom: 1px solid #141430; }}
+        .card-section-title {{ font-size: 0.72em; text-transform: uppercase; letter-spacing: 0.6px; color: #555577; font-weight: 600; margin-bottom: 8px; }}
+        .conn-item {{ display: flex; align-items: flex-start; gap: 8px; padding: 6px 0; cursor: pointer; border-radius: 4px; transition: background 0.12s; }}
+        .conn-item:hover {{ background: #14142e; margin: 0 -6px; padding: 6px 6px; }}
+        .conn-dot {{ width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }}
+        .conn-name {{ color: #c8c8e0; font-size: 0.88em; font-weight: 500; }}
+        .conn-rel {{ color: #555577; font-size: 0.78em; margin-top: 1px; line-height: 1.4; }}
+        .conn-type {{ color: #444466; font-size: 0.7em; }}
+
+        /* Legend */
+        #legend {{ position: fixed; bottom: 12px; left: 12px; background: #0e0e22ee; border: 1px solid #2a2a5a; border-radius: 10px; padding: 10px 14px; font-size: 0.75em; max-height: 240px; overflow-y: auto; z-index: 10; backdrop-filter: blur(8px); min-width: 150px; }}
         #legend .leg-title {{ color: #ff6b8a; font-weight: 600; margin-bottom: 6px; font-size: 0.9em; }}
-        #legend .leg-item {{ margin: 3px 0; display: flex; align-items: center; gap: 7px; cursor: pointer; padding: 2px 4px; border-radius: 4px; transition: background 0.15s; }}
+        #legend .leg-item {{ margin: 2px 0; display: flex; align-items: center; gap: 7px; cursor: pointer; padding: 2px 4px; border-radius: 4px; transition: background 0.15s; }}
         #legend .leg-item:hover {{ background: #1a1a3e; }}
         #legend .leg-dot {{ width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }}
         #legend .leg-label {{ color: #aaa; }}
@@ -185,6 +225,15 @@ fn generate_viz_html(
         <div id="error"><p>Failed to load vis-network.</p></div>
     </div>
     <div id="tooltip"></div>
+    <div id="card">
+        <div id="card-head">
+            <button id="card-close">&times;</button>
+            <div id="card-type"><span class="ct-dot"></span><span class="ct-label"></span></div>
+            <div id="card-name"></div>
+            <div id="card-meta"></div>
+        </div>
+        <div id="card-body"></div>
+    </div>
     <div id="legend"></div>
 
     <script>
@@ -200,34 +249,59 @@ fn generate_viz_html(
         var graphEdges = {};
 
         function escHtml(s) {{ var d=document.createElement('div'); d.textContent=s; return d.innerHTML; }}
+        
+        // Curated color palette for better visual distinction
+        var colorPalette = [
+            {{ bg:'#6366f1', border:'#4f46e5', light:'#818cf8' }}, // Indigo
+            {{ bg:'#ec4899', border:'#db2777', light:'#f472b6' }}, // Pink
+            {{ bg:'#14b8a6', border:'#0d9488', light:'#2dd4bf' }}, // Teal
+            {{ bg:'#f59e0b', border:'#d97706', light:'#fbbf24' }}, // Amber
+            {{ bg:'#8b5cf6', border:'#7c3aed', light:'#a78bfa' }}, // Violet
+            {{ bg:'#06b6d4', border:'#0891b2', light:'#22d3ee' }}, // Cyan
+            {{ bg:'#ef4444', border:'#dc2626', light:'#f87171' }}, // Red
+            {{ bg:'#22c55e', border:'#16a34a', light:'#4ade80' }}, // Green
+            {{ bg:'#f97316', border:'#ea580c', light:'#fb923c' }}, // Orange
+            {{ bg:'#3b82f6', border:'#2563eb', light:'#60a5fa' }}, // Blue
+            {{ bg:'#a855f7', border:'#9333ea', light:'#c084fc' }}, // Purple
+            {{ bg:'#eab308', border:'#ca8a04', light:'#facc15' }}  // Yellow
+        ];
+        var typeColorMap = {{}};
+        var colorIndex = 0;
+        
         function typeToColor(type) {{
             if (!type) type='concept';
-            var h=0; for(var i=0;i<type.length;i++){{ h=type.charCodeAt(i)+((h<<5)-h); h=h&h; }}
-            var hue=((h%360)+360)%360, sat=60+(Math.abs(h>>8)%15), lit=52+(Math.abs(h>>16)%10);
-            return {{ bg:'hsl('+hue+','+sat+'%,'+lit+'%)', border:'hsl('+hue+','+sat+'%,'+(lit-12)+'%)', light:'hsl('+hue+','+(sat-10)+'%,'+(lit+15)+'%)' }};
+            if (!typeColorMap[type]) {{
+                typeColorMap[type] = colorPalette[colorIndex % colorPalette.length];
+                colorIndex++;
+            }}
+            return typeColorMap[type];
         }}
 
         function initGraph() {{
             document.getElementById('loading').style.display='none';
 
-            // Pre-color nodes by entity type
+            // Pre-color nodes - labels hidden by default to prevent overlap
             graphNodes.forEach(function(n){{
                 var c=typeToColor(n.entityType);
                 n.color={{ background:c.bg, border:c.border, highlight:{{ background:c.light, border:c.bg }}, hover:{{ background:c.light, border:c.bg }} }};
-                n.font={{ color:'#d0d0e8', size: Math.min(14, Math.max(10, 8+n.value)) }};
+                // Truncate long labels
+                n.fullLabel = n.label;
+                if(n.label.length > 22) n.label = n.label.substring(0, 20) + '…';
+                // Start with labels hidden
+                n.font={{ color:'transparent', size:11, strokeWidth:0 }};
             }});
 
-            // Style proximity edges as thin and dashed; explicit edges as solid
+            // Style edges - labels off by default
             var showProximity = true;
             graphEdges.forEach(function(e){{
                 if(e.isProximity){{
-                    e.dashes=[4,4]; e.width=0.3; e.color={{ color:'#1a1a3a', highlight:'#3a3a5a', hover:'#2a2a4a' }};
+                    e.dashes=[4,4]; e.width=0.4; e.color={{ color:'#1e1e3a', highlight:'#3a3a5a', hover:'#2a2a4a' }};
                     e.font={{ size:0 }}; e.arrows={{to:{{enabled:false}}}};
                 }} else {{
-                    e.width=Math.max(0.8, Math.min(3, e.value/4));
-                    e.color={{ color:'#3a3a6a', highlight:'#ff6b8a', hover:'#5a5a8a' }};
-                    e.font={{ color:'#444466', size:8, strokeWidth:0, align:'middle' }};
-                    e.arrows={{to:{{enabled:true,scaleFactor:0.4}}}};
+                    e.width=Math.max(1, Math.min(3, e.value/3));
+                    e.color={{ color:'#4a4a7a', highlight:'#ff6b8a', hover:'#6a6a9a' }};
+                    e.font={{ color:'#444466', size:0, strokeWidth:0, align:'middle' }};
+                    e.arrows={{to:{{enabled:true,scaleFactor:0.5}}}};
                 }}
             }});
 
@@ -235,44 +309,186 @@ fn generate_viz_html(
             var edges = new vis.DataSet(graphEdges);
             var container = document.getElementById('graph');
             var options = {{
-                nodes: {{ shape:'dot', borderWidth:1.5, shadow:{{ enabled:true, color:'rgba(0,0,0,0.4)', size:6, x:2, y:2 }},
-                    scaling:{{ min:6, max:35, label:{{ enabled:true, min:9, max:18 }} }} }},
-                edges: {{ smooth:{{ type:'continuous', roundness:0.15 }}, hoverWidth:1.5, selectionWidth:2 }},
-                physics: {{ forceAtlas2Based:{{ gravitationalConstant:-40, centralGravity:0.006, springLength:160, springConstant:0.12, damping:0.45 }},
-                    maxVelocity:60, solver:'forceAtlas2Based', timestep:0.35, stabilization:{{ iterations:250, fit:true }} }},
-                interaction: {{ hover:true, tooltipDelay:80, hideEdgesOnDrag:true, multiselect:true, zoomSpeed:0.8 }}
+                nodes: {{ shape:'dot', borderWidth:2, shadow:{{ enabled:true, color:'rgba(0,0,0,0.5)', size:8, x:2, y:3 }},
+                    scaling:{{ min:10, max:45, label:{{ enabled:false }} }} }},
+                edges: {{ smooth:{{ type:'continuous', roundness:0.2 }}, hoverWidth:2, selectionWidth:2.5 }},
+                // Increased spacing to prevent overlap
+                physics: {{ forceAtlas2Based:{{ gravitationalConstant:-100, centralGravity:0.004, springLength:300, springConstant:0.06, damping:0.5 }},
+                    maxVelocity:40, solver:'forceAtlas2Based', timestep:0.4, stabilization:{{ iterations:400, fit:true }} }},
+                interaction: {{ hover:true, tooltipDelay:50, hideEdgesOnDrag:true, hideEdgesOnZoom:true, multiselect:true, zoomSpeed:0.7 }}
             }};
             var network = new vis.Network(container, {{ nodes:nodes, edges:edges }}, options);
+            
+            // Store original colors for reset
+            var nodeColors = {{}};
+            graphNodes.forEach(function(n){{ nodeColors[n.id] = n.color; }});
+            var highlightActive = false;
 
-            // ── Tooltip ──
+            // Neighborhood highlight - show labels only for selected node and neighbors
+            function neighbourhoodHighlight(params) {{
+                tooltip.style.display='none';
+                var allNodes = nodes.get({{ returnType: 'Object' }});
+                if (params.nodes.length > 0) {{
+                    highlightActive = true;
+                    var selectedNode = params.nodes[0];
+                    var connectedNodes = network.getConnectedNodes(selectedNode);
+                    
+                    // Dim all nodes and hide labels
+                    for (var nodeId in allNodes) {{
+                        allNodes[nodeId].color = 'rgba(80,80,100,0.3)';
+                        allNodes[nodeId].font = {{ color: 'transparent', size: 11 }};
+                    }}
+                    
+                    // First-degree neighbors get their color and labels
+                    for (var i = 0; i < connectedNodes.length; i++) {{
+                        allNodes[connectedNodes[i]].color = nodeColors[connectedNodes[i]];
+                        allNodes[connectedNodes[i]].font = {{ color: '#c0c0d0', size: 11 }};
+                    }}
+                    
+                    // Selected node fully highlighted with label
+                    allNodes[selectedNode].color = nodeColors[selectedNode];
+                    allNodes[selectedNode].font = {{ color: '#ffffff', size: 13, strokeWidth: 3, strokeColor: '#000000' }};
+                    
+                    nodes.update(Object.values(allNodes));
+                    openCard(selectedNode);
+                }} else if (highlightActive) {{
+                    highlightActive = false;
+                    // Reset all nodes
+                    for (var nodeId in allNodes) {{
+                        allNodes[nodeId].color = nodeColors[nodeId];
+                        allNodes[nodeId].font = {{ color: 'transparent', size: 11 }};
+                    }}
+                    nodes.update(Object.values(allNodes));
+                    closeCard();
+                }}
+            }}
+            network.on('click', neighbourhoodHighlight);
+
+            // Show label on hover with stroke for visibility
+            network.on('hoverNode', function(p){{
+                nodes.update({{ id: p.node, font: {{ color: '#ffffff', size: 13, strokeWidth: 3, strokeColor: '#000000' }} }});
+            }});
+            network.on('blurNode', function(p){{
+                if (!highlightActive) {{
+                    nodes.update({{ id: p.node, font: {{ color: 'transparent', size: 11, strokeWidth: 0 }} }});
+                }}
+            }});
+
+            // ── Hover tooltip (compact preview) ──
             var tooltip = document.getElementById('tooltip');
             network.on('hoverNode', function(p){{
-                var n=nodes.get(p.node), ce=network.getConnectedEdges(p.node);
+                var n=nodes.get(p.node);
                 var tc=typeToColor(n.entityType);
-                var html='<div class="tt-name">'+escHtml(n.label)+'</div>';
-                html+='<div class="tt-type"><span class="tt-dot" style="background:'+tc.bg+'"></span>'+escHtml(n.entityType||'')+'</div>';
-                // Show explicit relations first, then proximity
-                var explicit=[], proximity=[];
-                ce.forEach(function(eId){{
-                    var e=edges.get(eId), tid=e.from===p.node?e.to:e.from, t=nodes.get(tid);
-                    if(t){{ (e.isProximity?proximity:explicit).push({{ label:t.label, rel:e.fullLabel||e.label||'related' }}); }}
-                }});
-                html+='<div class="tt-rels">';
-                explicit.slice(0,6).forEach(function(r){{ html+='<span class="tt-target">'+escHtml(r.label)+'</span> <span class="tt-edge">'+escHtml(r.rel)+'</span><br>'; }});
-                if(proximity.length>0 && explicit.length<6) {{
-                    var left=Math.min(proximity.length, 4);
-                    proximity.slice(0,left).forEach(function(r){{ html+='<span style="color:#556">'+escHtml(r.label)+'</span><br>'; }});
-                }}
-                var total=explicit.length+proximity.length;
-                if(total>10) html+='<span style="color:#445">+'+(total-10)+' more</span>';
-                html+='</div>';
-                tooltip.innerHTML=html; tooltip.style.display='block';
+                var conns=network.getConnectedNodes(p.node).length;
+                tooltip.innerHTML=
+                    '<div class="tt-type"><span class="tt-dot" style="background:'+tc.bg+'"></span>'+escHtml(n.entityType||'concept')+'</div>'+
+                    '<div class="tt-name">'+escHtml(n.label)+'</div>'+
+                    '<div class="tt-hint">'+conns+' connections &middot; click to expand</div>';
+                tooltip.style.display='block';
                 var x=p.event.center.x, y=p.event.center.y;
-                if(x>window.innerWidth-360) x-=360;
+                if(x>window.innerWidth-280) x-=280;
+                if(y>window.innerHeight-80) y-=80;
                 tooltip.style.left=(x+14)+'px'; tooltip.style.top=(y+14)+'px';
             }});
             network.on('blurNode', function(){{ tooltip.style.display='none'; }});
             network.on('dragStart', function(){{ tooltip.style.display='none'; }});
+
+            // ── Detail card (click) ──
+            var card=document.getElementById('card'), cardBody=document.getElementById('card-body');
+            var selectedNode=null;
+
+            function openCard(nodeId) {{
+                var n=nodes.get(nodeId);
+                if(!n) return;
+                selectedNode=nodeId;
+                var tc=typeToColor(n.entityType);
+
+                // Header: type badge at top, then name
+                document.querySelector('#card-type .ct-dot').style.background=tc.bg;
+                document.querySelector('#card-type .ct-label').textContent=n.entityType||'concept';
+                document.getElementById('card-name').textContent=n.label;
+
+                // Gather connections
+                var ce=network.getConnectedEdges(nodeId);
+                var explicit=[], proximity=[];
+                ce.forEach(function(eId){{
+                    var e=edges.get(eId);
+                    if(!e) return;
+                    var tid=e.from===nodeId?e.to:e.from;
+                    var t=nodes.get(tid);
+                    if(!t) return;
+                    var item={{ id:tid, label:t.label, type:t.entityType||'concept', rel:e.fullLabel||e.label||'related', weight:e.value||1 }};
+                    if(e.isProximity) proximity.push(item); else explicit.push(item);
+                }});
+
+                // Sort by weight desc
+                explicit.sort(function(a,b){{ return b.weight-a.weight; }});
+                proximity.sort(function(a,b){{ return b.weight-a.weight; }});
+
+                document.getElementById('card-meta').textContent=explicit.length+' explicit + '+proximity.length+' proximity connections';
+
+                // Build sections
+                var html='';
+
+                if(explicit.length>0) {{
+                    html+='<div class="card-section"><div class="card-section-title">Explicit Relations ('+explicit.length+')</div>';
+                    explicit.forEach(function(c){{
+                        var cc=typeToColor(c.type);
+                        html+='<div class="conn-item" data-node="'+escHtml(c.id)+'">'+
+                            '<span class="conn-dot" style="background:'+cc.bg+'"></span>'+
+                            '<div><div class="conn-name">'+escHtml(c.label)+'</div>'+
+                            '<div class="conn-rel">'+escHtml(c.rel)+'</div>'+
+                            '<div class="conn-type">'+escHtml(c.type)+'</div></div></div>';
+                    }});
+                    html+='</div>';
+                }}
+
+                if(proximity.length>0) {{
+                    html+='<div class="card-section"><div class="card-section-title">Contextual Proximity ('+proximity.length+')</div>';
+                    proximity.forEach(function(c){{
+                        var cc=typeToColor(c.type);
+                        html+='<div class="conn-item" data-node="'+escHtml(c.id)+'">'+
+                            '<span class="conn-dot" style="background:'+cc.bg+'"></span>'+
+                            '<div><div class="conn-name">'+escHtml(c.label)+'</div>'+
+                            '<div class="conn-type">'+escHtml(c.type)+'</div></div></div>';
+                    }});
+                    html+='</div>';
+                }}
+
+                if(explicit.length===0 && proximity.length===0) {{
+                    html='<div class="card-section" style="color:#444">No connections found.</div>';
+                }}
+
+                cardBody.innerHTML=html;
+
+                // Make connection items clickable -- navigate to that node
+                cardBody.querySelectorAll('.conn-item').forEach(function(el){{
+                    el.addEventListener('click', function(){{
+                        var tid=this.getAttribute('data-node');
+                        if(tid){{
+                            network.focus(tid, {{ scale:1.2, animation:{{ duration:400, easingFunction:'easeInOutQuad' }} }});
+                            network.selectNodes([tid]);
+                            openCard(tid);
+                        }}
+                    }});
+                }});
+
+                card.classList.add('open');
+            }}
+
+            function closeCard() {{
+                card.classList.remove('open');
+                selectedNode=null;
+                network.unselectAll();
+            }}
+
+            // Click handler integrated into neighbourhoodHighlight above
+            // Card open/close is handled there
+
+            document.getElementById('card-close').addEventListener('click', function(e){{
+                e.stopPropagation();
+                closeCard();
+            }});
 
             // ── Toggle proximity edges ──
             var btnP=document.getElementById('btnProximity');
@@ -305,14 +521,13 @@ fn generate_viz_html(
 
             // ── Search ──
             var searchInput=document.getElementById('search'), allIds=nodes.getIds();
-            // Store original colors for reset
             var origColors={{}};
             graphNodes.forEach(function(n){{ origColors[n.id]=n.color; }});
 
             searchInput.addEventListener('input', function(){{
                 var q=this.value.toLowerCase().trim();
                 if(!q){{
-                    nodes.update(allIds.map(function(id){{ var n=nodes.get(id); return {{ id:id, opacity:1, font:{{ color:'#d0d0e8' }}, color:origColors[id], borderWidth:1.5 }}; }}));
+                    nodes.update(allIds.map(function(id){{ return {{ id:id, opacity:1, font:{{ color:'#d0d0e8' }}, color:origColors[id], borderWidth:1.5 }}; }}));
                     return;
                 }}
                 var match=new Set(), neighbors=new Set();
@@ -345,7 +560,10 @@ fn generate_viz_html(
             // ── Keyboard ──
             document.addEventListener('keydown', function(e){{
                 if(e.key==='/'&&document.activeElement!==searchInput){{ e.preventDefault(); searchInput.focus(); }}
-                if(e.key==='Escape'){{ searchInput.value=''; searchInput.dispatchEvent(new Event('input')); searchInput.blur(); }}
+                if(e.key==='Escape'){{
+                    if(card.classList.contains('open')){{ closeCard(); }}
+                    else {{ searchInput.value=''; searchInput.dispatchEvent(new Event('input')); searchInput.blur(); }}
+                }}
             }});
         }}
     </script>

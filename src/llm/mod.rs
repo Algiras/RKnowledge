@@ -1,7 +1,7 @@
 mod anthropic;
-mod openai;
-mod ollama;
 mod google;
+mod ollama;
+mod openai;
 pub(crate) mod parsing;
 mod prompts;
 
@@ -29,7 +29,7 @@ pub struct Relation {
 pub trait LlmProviderTrait: Send + Sync {
     /// Extract relations from text using the LLM
     async fn extract_relations(&self, text: &str) -> Result<Vec<Relation>>;
-    
+
     /// Get the provider name
     #[allow(dead_code)]
     fn name(&self) -> &'static str;
@@ -42,7 +42,11 @@ pub struct LlmClient {
 
 impl LlmClient {
     /// Create a new LLM client for the specified provider
-    pub fn new(provider: LlmProvider, config: &Config, model_override: Option<&str>) -> Result<Self> {
+    pub fn new(
+        provider: LlmProvider,
+        config: &Config,
+        model_override: Option<&str>,
+    ) -> Result<Self> {
         let provider_impl: Box<dyn LlmProviderTrait> = match provider {
             LlmProvider::Anthropic => {
                 let provider_config = config
@@ -100,7 +104,9 @@ impl LlmClient {
             }
         };
 
-        Ok(Self { provider: provider_impl })
+        Ok(Self {
+            provider: provider_impl,
+        })
     }
 
     /// Extract relations from text

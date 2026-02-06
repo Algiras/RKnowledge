@@ -1,14 +1,14 @@
 mod cli;
 mod config;
-mod parser;
-mod llm;
-mod graph;
-mod export;
 mod error;
+mod export;
+mod graph;
+mod llm;
+mod parser;
 
 use anyhow::Result;
 use clap::Parser;
-use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt, EnvFilter};
+use tracing_subscriber::{EnvFilter, layer::SubscriberExt, util::SubscriberInitExt};
 
 use crate::cli::{Cli, Commands};
 
@@ -26,7 +26,11 @@ async fn main() -> Result<()> {
         Commands::Init { force } => {
             cli::commands::init::run(force).await?;
         }
-        Commands::Auth { provider, key, list } => {
+        Commands::Auth {
+            provider,
+            key,
+            list,
+        } => {
             cli::commands::auth::run(provider, key, list).await?;
         }
         Commands::Build {
@@ -39,8 +43,17 @@ async fn main() -> Result<()> {
             concurrency,
             append,
         } => {
-            cli::commands::build::run(path, provider, model, output, chunk_size, chunk_overlap, concurrency, append)
-                .await?;
+            cli::commands::build::run(
+                path,
+                provider,
+                model,
+                output,
+                chunk_size,
+                chunk_overlap,
+                concurrency,
+                append,
+            )
+            .await?;
         }
         Commands::Export { format, output } => {
             cli::commands::export::run(format, output).await?;

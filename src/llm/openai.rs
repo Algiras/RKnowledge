@@ -4,7 +4,7 @@ use reqwest::Client;
 use serde::{Deserialize, Serialize};
 
 use super::parsing::parse_relations_json;
-use super::prompts::{graph_extraction_user_prompt, GRAPH_EXTRACTION_SYSTEM_PROMPT};
+use super::prompts::{GRAPH_EXTRACTION_SYSTEM_PROMPT, graph_extraction_user_prompt};
 use super::{LlmProviderTrait, Relation};
 
 pub struct OpenAIProvider {
@@ -53,9 +53,7 @@ impl OpenAIProvider {
             client: Client::new(),
             api_key: api_key.to_string(),
             model: model.to_string(),
-            base_url: base_url
-                .unwrap_or("https://api.openai.com/v1")
-                .to_string(),
+            base_url: base_url.unwrap_or("https://api.openai.com/v1").to_string(),
         })
     }
 
@@ -109,7 +107,9 @@ impl OpenAIProvider {
 impl LlmProviderTrait for OpenAIProvider {
     async fn extract_relations(&self, text: &str) -> Result<Vec<Relation>> {
         let user_prompt = graph_extraction_user_prompt(text);
-        let response = self.complete(GRAPH_EXTRACTION_SYSTEM_PROMPT, &user_prompt).await?;
+        let response = self
+            .complete(GRAPH_EXTRACTION_SYSTEM_PROMPT, &user_prompt)
+            .await?;
 
         // Parse JSON response
         parse_relations_json(&response)
@@ -119,4 +119,3 @@ impl LlmProviderTrait for OpenAIProvider {
         "openai"
     }
 }
-

@@ -1,5 +1,5 @@
 use anyhow::{Context, Result};
-use console::{style, Emoji};
+use console::{Emoji, style};
 use futures::stream::{self, StreamExt};
 use indicatif::{HumanDuration, ProgressBar, ProgressStyle};
 use std::path::PathBuf;
@@ -23,6 +23,7 @@ static ROCKET: Emoji<'_, '_> = Emoji("🚀 ", "");
 static CHECK: Emoji<'_, '_> = Emoji("✅ ", "[OK] ");
 static DATABASE: Emoji<'_, '_> = Emoji("💾 ", "");
 
+#[allow(clippy::too_many_arguments)]
 pub async fn run(
     path: PathBuf,
     provider: Option<LlmProvider>,
@@ -34,46 +35,64 @@ pub async fn run(
     append: bool,
 ) -> Result<()> {
     let started = Instant::now();
-    
+
     println!();
-    println!("{}", style(" RKnowledge - Knowledge Graph Builder ").bold().reverse());
+    println!(
+        "{}",
+        style(" RKnowledge - Knowledge Graph Builder ")
+            .bold()
+            .reverse()
+    );
     println!();
 
     // Load configuration
-    let config = Config::load().context("Failed to load configuration. Run 'rknowledge init' first.")?;
+    let config =
+        Config::load().context("Failed to load configuration. Run 'rknowledge init' first.")?;
 
     // Determine provider and model
-    let provider = provider.unwrap_or_else(|| {
-        match config.default_provider.as_str() {
-            "openai" => LlmProvider::OpenAI,
-            "ollama" => LlmProvider::Ollama,
-            "google" => LlmProvider::Google,
-            _ => LlmProvider::Anthropic,
-        }
+    let provider = provider.unwrap_or(match config.default_provider.as_str() {
+        "openai" => LlmProvider::OpenAI,
+        "ollama" => LlmProvider::Ollama,
+        "google" => LlmProvider::Google,
+        _ => LlmProvider::Anthropic,
     });
 
     let model = model.or(config.default_model.clone());
     let model_display = model.clone().unwrap_or_else(|| "default".to_string());
 
-    println!("{}Provider: {}", BRAIN, style(&provider.to_string()).cyan().bold());
+    println!(
+        "{}Provider: {}",
+        BRAIN,
+        style(&provider.to_string()).cyan().bold()
+    );
     println!("{}Model: {}", BRAIN, style(&model_display).cyan());
     println!("{}Source: {}", PAPER, style(path.display()).cyan());
     if concurrency > 1 {
         println!("{}Concurrency: {}", BRAIN, style(concurrency).cyan());
     }
     if append {
-        println!("{}Mode: {}", DATABASE, style("append (merge with existing)").yellow());
+        println!(
+            "{}Mode: {}",
+            DATABASE,
+            style("append (merge with existing)").yellow()
+        );
     }
     println!();
 
     // Collect documents
     print!("{}Scanning for documents... ", LOOKING_GLASS);
     let documents = collect_documents(&path)?;
-    println!("{}", style(format!("found {}", documents.len())).green().bold());
+    println!(
+        "{}",
+        style(format!("found {}", documents.len())).green().bold()
+    );
 
     if documents.is_empty() {
         println!();
-        println!("{}", style("No supported documents found (.pdf, .md, .txt, .html)").yellow());
+        println!(
+            "{}",
+            style("No supported documents found (.pdf, .md, .txt, .html)").yellow()
+        );
         return Ok(());
     }
 
@@ -98,8 +117,9 @@ pub async fn run(
         pb.inc(1);
     }
     pb.finish_and_clear();
-    println!("{}Parsed {} documents into {} chunks", 
-        CHECK, 
+    println!(
+        "{}Parsed {} documents into {} chunks",
+        CHECK,
         style(documents.len()).green().bold(),
         style(all_chunks.len()).green().bold()
     );
@@ -110,9 +130,9 @@ pub async fn run(
     // Build knowledge graph
     println!();
     println!("{}Extracting knowledge from text...", BRAIN);
-    
+
     let mut builder = GraphBuilder::new();
-    
+
     let pb = ProgressBar::new(all_chunks.len() as u64);
     pb.set_style(
         ProgressStyle::default_bar()
@@ -127,21 +147,22 @@ pub async fn run(
     // Process chunks concurrently
     let pb_ref = &pb;
     let client_ref = &llm_client;
-    let results: Vec<(String, Vec<crate::llm::Relation>)> = stream::iter(all_chunks.iter().enumerate())
-        .map(|(i, chunk)| {
-            let text = chunk.text.clone();
-            let chunk_id = chunk.id.clone();
-            let client = Arc::clone(client_ref);
-            async move {
-                pb_ref.set_message(format!("chunk {}/{}", i + 1, pb_ref.length().unwrap_or(0)));
-                let relations = client.extract_relations(&text).await.unwrap_or_default();
-                pb_ref.inc(1);
-                (chunk_id, relations)
-            }
-        })
-        .buffer_unordered(effective_concurrency)
-        .collect()
-        .await;
+    let results: Vec<(String, Vec<crate::llm::Relation>)> =
+        stream::iter(all_chunks.iter().enumerate())
+            .map(|(i, chunk)| {
+                let text = chunk.text.clone();
+                let chunk_id = chunk.id.clone();
+                let client = Arc::clone(client_ref);
+                async move {
+                    pb_ref.set_message(format!("chunk {}/{}", i + 1, pb_ref.length().unwrap_or(0)));
+                    let relations = client.extract_relations(&text).await.unwrap_or_default();
+                    pb_ref.inc(1);
+                    (chunk_id, relations)
+                }
+            })
+            .buffer_unordered(effective_concurrency)
+            .collect()
+            .await;
 
     let mut total_relations = 0;
     for (chunk_id, relations) in results {
@@ -150,7 +171,8 @@ pub async fn run(
     }
 
     pb.finish_and_clear();
-    println!("{}Extracted {} relations from {} chunks (concurrency: {})", 
+    println!(
+        "{}Extracted {} relations from {} chunks (concurrency: {})",
         CHECK,
         style(total_relations).green().bold(),
         style(all_chunks.len()).green().bold(),
@@ -165,8 +187,16 @@ pub async fn run(
     let graph = builder.build();
     println!();
     println!("{}Graph Statistics:", SPARKLE);
-    println!("  {} Nodes (concepts): {}", style("•").cyan(), style(graph.node_count()).green().bold());
-    println!("  {} Edges (relations): {}", style("•").cyan(), style(graph.edge_count()).green().bold());
+    println!(
+        "  {} Nodes (concepts): {}",
+        style("•").cyan(),
+        style(graph.node_count()).green().bold()
+    );
+    println!(
+        "  {} Edges (relations): {}",
+        style("•").cyan(),
+        style(graph.edge_count()).green().bold()
+    );
 
     // Output results
     println!();
@@ -236,8 +266,8 @@ fn collect_documents(path: &PathBuf) -> Result<Vec<PathBuf>> {
 }
 
 fn is_supported_file(path: &std::path::Path) -> bool {
-    match path.extension().and_then(|e| e.to_str()) {
-        Some("pdf") | Some("txt") | Some("md") | Some("html") | Some("htm") => true,
-        _ => false,
-    }
+    matches!(
+        path.extension().and_then(|e| e.to_str()),
+        Some("pdf") | Some("txt") | Some("md") | Some("html") | Some("htm")
+    )
 }

@@ -1,5 +1,5 @@
 use anyhow::{Context, Result};
-use console::{style, Emoji};
+use console::{Emoji, style};
 use indicatif::{ProgressBar, ProgressStyle};
 use std::fs;
 use std::process::Command;
@@ -16,7 +16,10 @@ static KEY: Emoji<'_, '_> = Emoji("🔑 ", "");
 
 pub async fn run(force: bool) -> Result<()> {
     println!();
-    println!("{}", style(" RKnowledge - Initialization ").bold().reverse());
+    println!(
+        "{}",
+        style(" RKnowledge - Initialization ").bold().reverse()
+    );
     println!();
 
     let config_dir = Config::config_dir()?;
@@ -98,10 +101,7 @@ pub async fn run(force: bool) -> Result<()> {
     fs::write(&docker_compose_path, docker_compose_content)
         .context("Failed to write docker-compose.yml")?;
 
-    println!(
-        "{}Created docker-compose.yml",
-        CHECK,
-    );
+    println!("{}Created docker-compose.yml", CHECK,);
 
     // Check if Docker is available
     let docker_available = Command::new("docker")
@@ -122,7 +122,13 @@ pub async fn run(force: bool) -> Result<()> {
         spinner.set_message("Starting Neo4j with Docker...");
 
         let status = Command::new("docker")
-            .args(["compose", "-f", docker_compose_path.to_str().unwrap(), "up", "-d"])
+            .args([
+                "compose",
+                "-f",
+                docker_compose_path.to_str().unwrap(),
+                "up",
+                "-d",
+            ])
             .output();
 
         spinner.finish_and_clear();
@@ -131,14 +137,20 @@ pub async fn run(force: bool) -> Result<()> {
             Ok(output) if output.status.success() => {
                 println!("{}Neo4j started successfully", CHECK);
                 println!();
-                println!("  {} Neo4j Browser: {}", style("→").cyan(), style("http://localhost:7474").blue().underlined());
-                println!("  {} Credentials: {} / {}", style("→").cyan(), style("neo4j").green(), style("rknowledge").green());
+                println!(
+                    "  {} Neo4j Browser: {}",
+                    style("→").cyan(),
+                    style("http://localhost:7474").blue().underlined()
+                );
+                println!(
+                    "  {} Credentials: {} / {}",
+                    style("→").cyan(),
+                    style("neo4j").green(),
+                    style("rknowledge").green()
+                );
             }
             _ => {
-                println!(
-                    "{}Failed to start Neo4j. Start manually with:",
-                    WARN,
-                );
+                println!("{}Failed to start Neo4j. Start manually with:", WARN,);
                 println!(
                     "  {} docker compose -f {} up -d",
                     style("$").dim(),
@@ -167,7 +179,10 @@ pub async fn run(force: bool) -> Result<()> {
     println!("    {} rknowledge auth", style("$").dim());
     println!();
     println!("  {}Build your first knowledge graph:", ROCKET);
-    println!("    {} rknowledge build ./your-documents/", style("$").dim());
+    println!(
+        "    {} rknowledge build ./your-documents/",
+        style("$").dim()
+    );
     println!();
 
     Ok(())

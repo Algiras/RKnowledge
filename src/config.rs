@@ -123,8 +123,7 @@ fn expand_env_var(value: &str) -> String {
     if value.starts_with("${") && value.ends_with('}') {
         let var_name = &value[2..value.len() - 1];
         std::env::var(var_name).unwrap_or_default()
-    } else if value.starts_with('$') {
-        let var_name = &value[1..];
+    } else if let Some(var_name) = value.strip_prefix('$') {
         std::env::var(var_name).unwrap_or_default()
     } else {
         value.to_string()
@@ -227,10 +226,7 @@ mod tests {
         assert!(config.get_provider("ollama").is_some());
         assert!(config.get_provider("openai").is_none());
         assert!(config.get_provider("nonexistent").is_none());
-        assert_eq!(
-            config.get_provider("anthropic").unwrap().api_key,
-            "sk-test"
-        );
+        assert_eq!(config.get_provider("anthropic").unwrap().api_key, "sk-test");
     }
 
     #[test]
@@ -261,9 +257,6 @@ mod tests {
         let serialized = toml::to_string_pretty(&config).unwrap();
         let deserialized: Config = toml::from_str(&serialized).unwrap();
         assert_eq!(deserialized.default_provider, "openai");
-        assert_eq!(
-            deserialized.providers.openai.unwrap().api_key,
-            "sk-123"
-        );
+        assert_eq!(deserialized.providers.openai.unwrap().api_key, "sk-123");
     }
 }

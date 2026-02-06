@@ -1,12 +1,12 @@
 use anyhow::{Context, Result};
-use console::{style, Emoji};
+use console::{Emoji, style};
 use indicatif::{ProgressBar, ProgressStyle};
 use std::time::Duration;
 
 use crate::config::Config;
-use crate::graph::neo4j::Neo4jClient;
 use crate::graph::builder::GraphBuilder;
 use crate::graph::community;
+use crate::graph::neo4j::Neo4jClient;
 
 static PEOPLE: Emoji<'_, '_> = Emoji("👥 ", "");
 static DATABASE: Emoji<'_, '_> = Emoji("💾 ", "");
@@ -14,10 +14,14 @@ static COMMUNITY: Emoji<'_, '_> = Emoji("🏘️  ", "");
 
 pub async fn run() -> Result<()> {
     println!();
-    println!("{}", style(" RKnowledge - Community Detection ").bold().reverse());
+    println!(
+        "{}",
+        style(" RKnowledge - Community Detection ").bold().reverse()
+    );
     println!();
 
-    let config = Config::load().context("Failed to load configuration. Run 'rknowledge init' first.")?;
+    let config =
+        Config::load().context("Failed to load configuration. Run 'rknowledge init' first.")?;
 
     let spinner = ProgressBar::new_spinner();
     spinner.set_style(
@@ -58,17 +62,28 @@ pub async fn run() -> Result<()> {
     spinner.finish_and_clear();
 
     if summary.is_empty() {
-        println!("{}", style("No communities detected (empty graph).").yellow());
+        println!(
+            "{}",
+            style("No communities detected (empty graph).").yellow()
+        );
         return Ok(());
     }
 
     // Build a lookup: node_label -> entity_type
     let node_type_map: std::collections::HashMap<String, String> = nodes
         .iter()
-        .map(|n| (n.label.to_lowercase(), n.entity_type.clone().unwrap_or_else(|| "untyped".to_string())))
+        .map(|n| {
+            (
+                n.label.to_lowercase(),
+                n.entity_type
+                    .clone()
+                    .unwrap_or_else(|| "untyped".to_string()),
+            )
+        })
         .collect();
 
-    println!("{}Detected {} communities from {} nodes", 
+    println!(
+        "{}Detected {} communities from {} nodes",
         COMMUNITY,
         style(summary.len()).green().bold(),
         style(nodes.len()).cyan(),
@@ -83,7 +98,7 @@ pub async fn run() -> Result<()> {
 
         let header = format!("Community {} ({} members)", community_id, members.len());
         match color {
-            "red" => println!("{}{}",  PEOPLE, style(&header).red().bold()),
+            "red" => println!("{}{}", PEOPLE, style(&header).red().bold()),
             "blue" => println!("{}{}", PEOPLE, style(&header).blue().bold()),
             "green" => println!("{}{}", PEOPLE, style(&header).green().bold()),
             "yellow" => println!("{}{}", PEOPLE, style(&header).yellow().bold()),
@@ -92,15 +107,26 @@ pub async fn run() -> Result<()> {
         }
 
         // Show entity type distribution for this community
-        let mut type_counts: std::collections::HashMap<&str, usize> = std::collections::HashMap::new();
+        let mut type_counts: std::collections::HashMap<&str, usize> =
+            std::collections::HashMap::new();
         for member in members {
-            let t = node_type_map.get(member).map(|s| s.as_str()).unwrap_or("untyped");
+            let t = node_type_map
+                .get(member)
+                .map(|s| s.as_str())
+                .unwrap_or("untyped");
             *type_counts.entry(t).or_insert(0) += 1;
         }
         let mut type_list: Vec<(&str, usize)> = type_counts.into_iter().collect();
         type_list.sort_by(|a, b| b.1.cmp(&a.1));
-        let type_str: Vec<String> = type_list.iter().map(|(t, c)| format!("{} {}", c, t)).collect();
-        println!("    {} {}", style("types:").dim(), style(type_str.join(", ")).dim());
+        let type_str: Vec<String> = type_list
+            .iter()
+            .map(|(t, c)| format!("{} {}", c, t))
+            .collect();
+        println!(
+            "    {} {}",
+            style("types:").dim(),
+            style(type_str.join(", ")).dim()
+        );
 
         // Show up to 20 members with their type
         let show_count = members.len().min(20);
@@ -109,11 +135,20 @@ pub async fn run() -> Result<()> {
             if t.is_empty() || t == "untyped" {
                 println!("    {} {}", style("•").dim(), style(member).cyan());
             } else {
-                println!("    {} {} {}", style("•").dim(), style(member).cyan(), style(format!("[{}]", t)).dim());
+                println!(
+                    "    {} {} {}",
+                    style("•").dim(),
+                    style(member).cyan(),
+                    style(format!("[{}]", t)).dim()
+                );
             }
         }
         if members.len() > 20 {
-            println!("    {} ... and {} more", style("•").dim(), style(members.len() - 20).dim());
+            println!(
+                "    {} ... and {} more",
+                style("•").dim(),
+                style(members.len() - 20).dim()
+            );
         }
         println!();
     }

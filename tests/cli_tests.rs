@@ -10,6 +10,7 @@ use std::fs;
 use tempfile::tempdir;
 
 fn cmd() -> Command {
+    #[allow(deprecated)]
     Command::cargo_bin("rknowledge").unwrap()
 }
 
@@ -209,7 +210,10 @@ fn test_query_with_neo4j() {
 #[ignore]
 fn test_cypher_query_with_neo4j() {
     cmd()
-        .args(["query", "cypher: MATCH (n:Concept) RETURN count(n) AS count"])
+        .args([
+            "query",
+            "cypher: MATCH (n:Concept) RETURN count(n) AS count",
+        ])
         .timeout(std::time::Duration::from_secs(10))
         .assert()
         .success()

@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2024"
 description = "High-performance knowledge graph extraction CLI using LLMs"
 license = "MIT"
-repository = "https://github.com/algimantask/rknowledge"
+repository = "https://github.com/Algiras/RKnowledge"
 keywords = ["knowledge-graph", "llm", "neo4j", "rag"]
 categories = ["command-line-utilities", "text-processing"]
 
