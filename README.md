@@ -178,32 +178,9 @@ database = "neo4j"
 
 ## Architecture
 
-```
-┌──────────────────────────────────────────────────────────────────────┐
-│                         CLI (clap)                                    │
-├────────┬──────┬────────┬────────┬──────┬────────┬────────┬───────────┤
-│  init  │ auth │ build  │ query  │ path │ stats  │ comm.  │ viz/export│
-├────────┴──────┴────────┴────────┴──────┴────────┴────────┴───────────┤
-│                                                                       │
-│  ┌────────────┐  ┌────────────────┐  ┌──────────────────────────┐    │
-│  │   Parser   │  │   LLM Client   │  │     Graph Builder        │    │
-│  │ PDF/MD/HTML│→ │ 4 providers    │→ │ petgraph + community     │    │
-│  │ + Chunker  │  │ concurrent -j  │  │ + entity typing          │    │
-│  └────────────┘  └────────────────┘  └──────────────────────────┘    │
-│                                               │                       │
-│  ┌────────────┐  ┌────────────────┐  ┌───────┴──────────────────┐    │
-│  │ Analytics  │  │   Storage      │  │     Visualization        │    │
-│  │ PageRank   │  │   Neo4j        │  │   vis-network + cards    │    │
-│  │ Dijkstra   │  │   Docker       │  │   search + legend        │    │
-│  │ LPA comm.  │  │   MERGE/append │  │   type coloring          │    │
-│  └────────────┘  └────────────────┘  └──────────────────────────┘    │
-│                                                                       │
-│  ┌──────────────────────────────────────────────────────────────┐    │
-│  │                    Export Layer                               │    │
-│  │              JSON  ·  CSV  ·  GraphML  ·  Cypher             │    │
-│  └──────────────────────────────────────────────────────────────┘    │
-└──────────────────────────────────────────────────────────────────────┘
-```
+<p align="center">
+  <img src="assets/architecture_diagram.png" alt="RKnowledge Architecture" width="700">
+</p>
 
 See [ARCHITECTURE.md](ARCHITECTURE.md) for the full deep-dive.
 
