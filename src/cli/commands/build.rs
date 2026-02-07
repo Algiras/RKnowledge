@@ -1,9 +1,7 @@
 use anyhow::{Context, Result};
 use console::{Emoji, style};
-use futures::stream::{self, StreamExt};
 use indicatif::{HumanDuration, ProgressBar, ProgressStyle};
 use std::path::PathBuf;
-use std::sync::Arc;
 use std::time::Instant;
 use walkdir::WalkDir;
 
@@ -11,8 +9,10 @@ use crate::cli::{LlmProvider, OutputDestination};
 use crate::config::Config;
 use crate::graph::builder::GraphBuilder;
 use crate::graph::neo4j::Neo4jClient;
+use crate::llm::batch_processor::{BatchProcessor, DocumentSelector};
 use crate::llm::LlmClient;
 use crate::parser::DocumentParser;
+use crate::parser::ModelContextLimits;
 
 static LOOKING_GLASS: Emoji<'_, '_> = Emoji("🔍 ", "");
 static PAPER: Emoji<'_, '_> = Emoji("📄 ", "");
@@ -60,6 +60,12 @@ pub async fn run(
     let model = model.or(config.default_model.clone());
     let model_display = model.clone().unwrap_or_else(|| "default".to_string());
 
+    // Auto-detect if we should use adaptive processing for local models
+    let use_adaptive = matches!(provider, LlmProvider::Ollama);
+    let detected_context = model.as_ref()
+        .map(|m| ModelContextLimits::get_context_size(m))
+        .unwrap_or(4096);
+
     println!(
         "{}Provider: {}",
         BRAIN,
@@ -67,6 +73,9 @@ pub async fn run(
     );
     println!("{}Model: {}", BRAIN, style(&model_display).cyan());
     println!("{}Source: {}", PAPER, style(path.display()).cyan());
+    if use_adaptive {
+        println!("{}Adaptive chunking: {} ({} tokens)", BRAIN, style("enabled").green(), style(detected_context).cyan());
+    }
     if concurrency > 1 {
         println!("{}Concurrency: {}", BRAIN, style(concurrency).cyan());
     }
@@ -98,7 +107,7 @@ pub async fn run(
 
     // Parse documents
     let parser = DocumentParser::new(chunk_size, chunk_overlap);
-    let mut all_chunks = Vec::new();
+    let mut doc_contents: Vec<(String, String)> = Vec::new(); // (source, text)
 
     let pb = ProgressBar::new(documents.len() as u64);
     pb.set_style(
@@ -113,19 +122,30 @@ pub async fn run(
         let filename = doc_path.file_name().unwrap_or_default().to_string_lossy();
         pb.set_message(format!("{}", style(filename).dim()));
         let chunks = parser.parse(doc_path)?;
-        all_chunks.extend(chunks);
+        // Combine chunks back into full document text for batch processing
+        let full_text: String = chunks.iter().map(|c| c.text.clone()).collect::<Vec<_>>().join("\n\n");
+        doc_contents.push((doc_path.to_string_lossy().to_string(), full_text));
         pb.inc(1);
     }
     pb.finish_and_clear();
+
+    // Smart document selection for large codebases
+    let selected_docs = if doc_contents.len() > 100 {
+        println!("{}Large codebase detected ({} docs). Selecting representative documents...", BRAIN, doc_contents.len());
+        DocumentSelector::select_representative_docs(&doc_contents, 5)
+    } else {
+        doc_contents
+    };
+
     println!(
-        "{}Parsed {} documents into {} chunks",
+        "{}Parsed {} documents ({} selected for processing)",
         CHECK,
         style(documents.len()).green().bold(),
-        style(all_chunks.len()).green().bold()
+        style(selected_docs.len()).green().bold()
     );
 
-    // Create LLM client (wrapped in Arc for concurrent access)
-    let llm_client = Arc::new(LlmClient::new(provider, &config, model.as_deref())?);
+    // Create LLM client
+    let llm_client = LlmClient::new(provider, &config, model.as_deref())?;
 
     // Build knowledge graph
     println!();
@@ -133,56 +153,37 @@ pub async fn run(
 
     let mut builder = GraphBuilder::new();
 
-    let pb = ProgressBar::new(all_chunks.len() as u64);
-    pb.set_style(
-        ProgressStyle::default_bar()
-            .template(&format!("{}{{spinner:.green}} [{{elapsed_precise}}] {{bar:40.magenta/blue}} {{pos}}/{{len}} | {{msg}}", LINK))
-            .unwrap()
-            .progress_chars("━━╸━"),
+    // Use batch processor for efficient large codebase processing
+    let batch_size = if use_adaptive { 3 } else { 5 }; // Smaller batches for local models
+    let mut processor = BatchProcessor::new(
+        llm_client,
+        &model_display,
+        concurrency.max(1),
+        batch_size,
     );
-    pb.enable_steady_tick(std::time::Duration::from_millis(100));
 
-    let effective_concurrency = concurrency.max(1);
+    // Enable progress persistence
+    let output_json_path = path.with_extension("kg.json");
+    processor = processor.with_progress_persistence(&output_json_path);
+    processor.load_progress().await?;
 
-    // Process chunks concurrently
-    let pb_ref = &pb;
-    let client_ref = &llm_client;
-    let results: Vec<(String, Vec<crate::llm::Relation>)> =
-        stream::iter(all_chunks.iter().enumerate())
-            .map(|(i, chunk)| {
-                let text = chunk.text.clone();
-                let chunk_id = chunk.id.clone();
-                let client = Arc::clone(client_ref);
-                async move {
-                    pb_ref.set_message(format!("chunk {}/{}", i + 1, pb_ref.length().unwrap_or(0)));
-                    let relations = match client.extract_relations(&text).await {
-                        Ok(r) => r,
-                        Err(e) => {
-                            tracing::warn!("LLM extraction failed for chunk {}: {:#}", i + 1, e);
-                            Vec::new()
-                        }
-                    };
-                    pb_ref.inc(1);
-                    (chunk_id, relations)
-                }
-            })
-            .buffer_unordered(effective_concurrency)
-            .collect()
-            .await;
+    // Process documents in batches
+    let relations_result = processor.process_documents(selected_docs).await?;
 
+    // Add all relations to builder
     let mut total_relations = 0;
-    for (chunk_id, relations) in results {
-        total_relations += relations.len();
-        builder.add_relations(relations, &chunk_id);
+    for relation in relations_result {
+        total_relations += 1;
+        builder.add_relations(vec![relation], "document");
     }
-
-    pb.finish_and_clear();
+    let stats = processor.get_stats();
     println!(
-        "{}Extracted {} relations from {} chunks (concurrency: {})",
+        "{}Extracted {} relations from {} documents (batch size: {}, concurrency: {})",
         CHECK,
         style(total_relations).green().bold(),
-        style(all_chunks.len()).green().bold(),
-        style(effective_concurrency).cyan(),
+        style(stats.total_documents).green().bold(),
+        style(batch_size).cyan(),
+        style(concurrency.max(1)).cyan(),
     );
 
     // Calculate contextual proximity
