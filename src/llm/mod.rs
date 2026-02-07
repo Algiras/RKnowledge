@@ -1,3 +1,5 @@
+pub mod adaptive_processor;
+pub mod batch_processor;
 mod anthropic;
 mod google;
 mod ollama;

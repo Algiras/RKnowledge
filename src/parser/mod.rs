@@ -1,3 +1,4 @@
+mod adaptive_chunker;
 mod chunker;
 mod html;
 mod markdown;
@@ -9,6 +10,7 @@ use serde::{Deserialize, Serialize};
 use std::path::Path;
 use uuid::Uuid;
 
+pub use adaptive_chunker::{AdaptiveChunker, Chunk, ModelContextLimits};
 pub use chunker::TextChunker;
 
 /// A document chunk with metadata
