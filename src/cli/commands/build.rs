@@ -9,8 +9,8 @@ use crate::cli::{LlmProvider, OutputDestination};
 use crate::config::Config;
 use crate::graph::builder::GraphBuilder;
 use crate::graph::neo4j::Neo4jClient;
-use crate::llm::batch_processor::{BatchProcessor, DocumentSelector};
 use crate::llm::LlmClient;
+use crate::llm::batch_processor::{BatchProcessor, DocumentSelector};
 use crate::parser::DocumentParser;
 use crate::parser::ModelContextLimits;
 
@@ -62,7 +62,8 @@ pub async fn run(
 
     // Auto-detect if we should use adaptive processing for local models
     let use_adaptive = matches!(provider, LlmProvider::Ollama);
-    let detected_context = model.as_ref()
+    let detected_context = model
+        .as_ref()
         .map(|m| ModelContextLimits::get_context_size(m))
         .unwrap_or(4096);
 
@@ -74,7 +75,12 @@ pub async fn run(
     println!("{}Model: {}", BRAIN, style(&model_display).cyan());
     println!("{}Source: {}", PAPER, style(path.display()).cyan());
     if use_adaptive {
-        println!("{}Adaptive chunking: {} ({} tokens)", BRAIN, style("enabled").green(), style(detected_context).cyan());
+        println!(
+            "{}Adaptive chunking: {} ({} tokens)",
+            BRAIN,
+            style("enabled").green(),
+            style(detected_context).cyan()
+        );
     }
     if concurrency > 1 {
         println!("{}Concurrency: {}", BRAIN, style(concurrency).cyan());
@@ -123,7 +129,11 @@ pub async fn run(
         pb.set_message(format!("{}", style(filename).dim()));
         let chunks = parser.parse(doc_path)?;
         // Combine chunks back into full document text for batch processing
-        let full_text: String = chunks.iter().map(|c| c.text.clone()).collect::<Vec<_>>().join("\n\n");
+        let full_text: String = chunks
+            .iter()
+            .map(|c| c.text.clone())
+            .collect::<Vec<_>>()
+            .join("\n\n");
         doc_contents.push((doc_path.to_string_lossy().to_string(), full_text));
         pb.inc(1);
     }
@@ -131,7 +141,11 @@ pub async fn run(
 
     // Smart document selection for large codebases
     let selected_docs = if doc_contents.len() > 100 {
-        println!("{}Large codebase detected ({} docs). Selecting representative documents...", BRAIN, doc_contents.len());
+        println!(
+            "{}Large codebase detected ({} docs). Selecting representative documents...",
+            BRAIN,
+            doc_contents.len()
+        );
         DocumentSelector::select_representative_docs(&doc_contents, 5)
     } else {
         doc_contents
@@ -155,12 +169,8 @@ pub async fn run(
 
     // Use batch processor for efficient large codebase processing
     let batch_size = if use_adaptive { 3 } else { 5 }; // Smaller batches for local models
-    let mut processor = BatchProcessor::new(
-        llm_client,
-        &model_display,
-        concurrency.max(1),
-        batch_size,
-    );
+    let mut processor =
+        BatchProcessor::new(llm_client, &model_display, concurrency.max(1), batch_size);
 
     // Enable progress persistence
     let output_json_path = path.with_extension("kg.json");
