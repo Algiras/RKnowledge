@@ -100,7 +100,9 @@ impl OllamaProvider {
             .json(&request)
             .send()
             .await
-            .context("Failed to send request to Ollama API. Is Ollama running? (try: ollama serve)")?;
+            .context(
+                "Failed to send request to Ollama API. Is Ollama running? (try: ollama serve)",
+            )?;
 
         if !response.status().is_success() {
             let status = response.status();

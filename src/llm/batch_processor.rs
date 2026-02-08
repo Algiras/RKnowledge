@@ -9,7 +9,7 @@ use crate::llm::{LlmClient, Relation};
 use crate::parser::{AdaptiveChunker, Chunk, ModelContextLimits};
 
 /// Batch processor for efficient large codebase processing
-/// 
+///
 /// Optimizations:
 /// 1. Batches multiple small chunks into single LLM calls
 /// 2. Persists progress for resume capability
@@ -18,8 +18,9 @@ use crate::parser::{AdaptiveChunker, Chunk, ModelContextLimits};
 pub struct BatchProcessor {
     llm_client: LlmClient,
     chunker: AdaptiveChunker,
+    #[allow(dead_code)]
     concurrency: usize,
-    batch_size: usize,        // Number of chunks per LLM call
+    batch_size: usize, // Number of chunks per LLM call
     progress_file: Option<String>,
     processed_hashes: HashMap<String, ProcessedDoc>,
 }
@@ -34,20 +35,15 @@ struct ProcessedDoc {
 
 impl BatchProcessor {
     /// Create a new batch processor
-    /// 
+    ///
     /// # Arguments
     /// * `llm_client` - The LLM client to use
     /// * `model` - Model name for context window detection
     /// * `concurrency` - Number of concurrent batch operations
     /// * `batch_size` - Number of chunks to process per LLM call (default: 5)
-    pub fn new(
-        llm_client: LlmClient,
-        model: &str,
-        concurrency: usize,
-        batch_size: usize,
-    ) -> Self {
+    pub fn new(llm_client: LlmClient, model: &str, concurrency: usize, batch_size: usize) -> Self {
         let chunker = ModelContextLimits::create_chunker(model);
-        
+
         Self {
             llm_client,
             chunker,
@@ -64,19 +60,22 @@ impl BatchProcessor {
             .parent()
             .map(|p| p.join(".rknowledge_progress.json"))
             .and_then(|p| p.to_str().map(String::from));
-        
+
         self.progress_file = progress_file;
         self
     }
 
     /// Load previous progress if exists
     pub async fn load_progress(&mut self) -> Result<()> {
-        if let Some(ref path) = self.progress_file {
-            if Path::new(path).exists() {
-                let content = fs::read_to_string(path).await?;
-                self.processed_hashes = serde_json::from_str(&content)?;
-                info!("Loaded progress: {} documents already processed", self.processed_hashes.len());
-            }
+        if let Some(ref path) = self.progress_file
+            && Path::new(path).exists()
+        {
+            let content = fs::read_to_string(path).await?;
+            self.processed_hashes = serde_json::from_str(&content)?;
+            info!(
+                "Loaded progress: {} documents already processed",
+                self.processed_hashes.len()
+            );
         }
         Ok(())
     }
@@ -94,7 +93,7 @@ impl BatchProcessor {
     fn calculate_hash(text: &str) -> String {
         use std::collections::hash_map::DefaultHasher;
         use std::hash::{Hash, Hasher};
-        
+
         let mut hasher = DefaultHasher::new();
         text.hash(&mut hasher);
         format!("{:x}", hasher.finish())
@@ -119,11 +118,14 @@ impl BatchProcessor {
         let mut processed_docs = 0;
 
         let total_docs = documents.len();
-        info!("Processing {} documents with batch size {}", total_docs, self.batch_size);
+        info!(
+            "Processing {} documents with batch size {}",
+            total_docs, self.batch_size
+        );
 
         for (source, text) in documents {
             let hash = Self::calculate_hash(&text);
-            
+
             // Skip if already processed
             if self.is_already_processed(&source, &hash) {
                 debug!("Skipping already processed document: {}", source);
@@ -135,7 +137,7 @@ impl BatchProcessor {
             let chunks = self.chunker.split(&text);
             let chunk_count = chunks.len();
             total_chunks += chunk_count;
-            
+
             info!("Processing {} ({} chunks)", source, chunk_count);
 
             // Process chunks in batches
@@ -144,23 +146,29 @@ impl BatchProcessor {
             all_relations.extend(doc_relations);
 
             // Mark as processed
-            self.processed_hashes.insert(source, ProcessedDoc {
-                hash,
-                chunks_processed: chunk_count,
-                relations_count: relation_count,
-                timestamp: std::time::SystemTime::now()
-                    .duration_since(std::time::UNIX_EPOCH)
-                    .unwrap_or_default()
-                    .as_secs()
-                    .to_string(),
-            });
+            self.processed_hashes.insert(
+                source,
+                ProcessedDoc {
+                    hash,
+                    chunks_processed: chunk_count,
+                    relations_count: relation_count,
+                    timestamp: std::time::SystemTime::now()
+                        .duration_since(std::time::UNIX_EPOCH)
+                        .unwrap_or_default()
+                        .as_secs()
+                        .to_string(),
+                },
+            );
 
             processed_docs += 1;
 
             // Save progress periodically
             if processed_docs % 10 == 0 {
                 self.save_progress().await?;
-                info!("Progress saved: {}/{} documents", processed_docs, total_docs);
+                info!(
+                    "Progress saved: {}/{} documents",
+                    processed_docs, total_docs
+                );
             }
         }
 
@@ -169,7 +177,10 @@ impl BatchProcessor {
 
         info!(
             "Processing complete: {} processed, {} skipped, {} total chunks, {} relations",
-            processed_docs, skipped_docs, total_chunks, all_relations.len()
+            processed_docs,
+            skipped_docs,
+            total_chunks,
+            all_relations.len()
         );
 
         Ok(all_relations)
@@ -182,28 +193,43 @@ impl BatchProcessor {
         source: &str,
     ) -> Result<Vec<Relation>> {
         let mut all_relations = Vec::new();
-        
+
         // Group chunks into batches
         let batches: Vec<Vec<&Chunk>> = chunks
             .chunks(self.batch_size)
             .map(|c| c.iter().collect())
             .collect();
 
-        info!("Processing {} chunks in {} batches", chunks.len(), batches.len());
+        info!(
+            "Processing {} chunks in {} batches",
+            chunks.len(),
+            batches.len()
+        );
 
         for (batch_idx, batch) in batches.iter().enumerate() {
-            debug!("Processing batch {}/{} ({} chunks)", batch_idx + 1, batches.len(), batch.len());
-            
+            debug!(
+                "Processing batch {}/{} ({} chunks)",
+                batch_idx + 1,
+                batches.len(),
+                batch.len()
+            );
+
             // Combine chunks for batch processing
             let batch_text = self.format_batch_for_processing(batch, source, batch_idx);
-            
+
             // Process with retry logic
-            match self.process_batch_with_retry(&batch_text, source, batch_idx).await {
+            match self
+                .process_batch_with_retry(&batch_text, source, batch_idx)
+                .await
+            {
                 Ok(relations) => {
                     all_relations.extend(relations);
                 }
                 Err(e) => {
-                    warn!("Batch {} failed: {}. Falling back to individual chunk processing", batch_idx, e);
+                    warn!(
+                        "Batch {} failed: {}. Falling back to individual chunk processing",
+                        batch_idx, e
+                    );
                     // Fallback: process chunks individually
                     for chunk in batch.iter() {
                         match self.process_single_chunk(chunk, source).await {
@@ -219,15 +245,20 @@ impl BatchProcessor {
     }
 
     /// Format multiple chunks for batch LLM processing
-    fn format_batch_for_processing(&self, chunks: &[&Chunk], source: &str, batch_idx: usize) -> String {
+    fn format_batch_for_processing(
+        &self,
+        chunks: &[&Chunk],
+        source: &str,
+        batch_idx: usize,
+    ) -> String {
         let mut result = format!("Document: {} (Batch {})", source, batch_idx);
         result.push_str("\n===CHUNK_SEPARATOR===\n");
-        
+
         for (i, chunk) in chunks.iter().enumerate() {
             result.push_str(&format!("\n---CHUNK_{}---\n", i));
             result.push_str(&chunk.text);
         }
-        
+
         result.push_str("\n===END_DOCUMENT===\n");
         result
     }
@@ -236,30 +267,30 @@ impl BatchProcessor {
     async fn process_batch_with_retry(
         &self,
         batch_text: &str,
-        source: &str,
+        _source: &str,
         batch_idx: usize,
     ) -> Result<Vec<Relation>> {
-        let mut attempt = 0;
-        let max_attempts = 2;
+        match self.llm_client.extract_relations(batch_text).await {
+            Ok(relations) => {
+                debug!(
+                    "Batch {} processed successfully: {} relations",
+                    batch_idx,
+                    relations.len()
+                );
+                Ok(relations)
+            }
+            Err(e) => {
+                let error_str = e.to_string().to_lowercase();
 
-        loop {
-            match self.llm_client.extract_relations(batch_text).await {
-                Ok(relations) => {
-                    debug!("Batch {} processed successfully: {} relations", batch_idx, relations.len());
-                    return Ok(relations);
-                }
-                Err(e) => {
-                    let error_str = e.to_string().to_lowercase();
-                    
-                    if Self::is_context_overflow(&error_str) && attempt < max_attempts {
-                        attempt += 1;
-                        warn!("Context overflow for batch {}, retrying with smaller content (attempt {})", 
-                              batch_idx, attempt);
-                        // Return error to trigger fallback to individual processing
-                        return Err(anyhow::anyhow!("Context overflow, needs fallback"));
-                    }
-                    
-                    return Err(e);
+                if Self::is_context_overflow(&error_str) {
+                    warn!(
+                        "Context overflow for batch {}, triggering fallback to individual processing",
+                        batch_idx
+                    );
+                    // Return error to trigger fallback to individual processing
+                    Err(anyhow::anyhow!("Context overflow, needs fallback"))
+                } else {
+                    Err(e)
                 }
             }
         }
@@ -287,21 +318,32 @@ impl BatchProcessor {
             "sequence length",
         ];
 
-        overflow_indicators.iter().any(|indicator| error_lower.contains(indicator))
+        overflow_indicators
+            .iter()
+            .any(|indicator| error_lower.contains(indicator))
     }
 
     /// Get processing statistics
     pub fn get_stats(&self) -> ProcessingStats {
         ProcessingStats {
             total_documents: self.processed_hashes.len(),
-            total_relations: self.processed_hashes.values().map(|d| d.relations_count).sum(),
-            total_chunks: self.processed_hashes.values().map(|d| d.chunks_processed).sum(),
+            total_relations: self
+                .processed_hashes
+                .values()
+                .map(|d| d.relations_count)
+                .sum(),
+            total_chunks: self
+                .processed_hashes
+                .values()
+                .map(|d| d.chunks_processed)
+                .sum(),
         }
     }
 }
 
 /// Processing statistics
 #[derive(Debug)]
+#[allow(dead_code)]
 pub struct ProcessingStats {
     pub total_documents: usize,
     pub total_relations: usize,
@@ -313,7 +355,7 @@ pub struct DocumentSelector;
 
 impl DocumentSelector {
     /// Select representative documents from a large codebase
-    /// 
+    ///
     /// Strategy:
     /// 1. Prioritize "index" files (README, TOC, SKILL)
     /// 2. Limit files per directory (avoiding duplication)
@@ -357,7 +399,11 @@ impl DocumentSelector {
             selected.push((source, text));
         }
 
-        info!("Selected {} representative documents from {}", selected.len(), all_docs.len());
+        info!(
+            "Selected {} representative documents from {}",
+            selected.len(),
+            all_docs.len()
+        );
         selected
     }
 
@@ -395,10 +441,11 @@ impl DocumentSelector {
         let lower = source.to_lowercase();
 
         // Skip generated files
-        if lower.contains("generated") 
+        if lower.contains("generated")
             || lower.contains("auto-generated")
             || lower.contains("broken-links")
-            || lower.contains("source-reference-map") {
+            || lower.contains("source-reference-map")
+        {
             return true;
         }
 
@@ -422,23 +469,34 @@ mod tests {
 
     #[test]
     fn test_context_overflow_detection() {
-        assert!(BatchProcessor::is_context_overflow("Error: context length exceeded"));
+        assert!(BatchProcessor::is_context_overflow(
+            "Error: context length exceeded"
+        ));
         assert!(BatchProcessor::is_context_overflow("Token limit reached"));
-        assert!(!BatchProcessor::is_context_overflow("Network error occurred"));
+        assert!(!BatchProcessor::is_context_overflow(
+            "Network error occurred"
+        ));
     }
 
     #[test]
     fn test_document_priority() {
-        assert!(DocumentSelector::document_priority("README.md") > 
-                DocumentSelector::document_priority("generated-file.md"));
-        assert!(DocumentSelector::document_priority("SKILL.md") > 
-                DocumentSelector::document_priority("random.md"));
+        assert!(
+            DocumentSelector::document_priority("README.md")
+                > DocumentSelector::document_priority("generated-file.md")
+        );
+        assert!(
+            DocumentSelector::document_priority("SKILL.md")
+                > DocumentSelector::document_priority("random.md")
+        );
     }
 
     #[test]
     fn test_should_skip() {
         assert!(DocumentSelector::should_skip("broken-links.json", "{}"));
         assert!(DocumentSelector::should_skip("generated.md", "content"));
-        assert!(!DocumentSelector::should_skip("readme.md", "# Title\n\nThis is a long content that should not be skipped because it has more than one hundred characters to pass the minimum length check."));
+        assert!(!DocumentSelector::should_skip(
+            "readme.md",
+            "# Title\n\nThis is a long content that should not be skipped because it has more than one hundred characters to pass the minimum length check."
+        ));
     }
 }

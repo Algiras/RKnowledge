@@ -9,6 +9,7 @@ pub fn estimate_tokens(text: &str) -> usize {
 }
 
 /// Adaptive chunker that adjusts size based on available context
+#[allow(dead_code)]
 pub struct AdaptiveChunker {
     target_tokens: usize,
     overlap_tokens: usize,
@@ -66,6 +67,7 @@ impl AdaptiveChunker {
     }
 
     /// Split with a specific target (used for retry with smaller size)
+    #[allow(dead_code)]
     pub fn split_with_target(&self, text: &str, target_tokens: usize) -> Vec<Chunk> {
         let mut temp = Self::new(target_tokens, target_tokens / 10);
         temp.max_retries = self.max_retries;
@@ -240,6 +242,7 @@ impl AdaptiveChunker {
 
 /// A chunk with metadata
 #[derive(Debug, Clone)]
+#[allow(dead_code)]
 pub struct Chunk {
     pub text: String,
     pub estimated_tokens: usize,
@@ -300,7 +303,7 @@ mod tests {
         let tokens = estimate_tokens(text);
         // 48 chars / 4 = ~12 tokens
         assert!(
-            tokens >= 10 && tokens <= 15,
+            (10..=15).contains(&tokens),
             "Expected ~12 tokens, got {}",
             tokens
         );

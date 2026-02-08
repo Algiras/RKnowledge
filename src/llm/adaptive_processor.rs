@@ -1,4 +1,4 @@
-use anyhow::{Context, Result};
+use anyhow::Result;
 use std::sync::Arc;
 use tokio::sync::Semaphore;
 use tracing::{debug, info, warn};
@@ -7,6 +7,7 @@ use crate::llm::{LlmClient, Relation};
 use crate::parser::{AdaptiveChunker, Chunk, ModelContextLimits};
 
 /// Processor that handles context overflow with automatic retry
+#[allow(dead_code)]
 pub struct AdaptiveProcessor {
     llm_client: Arc<LlmClient>,
     chunker: AdaptiveChunker,
@@ -14,11 +15,12 @@ pub struct AdaptiveProcessor {
     concurrency: usize,
 }
 
+#[allow(dead_code)]
 impl AdaptiveProcessor {
     /// Create a new adaptive processor for a specific model
     pub fn new(llm_client: LlmClient, model: &str, concurrency: usize) -> Self {
         let chunker = ModelContextLimits::create_chunker(model);
-        
+
         Self {
             llm_client: Arc::new(llm_client),
             chunker,
@@ -54,12 +56,12 @@ impl AdaptiveProcessor {
             let permit = semaphore.clone().acquire_owned().await?;
             let client = self.llm_client.clone();
             let source = source.to_string();
-            
+
             let task = tokio::spawn(async move {
                 let _permit = permit; // Hold permit until task completes
                 Self::process_chunk_with_retry(&client, chunk, &source).await
             });
-            
+
             tasks.push(task);
         }
 
@@ -113,11 +115,11 @@ impl AdaptiveProcessor {
                 }
                 Err(e) => {
                     let error_str = e.to_string().to_lowercase();
-                    
+
                     // Check if it's a context overflow error
                     if Self::is_context_overflow(&error_str) {
                         attempt += 1;
-                        
+
                         if attempt >= max_attempts {
                             return Err(anyhow::anyhow!(
                                 "Context overflow after {} retries for chunk {} from {}: {}",
@@ -130,9 +132,7 @@ impl AdaptiveProcessor {
 
                         warn!(
                             "Context overflow for chunk {} from {}, retrying with smaller size (attempt {})",
-                            current_chunk.chunk_index,
-                            source,
-                            attempt
+                            current_chunk.chunk_index, source, attempt
                         );
 
                         // Reduce target size by 50% and re-chunk
@@ -155,12 +155,11 @@ impl AdaptiveProcessor {
                                 chunk_index: current_chunk.chunk_index,
                                 parent_id: Some(format!(
                                     "{}-retry-{}",
-                                    current_chunk.chunk_index,
-                                    attempt
+                                    current_chunk.chunk_index, attempt
                                 )),
                             };
                         }
-                        
+
                         // Continue to next attempt
                         continue;
                     }
@@ -188,18 +187,22 @@ impl AdaptiveProcessor {
             "sequence length",
         ];
 
-        overflow_indicators.iter().any(|indicator| error_lower.contains(indicator))
+        overflow_indicators
+            .iter()
+            .any(|indicator| error_lower.contains(indicator))
     }
 }
 
 /// Builder for hierarchical processing
-/// 
+///
 /// Processes chunks, then creates summary nodes to link related chunks
+#[allow(dead_code)]
 pub struct HierarchicalProcessor {
     processor: AdaptiveProcessor,
     batch_size: usize,
 }
 
+#[allow(dead_code)]
 impl HierarchicalProcessor {
     pub fn new(processor: AdaptiveProcessor, batch_size: usize) -> Self {
         Self {
@@ -227,10 +230,10 @@ impl HierarchicalProcessor {
                 .join("\n\n");
 
             let batch_relations = self.processor.process(&batch_text, source).await?;
-            
+
             // Create a batch summary node
             let summary_node = format!("{}_batch_{}", source, batch_idx);
-            
+
             // Link chunks in this batch to the summary
             for chunk in batch {
                 all_relations.push(Relation {
@@ -267,6 +270,7 @@ impl HierarchicalProcessor {
 
 /// Result from hierarchical processing
 #[derive(Debug)]
+#[allow(dead_code)]
 pub struct HierarchicalResult {
     pub relations: Vec<Relation>,
     pub batch_count: usize,

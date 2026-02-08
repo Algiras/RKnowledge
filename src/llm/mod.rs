@@ -1,6 +1,6 @@
 pub mod adaptive_processor;
-pub mod batch_processor;
 mod anthropic;
+pub mod batch_processor;
 mod google;
 mod ollama;
 mod openai;
