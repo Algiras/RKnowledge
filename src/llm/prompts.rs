@@ -65,7 +65,7 @@ Rules:
 use crate::config::DomainConfig;
 
 /// Generate domain-aware extraction system prompt
-/// 
+///
 /// This function templates the base extraction prompt with domain-specific context,
 /// entity type hints, and focus areas to improve extraction quality for specialized domains.
 pub fn domain_aware_extraction_prompt(domain: Option<&DomainConfig>) -> String {
@@ -74,9 +74,11 @@ pub fn domain_aware_extraction_prompt(domain: Option<&DomainConfig>) -> String {
         None => return GRAPH_EXTRACTION_SYSTEM_PROMPT.to_string(),
     };
 
-    let mut prompt = String::from(r#"You are a network graph maker who extracts terms and their relations from a given context.
+    let mut prompt = String::from(
+        r#"You are a network graph maker who extracts terms and their relations from a given context.
 You are provided with a context chunk (delimited by ```). Your task is to extract the ontology of terms mentioned in the given context. These terms should represent the key concepts as per the context.
-"#);
+"#,
+    );
 
     // Add domain context if provided
     if let Some(context) = &domain.context {
@@ -85,7 +87,10 @@ You are provided with a context chunk (delimited by ```). Your task is to extrac
 
     // Add domain name context
     if let Some(name) = &domain.name {
-        prompt.push_str(&format!("You are analyzing content from the **{}** domain.\n", name));
+        prompt.push_str(&format!(
+            "You are analyzing content from the **{}** domain.\n",
+            name
+        ));
     }
 
     prompt.push_str(r#"
@@ -114,7 +119,10 @@ Thought 4: Classify each term with a short descriptive type that best captures w
 
     // Add focus area if provided
     if let Some(focus) = &domain.focus {
-        prompt.push_str(&format!("\n**Primary Focus**: Pay special attention to {}.\n", focus));
+        prompt.push_str(&format!(
+            "\n**Primary Focus**: Pay special attention to {}.\n",
+            focus
+        ));
     }
 
     prompt.push_str(r#"
@@ -141,4 +149,3 @@ Rules:
 
     prompt
 }
-

@@ -50,11 +50,13 @@ impl Neo4jClient {
     /// Store a graph in Neo4j (replaces existing data for the same tenant)
     pub async fn store_graph(&self, builder: &GraphBuilder) -> Result<()> {
         let tenant = builder.tenant();
-        
+
         // Clear existing data for this tenant only
         self.graph
-            .run(query("MATCH (n:Concept {tenant: $tenant}) DETACH DELETE n")
-                .param("tenant", tenant))
+            .run(
+                query("MATCH (n:Concept {tenant: $tenant}) DETACH DELETE n")
+                    .param("tenant", tenant),
+            )
             .await
             .context("Failed to clear existing concepts")?;
 
@@ -104,7 +106,7 @@ impl Neo4jClient {
     /// Merge a graph into Neo4j (append mode -- preserves existing data)
     pub async fn merge_graph(&self, builder: &GraphBuilder) -> Result<()> {
         let tenant = builder.tenant();
-        
+
         // Create composite index on (id, tenant) for faster lookups
         self.graph
             .run(query(
@@ -153,15 +155,19 @@ impl Neo4jClient {
     }
 
     /// Fetch all nodes and edges from Neo4j (optionally filtered by tenant)
-    pub async fn fetch_graph(&self, tenant: Option<&str>) -> Result<(Vec<GraphNode>, Vec<GraphEdge>)> {
+    pub async fn fetch_graph(
+        &self,
+        tenant: Option<&str>,
+    ) -> Result<(Vec<GraphNode>, Vec<GraphEdge>)> {
         // Fetch nodes - filter by tenant if specified
         let nodes_query = match tenant {
             Some(t) => query("MATCH (n:Concept {tenant: $tenant}) RETURN n.id AS id, n.label AS label, n.degree AS degree, n.community AS community, n.entity_type AS entity_type, n.tenant AS tenant")
                 .param("tenant", t),
             None => query("MATCH (n:Concept) RETURN n.id AS id, n.label AS label, n.degree AS degree, n.community AS community, n.entity_type AS entity_type, n.tenant AS tenant"),
         };
-        
-        let mut result = self.graph
+
+        let mut result = self
+            .graph
             .execute(nodes_query)
             .await
             .context("Failed to fetch nodes")?;
@@ -194,13 +200,14 @@ impl Neo4jClient {
             Some(t) => query(
                 "MATCH (a:Concept {tenant: $tenant})-[r:RELATES_TO]->(b:Concept {tenant: $tenant}) \
                  RETURN a.id AS source, b.id AS target, r.relation AS relation, r.weight AS weight",
-            ).param("tenant", t),
+            )
+            .param("tenant", t),
             None => query(
                 "MATCH (a:Concept)-[r:RELATES_TO]->(b:Concept) \
                  RETURN a.id AS source, b.id AS target, r.relation AS relation, r.weight AS weight",
             ),
         };
-        
+
         let mut result = self
             .graph
             .execute(edges_query)

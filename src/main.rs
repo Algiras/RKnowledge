@@ -92,8 +92,17 @@ async fn main() -> Result<()> {
             interactive,
             from_file,
         } => {
-            cli::commands::add::run(node1, node2, relation, type1, type2, interactive, from_file, cli.tenant.as_deref())
-                .await?;
+            cli::commands::add::run(
+                node1,
+                node2,
+                relation,
+                type1,
+                type2,
+                interactive,
+                from_file,
+                cli.tenant.as_deref(),
+            )
+            .await?;
         }
     }
 

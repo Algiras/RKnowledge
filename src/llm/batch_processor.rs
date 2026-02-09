@@ -279,7 +279,11 @@ impl BatchProcessor {
         _source: &str,
         batch_idx: usize,
     ) -> Result<Vec<Relation>> {
-        match self.llm_client.extract_relations(batch_text, self.domain_config.as_ref()).await {
+        match self
+            .llm_client
+            .extract_relations(batch_text, self.domain_config.as_ref())
+            .await
+        {
             Ok(relations) => {
                 debug!(
                     "Batch {} processed successfully: {} relations",
@@ -308,7 +312,9 @@ impl BatchProcessor {
     /// Process a single chunk (fallback method)
     async fn process_single_chunk(&self, chunk: &Chunk, _source: &str) -> Result<Vec<Relation>> {
         debug!("Processing single chunk {}", chunk.chunk_index);
-        self.llm_client.extract_relations(&chunk.text, self.domain_config.as_ref()).await
+        self.llm_client
+            .extract_relations(&chunk.text, self.domain_config.as_ref())
+            .await
     }
 
     /// Check if error indicates context window overflow

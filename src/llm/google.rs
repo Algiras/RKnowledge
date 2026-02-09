@@ -152,12 +152,14 @@ impl GoogleProvider {
 
 #[async_trait]
 impl LlmProviderTrait for GoogleProvider {
-    async fn extract_relations(&self, text: &str, domain: Option<&DomainConfig>) -> Result<Vec<Relation>> {
+    async fn extract_relations(
+        &self,
+        text: &str,
+        domain: Option<&DomainConfig>,
+    ) -> Result<Vec<Relation>> {
         let system_prompt = domain_aware_extraction_prompt(domain);
         let user_prompt = graph_extraction_user_prompt(text);
-        let response = self
-            .complete(&system_prompt, &user_prompt)
-            .await?;
+        let response = self.complete(&system_prompt, &user_prompt).await?;
 
         tracing::debug!(raw_len = response.len(), "Parsing Google response");
 

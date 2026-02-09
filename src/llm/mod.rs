@@ -30,7 +30,11 @@ pub struct Relation {
 #[async_trait]
 pub trait LlmProviderTrait: Send + Sync {
     /// Extract relations from text using the LLM
-    async fn extract_relations(&self, text: &str, domain: Option<&DomainConfig>) -> Result<Vec<Relation>>;
+    async fn extract_relations(
+        &self,
+        text: &str,
+        domain: Option<&DomainConfig>,
+    ) -> Result<Vec<Relation>>;
 
     /// Get the provider name
     #[allow(dead_code)]
@@ -114,7 +118,11 @@ impl LlmClient {
     }
 
     /// Extract relations from text
-    pub async fn extract_relations(&self, text: &str, domain: Option<&DomainConfig>) -> Result<Vec<Relation>> {
+    pub async fn extract_relations(
+        &self,
+        text: &str,
+        domain: Option<&DomainConfig>,
+    ) -> Result<Vec<Relation>> {
         self.provider.extract_relations(text, domain).await
     }
 

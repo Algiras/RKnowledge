@@ -122,12 +122,14 @@ impl OllamaProvider {
 
 #[async_trait]
 impl LlmProviderTrait for OllamaProvider {
-    async fn extract_relations(&self, text: &str, domain: Option<&DomainConfig>) -> Result<Vec<Relation>> {
+    async fn extract_relations(
+        &self,
+        text: &str,
+        domain: Option<&DomainConfig>,
+    ) -> Result<Vec<Relation>> {
         let system_prompt = domain_aware_extraction_prompt(domain);
         let user_prompt = graph_extraction_user_prompt(text);
-        let response = self
-            .complete(&system_prompt, &user_prompt)
-            .await?;
+        let response = self.complete(&system_prompt, &user_prompt).await?;
 
         // Parse JSON response
         parse_relations_json(&response)
