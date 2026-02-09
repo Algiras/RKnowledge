@@ -142,6 +142,38 @@ rknowledge communities
 rknowledge query "cypher: MATCH (n:Concept) RETURN n.label, n.degree ORDER BY n.degree DESC LIMIT 10"
 ```
 
+## Advanced Features
+
+### Tenant Isolation
+
+Isolate multiple projects within one Neo4j instance. Queries and stats are automatically scoped to the specified tenant.
+
+```bash
+rknowledge build ./docs --tenant client-a
+rknowledge stats --tenant client-a
+rknowledge viz --tenant client-a
+```
+
+### Manual Relation Insertion
+
+Add ground truth data directly. Perfect for linking concepts the LLM might miss or adding domain-specific "hard links".
+
+```bash
+# Interactive mode
+rknowledge add --interactive
+
+# Direct insertion
+rknowledge add "Rust" "is a" "Programming Language" --type1 "Language" --type2 "Category"
+```
+
+### Domain-Aware Prompting
+
+Guide extraction with domain context (medical, legal, etc.) or custom focus areas.
+
+```bash
+rknowledge build ./papers --domain medical --context "Focus on drug-gene interactions"
+```
+
 ## Configuration
 
 Configuration is stored at `~/<config_dir>/rknowledge/config.toml`:
@@ -248,7 +280,7 @@ After `rknowledge init`, Neo4j is available at:
 ## Development
 
 ```bash
-cargo test                  # Run tests (118 total)
+cargo test                  # Run tests (127 total)
 cargo clippy -- -D warnings # Lint (CI enforced)
 cargo fmt                   # Format
 RUST_LOG=debug cargo run -- build ./demo_data  # Debug logging
