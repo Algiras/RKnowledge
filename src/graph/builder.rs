@@ -68,6 +68,7 @@ impl GraphBuilder {
     }
 
     /// Set the tenant for this graph builder (builder pattern)
+    #[allow(dead_code)]
     pub fn with_tenant(mut self, tenant: &str) -> Self {
         self.tenant = tenant.to_string();
         self

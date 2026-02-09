@@ -11,6 +11,7 @@ use crate::parser::{AdaptiveChunker, Chunk, ModelContextLimits};
 pub struct AdaptiveProcessor {
     llm_client: Arc<LlmClient>,
     chunker: AdaptiveChunker,
+    #[allow(dead_code)]
     max_retries: u32,
     concurrency: usize,
     domain_config: Option<DomainConfig>,

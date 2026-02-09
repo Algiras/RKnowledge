@@ -25,6 +25,7 @@ pub struct RelationImport {
     pub type2: Option<String>,
 }
 
+#[allow(clippy::too_many_arguments)]
 pub async fn run(
     node1: Option<String>,
     node2: Option<String>,
