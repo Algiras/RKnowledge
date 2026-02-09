@@ -43,9 +43,12 @@ Production-grade knowledge graph extraction CLI. Extract concepts and relationsh
 - **Multi-provider LLM**: Anthropic, OpenAI, Google, Ollama (local/free)
 - **Concurrent extraction**: Parallel LLM calls with `-j` flag
 - **Smart entity typing**: LLM classifies freely ("programming language", "database", etc.)
+- **Tenant Isolation**: Isolate multiple projects/users in one Neo4j instance
+- **Manual Relation Entry**: Add ground truth data directly via CLI
+- **Domain-Aware Prompting**: Specialized extraction for medical, legal, or technical docs
 - **Neo4j backend**: Persistent graph DB with Cypher, incremental `--append`
 - **Graph analytics**: PageRank, community detection, shortest path, density
-- **Interactive visualization**: Click cards, search, entity legend, toggle proximity edges
+- **Interactive visualization**: Redesigned dashboard with entity filters and search
 - **Multiple exports**: JSON, CSV, GraphML, Cypher
 - **Fast**: Compiled Rust, single binary, zero runtime deps
 
@@ -84,14 +87,13 @@ rknowledge init
 rknowledge auth
 
 # 3. Build a knowledge graph from documents
-rknowledge build ./docs/ --provider ollama -j 8
+rknowledge build ./docs/ --provider ollama --tenant my-project
 
 # 4. Explore
-rknowledge query "machine learning" --depth 2
-rknowledge path "docker" "kubernetes"
-rknowledge stats
-rknowledge communities
-rknowledge viz
+rknowledge query "machine learning" --tenant my-project
+rknowledge path "docker" "kubernetes" --tenant my-project
+rknowledge stats --tenant my-project
+rknowledge viz --tenant my-project
 ```
 
 ## Commands
