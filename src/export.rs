@@ -25,6 +25,7 @@ pub fn export_json(builder: &GraphBuilder, path: &Path) -> Result<()> {
             community: n.community,
             degree: Some(n.degree),
             entity_type: n.entity_type,
+            tenant: n.tenant,
         })
         .collect();
 
@@ -69,6 +70,7 @@ pub fn export_csv(builder: &GraphBuilder, nodes_path: &Path, edges_path: &Path) 
             community: n.community,
             degree: Some(n.degree),
             entity_type: n.entity_type,
+            tenant: n.tenant,
         })
         .collect();
 
@@ -290,6 +292,7 @@ mod tests {
                 community: None,
                 degree: Some(3),
                 entity_type: Some("technology".into()),
+                tenant: "default".into(),
             },
             GraphNode {
                 id: "tokio".into(),
@@ -297,6 +300,7 @@ mod tests {
                 community: Some(1),
                 degree: Some(1),
                 entity_type: None,
+                tenant: "default".into(),
             },
         ]
     }
@@ -389,6 +393,7 @@ mod tests {
             community: None,
             degree: Some(0),
             entity_type: None,
+            tenant: "default".into(),
         }];
         let dir = tempdir().unwrap();
         let np = dir.path().join("n.csv");
@@ -423,6 +428,7 @@ mod tests {
             community: None,
             degree: Some(0),
             entity_type: None,
+            tenant: "default".into(),
         }];
         let dir = tempdir().unwrap();
         let path = dir.path().join("escape.graphml");
@@ -458,6 +464,7 @@ mod tests {
             community: None,
             degree: Some(0),
             entity_type: None,
+            tenant: "default".into(),
         }];
         let dir = tempdir().unwrap();
         let path = dir.path().join("esc.cypher");

@@ -12,7 +12,7 @@ use async_trait::async_trait;
 use serde::{Deserialize, Serialize};
 
 use crate::cli::LlmProvider;
-use crate::config::Config;
+use crate::config::{Config, DomainConfig};
 
 /// A relation extracted from text
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -30,7 +30,7 @@ pub struct Relation {
 #[async_trait]
 pub trait LlmProviderTrait: Send + Sync {
     /// Extract relations from text using the LLM
-    async fn extract_relations(&self, text: &str) -> Result<Vec<Relation>>;
+    async fn extract_relations(&self, text: &str, domain: Option<&DomainConfig>) -> Result<Vec<Relation>>;
 
     /// Get the provider name
     #[allow(dead_code)]
@@ -114,8 +114,8 @@ impl LlmClient {
     }
 
     /// Extract relations from text
-    pub async fn extract_relations(&self, text: &str) -> Result<Vec<Relation>> {
-        self.provider.extract_relations(text).await
+    pub async fn extract_relations(&self, text: &str, domain: Option<&DomainConfig>) -> Result<Vec<Relation>> {
+        self.provider.extract_relations(text, domain).await
     }
 
     /// Get the provider name

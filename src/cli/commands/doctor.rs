@@ -157,7 +157,7 @@ pub async fn run() -> Result<()> {
                     pass("Neo4j connection successful", &mut pass_count);
 
                     // Check graph data
-                    match client.fetch_graph().await {
+                    match client.fetch_graph(None).await {
                         Ok((nodes, edges)) => {
                             if nodes.is_empty() {
                                 info("Graph is empty (0 nodes, 0 edges)");

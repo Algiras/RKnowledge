@@ -14,6 +14,12 @@ pub struct Config {
     pub chunk_overlap: usize,
     pub providers: ProvidersConfig,
     pub neo4j: Neo4jConfig,
+    /// Tenant configuration for knowledge isolation
+    #[serde(default)]
+    pub tenant: TenantConfig,
+    /// Domain-specific configuration for LLM prompts
+    #[serde(default)]
+    pub domain: DomainConfig,
 }
 
 fn default_provider() -> String {
@@ -50,6 +56,54 @@ pub struct Neo4jConfig {
     pub user: String,
     pub password: String,
     pub database: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct TenantConfig {
+    /// Default tenant name (used when --tenant not specified)
+    #[serde(default = "default_tenant")]
+    pub default: String,
+
+    /// Isolation mode: "property" (Community Edition) or "database" (Enterprise)
+    #[serde(default = "default_isolation_mode")]
+    pub isolation_mode: String,
+}
+
+fn default_tenant() -> String {
+    "default".to_string()
+}
+
+fn default_isolation_mode() -> String {
+    "property".to_string()
+}
+
+impl Default for TenantConfig {
+    fn default() -> Self {
+        Self {
+            default: default_tenant(),
+            isolation_mode: default_isolation_mode(),
+        }
+    }
+}
+
+/// Domain-specific configuration for LLM prompt customization
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct DomainConfig {
+    /// Domain name (e.g., "medical", "legal", "software")
+    #[serde(default)]
+    pub name: Option<String>,
+
+    /// Custom context to inject into extraction prompts
+    #[serde(default)]
+    pub context: Option<String>,
+
+    /// Suggested entity types for this domain
+    #[serde(default)]
+    pub entity_types: Vec<String>,
+
+    /// Specific focus areas for extraction
+    #[serde(default)]
+    pub focus: Option<String>,
 }
 
 impl Config {
@@ -259,6 +313,8 @@ mod tests {
                 password: "pw".into(),
                 database: Some("neo4j".into()),
             },
+            tenant: Default::default(),
+            domain: Default::default(),
         };
 
         let serialized = toml::to_string_pretty(&config).unwrap();

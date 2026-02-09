@@ -13,7 +13,7 @@ static DATABASE: Emoji<'_, '_> = Emoji("💾 ", "");
 #[allow(dead_code)]
 static CHECK: Emoji<'_, '_> = Emoji("✅ ", "[OK] ");
 
-pub async fn run(from: String, to: String) -> Result<()> {
+pub async fn run(from: String, to: String, tenant: Option<&str>) -> Result<()> {
     println!();
     println!("{}", style(" RKnowledge - Shortest Path ").bold().reverse());
     println!();
@@ -31,7 +31,7 @@ pub async fn run(from: String, to: String) -> Result<()> {
     spinner.set_message("Fetching graph from Neo4j...");
 
     let neo4j_client = Neo4jClient::new(&config.neo4j).await?;
-    let (nodes, edges) = neo4j_client.fetch_graph().await?;
+    let (nodes, edges) = neo4j_client.fetch_graph(tenant).await?;
 
     spinner.set_message("Finding shortest path...");
 

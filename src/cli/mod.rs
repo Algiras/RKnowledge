@@ -13,6 +13,10 @@ use clap::{Parser, Subcommand, ValueEnum};
 pub struct Cli {
     #[command(subcommand)]
     pub command: Commands,
+
+    /// Tenant namespace for knowledge isolation (scopes all operations)
+    #[arg(long, global = true, env = "RKNOWLEDGE_TENANT")]
+    pub tenant: Option<String>,
 }
 
 #[derive(Subcommand)]
@@ -82,6 +86,18 @@ pub enum Commands {
         /// Append to existing graph instead of replacing
         #[arg(long, default_value = "false")]
         append: bool,
+
+        /// Domain name for specialized extraction (e.g., "medical", "legal", "software")
+        #[arg(long, env = "RKNOWLEDGE_DOMAIN")]
+        domain: Option<String>,
+
+        /// Custom context to inject into extraction prompts
+        #[arg(long, env = "RKNOWLEDGE_CONTEXT")]
+        context: Option<String>,
+
+        /// Path to file containing custom context/prompt to inject into extraction
+        #[arg(long, env = "RKNOWLEDGE_CONTEXT_FILE")]
+        context_file: Option<PathBuf>,
     },
 
     /// Export knowledge graph to various formats
@@ -129,6 +145,35 @@ pub enum Commands {
 
     /// Check system health and diagnose common problems
     Doctor,
+
+    /// Manually add a relation between two concepts
+    Add {
+        /// First node name
+        node1: Option<String>,
+
+        /// Second node name
+        node2: Option<String>,
+
+        /// Relationship description
+        #[arg(short, long)]
+        relation: Option<String>,
+
+        /// Type for first node (e.g., "person", "company")
+        #[arg(long)]
+        type1: Option<String>,
+
+        /// Type for second node
+        #[arg(long)]
+        type2: Option<String>,
+
+        /// Interactive mode (prompt for values)
+        #[arg(short, long, default_value = "false")]
+        interactive: bool,
+
+        /// Import from JSON file
+        #[arg(long, value_name = "FILE")]
+        from_file: Option<PathBuf>,
+    },
 }
 
 #[derive(Debug, Clone, Copy, ValueEnum, Default)]

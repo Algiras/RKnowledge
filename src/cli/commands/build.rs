@@ -5,10 +5,13 @@ use std::path::PathBuf;
 use std::time::Instant;
 use walkdir::WalkDir;
 
+
 use crate::cli::{LlmProvider, OutputDestination};
-use crate::config::Config;
+use tokio::fs;
+use crate::config::{Config, DomainConfig};
 use crate::graph::builder::GraphBuilder;
 use crate::graph::neo4j::Neo4jClient;
+
 use crate::llm::LlmClient;
 use crate::llm::batch_processor::{BatchProcessor, DocumentSelector};
 use crate::parser::DocumentParser;
@@ -33,6 +36,10 @@ pub async fn run(
     chunk_overlap: usize,
     concurrency: usize,
     append: bool,
+    domain: Option<String>,
+    context: Option<String>,
+    context_file: Option<PathBuf>,
+    tenant: Option<&str>,
 ) -> Result<()> {
     let started = Instant::now();
 
@@ -165,12 +172,36 @@ pub async fn run(
     println!();
     println!("{}Extracting knowledge from text...", BRAIN);
 
+    // Handle domain and custom context
+    let mut domain_config = DomainConfig {
+        name: domain,
+        context: context.clone(),
+        ..Default::default()
+    };
+
+    // If context_file provided, read it and append/set as context
+    if let Some(file_path) = context_file {
+        let file_context = fs::read_to_string(&file_path)
+            .await
+            .context(format!("Failed to read context file: {}", file_path.display()))?;
+        
+        if let Some(ref mut ctx) = domain_config.context {
+            ctx.push_str("\n\n");
+            ctx.push_str(&file_context);
+        } else {
+            domain_config.context = Some(file_context);
+        }
+    }
+
     let mut builder = GraphBuilder::new();
+    if let Some(t) = tenant {
+        builder.set_tenant(t);
+    }
 
     // Use batch processor for efficient large codebase processing
     let batch_size = if use_adaptive { 3 } else { 5 }; // Smaller batches for local models
-    let mut processor =
-        BatchProcessor::new(llm_client, &model_display, concurrency.max(1), batch_size);
+    let mut processor = BatchProcessor::new(llm_client, &model_display, concurrency.max(1), batch_size)
+        .with_domain_config(Some(domain_config));
 
     // Enable progress persistence
     let output_json_path = path.with_extension("kg.json");

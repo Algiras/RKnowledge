@@ -82,6 +82,8 @@ pub async fn run(force: bool) -> Result<()> {
             password: "rknowledge".to_string(),
             database: Some("neo4j".to_string()),
         },
+        tenant: Default::default(),
+        domain: Default::default(),
     };
 
     // Write config file

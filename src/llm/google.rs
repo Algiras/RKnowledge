@@ -4,8 +4,9 @@ use reqwest::Client;
 use serde::{Deserialize, Serialize};
 
 use super::parsing::parse_relations_json;
-use super::prompts::{GRAPH_EXTRACTION_SYSTEM_PROMPT, graph_extraction_user_prompt};
+use super::prompts::{domain_aware_extraction_prompt, graph_extraction_user_prompt};
 use super::{LlmProviderTrait, Relation};
+use crate::config::DomainConfig;
 
 pub struct GoogleProvider {
     client: Client,
@@ -151,10 +152,11 @@ impl GoogleProvider {
 
 #[async_trait]
 impl LlmProviderTrait for GoogleProvider {
-    async fn extract_relations(&self, text: &str) -> Result<Vec<Relation>> {
+    async fn extract_relations(&self, text: &str, domain: Option<&DomainConfig>) -> Result<Vec<Relation>> {
+        let system_prompt = domain_aware_extraction_prompt(domain);
         let user_prompt = graph_extraction_user_prompt(text);
         let response = self
-            .complete(GRAPH_EXTRACTION_SYSTEM_PROMPT, &user_prompt)
+            .complete(&system_prompt, &user_prompt)
             .await?;
 
         tracing::debug!(raw_len = response.len(), "Parsing Google response");

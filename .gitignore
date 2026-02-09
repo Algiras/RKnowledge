@@ -24,4 +24,4 @@ logs/
 # Test output
 *.tmp
 /test-output/
-promo-video/
+promo-video/*

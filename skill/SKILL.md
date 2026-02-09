@@ -107,6 +107,11 @@ rknowledge export --format cypher --output import.cypher
 rknowledge viz
 ```
 
+The visualization features a premium **glassmorphism dashboard** with:
+- **Entity Filtering**: Show/hide specific concept types.
+- **Neighborhood Search**: Highlight concepts and their relations.
+- **Interactive Cards**: Explore properties and connections.
+
 ## Commands Reference
 
 | Command | Description |
@@ -114,6 +119,7 @@ rknowledge viz
 | `rknowledge init` | Initialize config and start Neo4j |
 | `rknowledge auth` | Configure API keys for LLM providers |
 | `rknowledge build <path>` | Process documents and build graph |
+| `rknowledge add` | Manually insert relations into the graph |
 | `rknowledge query <query>` | Search or query the graph |
 | `rknowledge path <from> <to>` | Find shortest path between concepts |
 | `rknowledge stats` | Show graph statistics and analytics |
@@ -129,6 +135,10 @@ rknowledge viz
 | `--provider` | LLM provider (anthropic, openai, ollama, google) | anthropic |
 | `--model` | Model to use | Provider default |
 | `--output` | Output destination (neo4j, json, csv) | neo4j |
+| `--tenant` | Tenant namespace for knowledge isolation | default |
+| `--domain` | Domain name for specialized extraction | None |
+| `--context` | Custom context for extraction prompts | None |
+| `--context-file` | Path to file containing custom prompt | None |
 | `--chunk-size` | Text chunk size in characters | 1500 |
 | `--chunk-overlap` | Overlap between chunks | 150 |
 | `--concurrency, -j` | Number of concurrent LLM requests | 4 |
@@ -216,6 +226,51 @@ model = "local-model"
 Then build with:
 ```bash
 rknowledge build ./docs --provider openai
+```
+
+## Advanced Features
+
+### Tenant Isolation
+
+Isolate multiple projects or users within the same Neo4j instance using the `--tenant` flag:
+
+```bash
+# Add data to project-alpha
+rknowledge build ./docs-alpha --tenant alpha
+
+# Add data to project-beta
+rknowledge build ./docs-beta --tenant beta
+
+# Queries only see data from the specified tenant
+rknowledge stats --tenant alpha
+rknowledge query "Who is the lead dev?" --tenant beta
+```
+
+### Domain-Aware Extraction
+
+Customize LLM prompts for specialized domains (medical, legal, technical) using domain flags:
+
+```bash
+# Specify domain-specific context directly
+rknowledge build ./medical-docs --domain medical --context "Focus on clinical trials and drug interactions"
+
+# Or use a custom prompt file for complex instructions
+rknowledge build ./codebase --context-file extraction_prompt.txt
+```
+
+### Manual Relation Insertion
+
+Add individual relations directly to the graph without document processing:
+
+```bash
+# Interactive mode
+rknowledge add
+
+# Single relation
+rknowledge add "Knowledge Graph" "contains" "Nodes" --type1 "concept" --type2 "structure"
+
+# Batch import from JSON
+rknowledge add --file relations.json --tenant alpha
 ```
 
 ## Example Workflows

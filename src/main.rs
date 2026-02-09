@@ -42,6 +42,9 @@ async fn main() -> Result<()> {
             chunk_overlap,
             concurrency,
             append,
+            domain,
+            context,
+            context_file,
         } => {
             cli::commands::build::run(
                 path,
@@ -52,29 +55,45 @@ async fn main() -> Result<()> {
                 chunk_overlap,
                 concurrency,
                 append,
+                domain,
+                context,
+                context_file,
+                cli.tenant.as_deref(),
             )
             .await?;
         }
         Commands::Export { format, output } => {
-            cli::commands::export::run(format, output).await?;
+            cli::commands::export::run(format, output, cli.tenant.as_deref()).await?;
         }
         Commands::Query { query, depth } => {
             cli::commands::query::run(query, depth).await?;
         }
         Commands::Path { from, to } => {
-            cli::commands::path::run(from, to).await?;
+            cli::commands::path::run(from, to, cli.tenant.as_deref()).await?;
         }
         Commands::Stats => {
-            cli::commands::stats::run().await?;
+            cli::commands::stats::run(cli.tenant.as_deref()).await?;
         }
         Commands::Communities => {
-            cli::commands::communities::run().await?;
+            cli::commands::communities::run(cli.tenant.as_deref()).await?;
         }
         Commands::Viz { port } => {
-            cli::commands::viz::run(port).await?;
+            cli::commands::viz::run(port, cli.tenant.as_deref()).await?;
         }
         Commands::Doctor => {
             cli::commands::doctor::run().await?;
+        }
+        Commands::Add {
+            node1,
+            node2,
+            relation,
+            type1,
+            type2,
+            interactive,
+            from_file,
+        } => {
+            cli::commands::add::run(node1, node2, relation, type1, type2, interactive, from_file, cli.tenant.as_deref())
+                .await?;
         }
     }
 

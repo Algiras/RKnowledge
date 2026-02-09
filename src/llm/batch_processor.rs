@@ -5,6 +5,7 @@ use std::path::Path;
 use tokio::fs;
 use tracing::{debug, info, warn};
 
+use crate::config::DomainConfig;
 use crate::llm::{LlmClient, Relation};
 use crate::parser::{AdaptiveChunker, Chunk, ModelContextLimits};
 
@@ -23,6 +24,7 @@ pub struct BatchProcessor {
     batch_size: usize, // Number of chunks per LLM call
     progress_file: Option<String>,
     processed_hashes: HashMap<String, ProcessedDoc>,
+    domain_config: Option<DomainConfig>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -51,7 +53,14 @@ impl BatchProcessor {
             batch_size: batch_size.max(1),
             progress_file: None,
             processed_hashes: HashMap::new(),
+            domain_config: None,
         }
+    }
+
+    /// Set domain configuration for specialized extraction
+    pub fn with_domain_config(mut self, domain_config: Option<DomainConfig>) -> Self {
+        self.domain_config = domain_config;
+        self
     }
 
     /// Enable progress persistence for resume capability
@@ -270,7 +279,7 @@ impl BatchProcessor {
         _source: &str,
         batch_idx: usize,
     ) -> Result<Vec<Relation>> {
-        match self.llm_client.extract_relations(batch_text).await {
+        match self.llm_client.extract_relations(batch_text, self.domain_config.as_ref()).await {
             Ok(relations) => {
                 debug!(
                     "Batch {} processed successfully: {} relations",
@@ -299,7 +308,7 @@ impl BatchProcessor {
     /// Process a single chunk (fallback method)
     async fn process_single_chunk(&self, chunk: &Chunk, _source: &str) -> Result<Vec<Relation>> {
         debug!("Processing single chunk {}", chunk.chunk_index);
-        self.llm_client.extract_relations(&chunk.text).await
+        self.llm_client.extract_relations(&chunk.text, self.domain_config.as_ref()).await
     }
 
     /// Check if error indicates context window overflow

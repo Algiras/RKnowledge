@@ -12,7 +12,7 @@ static PEOPLE: Emoji<'_, '_> = Emoji("👥 ", "");
 static DATABASE: Emoji<'_, '_> = Emoji("💾 ", "");
 static COMMUNITY: Emoji<'_, '_> = Emoji("🏘️  ", "");
 
-pub async fn run() -> Result<()> {
+pub async fn run(tenant: Option<&str>) -> Result<()> {
     println!();
     println!(
         "{}",
@@ -33,7 +33,7 @@ pub async fn run() -> Result<()> {
     spinner.set_message("Fetching graph from Neo4j...");
 
     let neo4j_client = Neo4jClient::new(&config.neo4j).await?;
-    let (nodes, edges) = neo4j_client.fetch_graph().await?;
+    let (nodes, edges) = neo4j_client.fetch_graph(tenant).await?;
 
     spinner.set_message("Detecting communities...");
 

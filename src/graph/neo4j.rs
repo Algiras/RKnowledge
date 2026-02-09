@@ -14,6 +14,13 @@ pub struct GraphNode {
     pub degree: Option<usize>,
     #[serde(default)]
     pub entity_type: Option<String>,
+    /// Tenant namespace for isolation
+    #[serde(default = "default_tenant")]
+    pub tenant: String,
+}
+
+fn default_tenant() -> String {
+    "default".to_string()
 }
 
 /// Edge representation for Neo4j
@@ -40,48 +47,53 @@ impl Neo4jClient {
         Ok(Self { graph })
     }
 
-    /// Store a graph in Neo4j (replaces existing data)
+    /// Store a graph in Neo4j (replaces existing data for the same tenant)
     pub async fn store_graph(&self, builder: &GraphBuilder) -> Result<()> {
-        // Clear existing data
+        let tenant = builder.tenant();
+        
+        // Clear existing data for this tenant only
         self.graph
-            .run(query("MATCH (n:Concept) DETACH DELETE n"))
+            .run(query("MATCH (n:Concept {tenant: $tenant}) DETACH DELETE n")
+                .param("tenant", tenant))
             .await
             .context("Failed to clear existing concepts")?;
 
-        // Create index on id for faster lookups
+        // Create composite index on (id, tenant) for faster lookups
         self.graph
             .run(query(
-                "CREATE INDEX concept_id IF NOT EXISTS FOR (n:Concept) ON (n.id)",
+                "CREATE INDEX concept_id_tenant IF NOT EXISTS FOR (n:Concept) ON (n.id, n.tenant)",
             ))
             .await
             .ok();
 
-        // Create nodes with community info and entity type
+        // Create nodes with community info, entity type, and tenant
         let nodes = builder.get_nodes();
         for node in &nodes {
             let q = query(
-                "CREATE (n:Concept {id: $id, label: $label, degree: $degree, community: $community, entity_type: $entity_type})"
+                "CREATE (n:Concept {id: $id, label: $label, degree: $degree, community: $community, entity_type: $entity_type, tenant: $tenant})"
             )
             .param("id", node.id.clone())
             .param("label", node.label.clone())
             .param("degree", node.degree as i64)
             .param("community", node.community.unwrap_or(0) as i64)
-            .param("entity_type", node.entity_type.clone().unwrap_or_else(|| "concept".to_string()));
+            .param("entity_type", node.entity_type.clone().unwrap_or_else(|| "concept".to_string()))
+            .param("tenant", node.tenant.clone());
 
             self.graph.run(q).await.context("Failed to create node")?;
         }
 
-        // Create edges
+        // Create edges (between nodes of the same tenant)
         let edges = builder.get_edges();
         for edge in &edges {
             let q = query(
-                "MATCH (a:Concept {id: $source}), (b:Concept {id: $target}) \
+                "MATCH (a:Concept {id: $source, tenant: $tenant}), (b:Concept {id: $target, tenant: $tenant}) \
                  CREATE (a)-[r:RELATES_TO {relation: $relation, weight: $weight}]->(b)",
             )
             .param("source", edge.source.clone())
             .param("target", edge.target.clone())
             .param("relation", edge.relation.clone())
-            .param("weight", edge.weight);
+            .param("weight", edge.weight)
+            .param("tenant", tenant);
 
             self.graph.run(q).await.context("Failed to create edge")?;
         }
@@ -91,19 +103,21 @@ impl Neo4jClient {
 
     /// Merge a graph into Neo4j (append mode -- preserves existing data)
     pub async fn merge_graph(&self, builder: &GraphBuilder) -> Result<()> {
-        // Create index on id for faster lookups
+        let tenant = builder.tenant();
+        
+        // Create composite index on (id, tenant) for faster lookups
         self.graph
             .run(query(
-                "CREATE INDEX concept_id IF NOT EXISTS FOR (n:Concept) ON (n.id)",
+                "CREATE INDEX concept_id_tenant IF NOT EXISTS FOR (n:Concept) ON (n.id, n.tenant)",
             ))
             .await
             .ok();
 
-        // MERGE nodes (create if not exists, update if exists)
+        // MERGE nodes (create if not exists, update if exists) - scoped by tenant
         let nodes = builder.get_nodes();
         for node in &nodes {
             let q = query(
-                "MERGE (n:Concept {id: $id}) \
+                "MERGE (n:Concept {id: $id, tenant: $tenant}) \
                  ON CREATE SET n.label = $label, n.degree = $degree, n.community = $community, n.entity_type = $entity_type \
                  ON MATCH SET n.degree = n.degree + $degree, n.community = $community, n.entity_type = $entity_type"
             )
@@ -111,16 +125,17 @@ impl Neo4jClient {
             .param("label", node.label.clone())
             .param("degree", node.degree as i64)
             .param("community", node.community.unwrap_or(0) as i64)
-            .param("entity_type", node.entity_type.clone().unwrap_or_else(|| "concept".to_string()));
+            .param("entity_type", node.entity_type.clone().unwrap_or_else(|| "concept".to_string()))
+            .param("tenant", node.tenant.clone());
 
             self.graph.run(q).await.context("Failed to merge node")?;
         }
 
-        // MERGE edges (accumulate weight on duplicate)
+        // MERGE edges (accumulate weight on duplicate) - scoped by tenant
         let edges = builder.get_edges();
         for edge in &edges {
             let q = query(
-                "MATCH (a:Concept {id: $source}), (b:Concept {id: $target}) \
+                "MATCH (a:Concept {id: $source, tenant: $tenant}), (b:Concept {id: $target, tenant: $tenant}) \
                  MERGE (a)-[r:RELATES_TO {relation: $relation}]->(b) \
                  ON CREATE SET r.weight = $weight \
                  ON MATCH SET r.weight = r.weight + $weight",
@@ -128,7 +143,8 @@ impl Neo4jClient {
             .param("source", edge.source.clone())
             .param("target", edge.target.clone())
             .param("relation", edge.relation.clone())
-            .param("weight", edge.weight);
+            .param("weight", edge.weight)
+            .param("tenant", tenant);
 
             self.graph.run(q).await.context("Failed to merge edge")?;
         }
@@ -136,11 +152,17 @@ impl Neo4jClient {
         Ok(())
     }
 
-    /// Fetch all nodes and edges from Neo4j
-    pub async fn fetch_graph(&self) -> Result<(Vec<GraphNode>, Vec<GraphEdge>)> {
-        // Fetch nodes
+    /// Fetch all nodes and edges from Neo4j (optionally filtered by tenant)
+    pub async fn fetch_graph(&self, tenant: Option<&str>) -> Result<(Vec<GraphNode>, Vec<GraphEdge>)> {
+        // Fetch nodes - filter by tenant if specified
+        let nodes_query = match tenant {
+            Some(t) => query("MATCH (n:Concept {tenant: $tenant}) RETURN n.id AS id, n.label AS label, n.degree AS degree, n.community AS community, n.entity_type AS entity_type, n.tenant AS tenant")
+                .param("tenant", t),
+            None => query("MATCH (n:Concept) RETURN n.id AS id, n.label AS label, n.degree AS degree, n.community AS community, n.entity_type AS entity_type, n.tenant AS tenant"),
+        };
+        
         let mut result = self.graph
-            .execute(query("MATCH (n:Concept) RETURN n.id AS id, n.label AS label, n.degree AS degree, n.community AS community, n.entity_type AS entity_type"))
+            .execute(nodes_query)
             .await
             .context("Failed to fetch nodes")?;
 
@@ -151,6 +173,7 @@ impl Neo4jClient {
             let degree: i64 = row.get("degree").unwrap_or(0);
             let community: i64 = row.get("community").unwrap_or(-1);
             let entity_type: Option<String> = row.get("entity_type").ok();
+            let node_tenant: String = row.get("tenant").unwrap_or_else(|_| "default".to_string());
 
             nodes.push(GraphNode {
                 id,
@@ -162,16 +185,25 @@ impl Neo4jClient {
                 },
                 degree: Some(degree as usize),
                 entity_type,
+                tenant: node_tenant,
             });
         }
 
-        // Fetch edges
-        let mut result = self
-            .graph
-            .execute(query(
+        // Fetch edges - filter by tenant if specified
+        let edges_query = match tenant {
+            Some(t) => query(
+                "MATCH (a:Concept {tenant: $tenant})-[r:RELATES_TO]->(b:Concept {tenant: $tenant}) \
+                 RETURN a.id AS source, b.id AS target, r.relation AS relation, r.weight AS weight",
+            ).param("tenant", t),
+            None => query(
                 "MATCH (a:Concept)-[r:RELATES_TO]->(b:Concept) \
                  RETURN a.id AS source, b.id AS target, r.relation AS relation, r.weight AS weight",
-            ))
+            ),
+        };
+        
+        let mut result = self
+            .graph
+            .execute(edges_query)
             .await
             .context("Failed to fetch edges")?;
 
@@ -375,6 +407,7 @@ mod tests {
             community: Some(1),
             degree: Some(5),
             entity_type: Some("concept".into()),
+            tenant: "default".into(),
         };
         let json = serde_json::to_string(&node).unwrap();
         assert!(json.contains("Test Node"));
@@ -427,6 +460,7 @@ mod tests {
             community: Some(42),
             degree: Some(10),
             entity_type: Some("location".into()),
+            tenant: "default".into(),
         };
         let json = serde_json::to_string(&original).unwrap();
         let back: GraphNode = serde_json::from_str(&json).unwrap();

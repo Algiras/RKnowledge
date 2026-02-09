@@ -3,16 +3,17 @@ use std::sync::Arc;
 use tokio::sync::Semaphore;
 use tracing::{debug, info, warn};
 
+use crate::config::DomainConfig;
 use crate::llm::{LlmClient, Relation};
 use crate::parser::{AdaptiveChunker, Chunk, ModelContextLimits};
 
 /// Processor that handles context overflow with automatic retry
-#[allow(dead_code)]
 pub struct AdaptiveProcessor {
     llm_client: Arc<LlmClient>,
     chunker: AdaptiveChunker,
     max_retries: u32,
     concurrency: usize,
+    domain_config: Option<DomainConfig>,
 }
 
 #[allow(dead_code)]
@@ -26,7 +27,14 @@ impl AdaptiveProcessor {
             chunker,
             max_retries: 3,
             concurrency,
+            domain_config: None,
         }
+    }
+
+    /// Set domain configuration
+    pub fn with_domain_config(mut self, domain_config: Option<DomainConfig>) -> Self {
+        self.domain_config = domain_config;
+        self
     }
 
     /// Create with custom chunk size
@@ -41,6 +49,7 @@ impl AdaptiveProcessor {
             chunker: AdaptiveChunker::new(target_tokens, overlap_tokens),
             max_retries: 3,
             concurrency,
+            domain_config: None,
         }
     }
 
@@ -56,10 +65,11 @@ impl AdaptiveProcessor {
             let permit = semaphore.clone().acquire_owned().await?;
             let client = self.llm_client.clone();
             let source = source.to_string();
+            let domain = self.domain_config.clone();
 
             let task = tokio::spawn(async move {
                 let _permit = permit; // Hold permit until task completes
-                Self::process_chunk_with_retry(&client, chunk, &source).await
+                Self::process_chunk_with_retry(&client, chunk, &source, domain.as_ref()).await
             });
 
             tasks.push(task);
@@ -95,6 +105,7 @@ impl AdaptiveProcessor {
         client: &LlmClient,
         chunk: Chunk,
         source: &str,
+        domain: Option<&DomainConfig>,
     ) -> Result<Vec<Relation>> {
         let mut current_chunk = chunk;
         let mut attempt = 0;
@@ -109,7 +120,7 @@ impl AdaptiveProcessor {
                 attempt + 1
             );
 
-            match client.extract_relations(&current_chunk.text).await {
+            match client.extract_relations(&current_chunk.text, domain).await {
                 Ok(relations) => {
                     return Ok(relations);
                 }

@@ -13,6 +13,13 @@ pub struct GraphNode {
     pub community: Option<usize>,
     #[serde(default)]
     pub entity_type: Option<String>,
+    /// Tenant namespace for isolation
+    #[serde(default = "default_tenant")]
+    pub tenant: String,
+}
+
+fn default_tenant() -> String {
+    "default".to_string()
 }
 
 /// An edge in the knowledge graph
@@ -37,6 +44,8 @@ pub struct GraphBuilder {
     edges: HashMap<(String, String), EdgeData>,
     /// Entity types per node label (most recently seen type wins)
     node_types: HashMap<String, String>,
+    /// Tenant namespace for this graph
+    tenant: String,
 }
 
 #[derive(Clone)]
@@ -54,7 +63,24 @@ impl GraphBuilder {
             node_chunks: HashMap::new(),
             edges: HashMap::new(),
             node_types: HashMap::new(),
+            tenant: "default".to_string(),
         }
+    }
+
+    /// Set the tenant for this graph builder (builder pattern)
+    pub fn with_tenant(mut self, tenant: &str) -> Self {
+        self.tenant = tenant.to_string();
+        self
+    }
+
+    /// Set the tenant for this graph builder (mutable reference)
+    pub fn set_tenant(&mut self, tenant: &str) {
+        self.tenant = tenant.to_string();
+    }
+
+    /// Get the current tenant
+    pub fn tenant(&self) -> &str {
+        &self.tenant
     }
 
     /// Add a node to the graph if it doesn't exist (public accessor)
@@ -234,6 +260,7 @@ impl GraphBuilder {
                     degree,
                     community,
                     entity_type,
+                    tenant: self.tenant.clone(),
                 }
             })
             .collect()

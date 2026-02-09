@@ -12,7 +12,7 @@ static DATABASE: Emoji<'_, '_> = Emoji("💾 ", "");
 static CHECK: Emoji<'_, '_> = Emoji("✅ ", "[OK] ");
 static FILE: Emoji<'_, '_> = Emoji("📁 ", "");
 
-pub async fn run(format: ExportFormat, output: PathBuf) -> Result<()> {
+pub async fn run(format: ExportFormat, output: PathBuf, tenant: Option<&str>) -> Result<()> {
     println!();
     println!("{}", style(" RKnowledge - Export ").bold().reverse());
     println!();
@@ -32,7 +32,7 @@ pub async fn run(format: ExportFormat, output: PathBuf) -> Result<()> {
     spinner.set_message("Fetching graph from Neo4j...");
 
     let neo4j_client = Neo4jClient::new(&config.neo4j).await?;
-    let (nodes, edges) = neo4j_client.fetch_graph().await?;
+    let (nodes, edges) = neo4j_client.fetch_graph(tenant).await?;
 
     spinner.finish_and_clear();
     println!(
