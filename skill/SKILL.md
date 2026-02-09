@@ -260,18 +260,34 @@ rknowledge build ./codebase --context-file extraction_prompt.txt
 
 ### Manual Relation Insertion
 
-Add individual relations directly to the graph without document processing:
+Add individual relations directly to the graph without document processing. This is useful for adding "ground truth" or linking concepts that weren't captured by the LLM:
 
 ```bash
-# Interactive mode
-rknowledge add
+# Interactive mode (walks you through node names, types, and relation)
+rknowledge add --interactive
 
-# Single relation
+# Single relation with types
 rknowledge add "Knowledge Graph" "contains" "Nodes" --type1 "concept" --type2 "structure"
 
-# Batch import from JSON
-rknowledge add --file relations.json --tenant alpha
+# Single relation for a specific tenant
+rknowledge add "Project A" "depends on" "Library B" --tenant my-client --relation "dependency"
+
+# Batch import from JSON (see docs for schema)
+rknowledge add --from-file relations.json --tenant alpha
 ```
+
+### Tenant-Aware Visualization
+
+The redesigned visualization dashboard supports all v0.2.0 features:
+
+```bash
+# Visualize a specific project
+rknowledge viz --tenant project-x
+```
+
+- **Filter Sidebar**: Toggle entire entity types (e.g., hide all "proximity" nodes) to clean up the graph.
+- **Search & Focus**: Use the search bar to find a node; it will automatically highlight and pull in its neighbors.
+- **Deep Exploration**: Click any node to see its full property list and all related nodes in a dedicated detail panel.
 
 ## Example Workflows
 
