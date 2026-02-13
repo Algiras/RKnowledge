@@ -1,0 +1,32 @@
+# RKnowledge - Knowledge Graph Extraction & Analysis
+
+## Overview
+RKnowledge is a production-grade CLI tool for extracting concepts and relationships from documents using LLMs. It builds knowledge graphs stored in Neo4j and provides interactive visualization with advanced graph algorithms.
+
+## Key Features
+- Extract concepts and relationships from PDFs, Markdown, HTML, and text
+- Store and analyze in Neo4j graph database
+- Interactive graph visualization
+- Graph algorithm analysis
+- Batch processing support
+
+## Documentation
+https://algiras.github.io/RKnowledge/
+
+## Repository
+https://github.com/Algiras/RKnowledge
+
+## Use Cases
+- Building knowledge bases from documents
+- Knowledge graph visualization
+- Semantic relationship discovery
+- RAG (Retrieval-Augmented Generation) system setup
+- Document intelligence systems
+
+## Technologies
+- Rust
+- Neo4j
+- LLM Integration (Claude, OpenAI, etc.)
+
+## License
+MIT
