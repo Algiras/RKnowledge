@@ -1,0 +1,39 @@
+# RKnowledge
+
+> Production-grade knowledge graph extraction CLI. Extract concepts and relationships from any document using LLMs, store in Neo4j, and explore with interactive visualization.
+
+## About
+
+RKnowledge is a Rust CLI that transforms documents into a queryable knowledge graph. It supports multiple LLM providers, parallel extraction, incremental updates, and graph analytics. Inspired by rahulnyk/knowledge_graph (Python), rewritten from scratch with 118 tests.
+
+## Install
+
+Quick install: `curl -fsSL https://raw.githubusercontent.com/Algiras/RKnowledge/main/install.sh | sh`
+From source: `cargo install --path .`
+Prebuilt binaries: https://github.com/Algiras/RKnowledge/releases
+
+## Core Commands
+
+- `rknowledge extract <file>` - Extract concepts and relationships from a document
+- `rknowledge query <term>` - Query the knowledge graph
+- `rknowledge path <from> <to>` - Find shortest path between concepts
+- `rknowledge stats` - Graph statistics (PageRank, communities, density)
+- `rknowledge communities` - Detect concept clusters
+- `rknowledge visualize` - Launch interactive graph visualization
+
+## Features
+
+- **Multi-format**: PDF, Markdown, HTML, plain text
+- **Multi-provider LLM**: Anthropic, OpenAI, Google, Ollama
+- **Parallel extraction**: Concurrent LLM calls with `-j` flag
+- **Neo4j backend**: Persistent graph DB, incremental `--append`
+- **Graph analytics**: PageRank, community detection, shortest path
+- **Export**: JSON, CSV, GraphML, Cypher
+- **Tenant isolation**: Multiple projects in one Neo4j instance
+
+## Source
+
+- Repository: https://github.com/Algiras/RKnowledge
+- Documentation: https://algiras.github.io/RKnowledge/
+- License: MIT
+- Language: Rust
